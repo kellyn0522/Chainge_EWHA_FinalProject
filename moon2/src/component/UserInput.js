@@ -1,5 +1,5 @@
 import {useContext} from "react";
-import "./UserInput.css";
+// import "./UserInput.css";
 import {inputContext, inputRefContext} from "../pages/Login";
 
 const UserInput = ({onClickButton}) => { // 사용자에게 아이디와 비밀번호 입력 받기
