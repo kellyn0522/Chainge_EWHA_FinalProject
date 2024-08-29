@@ -1,5 +1,4 @@
 import './App.css';
-import { Routes, Route } from "react-router-dom";
 import React, {useState, useReducer, useEffect, useRef} from "react";
 import Home from "./pages/Home";  // import pages
 import Mypage from "./pages/Mypage";
@@ -15,7 +14,12 @@ import Unregister from "./pages/Unregister";
 import MakeContract from "./pages/MakeContract";
 import ContractList from "./pages/ContractList";
 import UserHistory from "./pages/UserHistory";
-
+import{Routes, Route, Navigate} from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
+import {Container} from "react-bootstrap";
+import { useContext } from "react";
+import { AuthContext } from "./context/AuthContext";
+import { ChatContextProvider } from "./context/ChatContext";
 
 function userReducer(state, action) { // user 변수를 변경하는 함수
   switch(action.type){
@@ -205,6 +209,7 @@ function App() {
   const [userData, dispatchUser] = useReducer(userReducer, mockData); // 사용자 정보를 저장한 변수 배열, 테스트용 데이터로 초기화
   const [itemData, dispatchItem] = useReducer(itemReducer, mockDataItem); // 매물 정보를 저장한 변수 배열, 테스트용 데이터로 초기화
 
+  const {user} = useContext(AuthContext);
   
   useEffect(() => { // 데이터 초기화
     dispatchLog({
@@ -392,6 +397,8 @@ function App() {
   };
 
   return (
+  <ChatContextProvider user = {user}>
+    <Container> 
     <userContext.Provider value={{onCreateUser, onUpdateUser, onDeleteUser}}>
       <itemContext.Provider value={{onCreateItem, onUpdateItem, onDeleteItem}}>
         <isLoginContext.Provider value={isLogin}>
@@ -428,6 +435,8 @@ function App() {
         </isLoginContext.Provider>
       </itemContext.Provider>
     </userContext.Provider>
+    </Container>
+    </ChatContextProvider>
   );
 }
 
