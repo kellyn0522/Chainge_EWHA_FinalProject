@@ -4,20 +4,15 @@ import {userContext,isLoginContext, userDataContext} from "../App";
 import Logo from "../component/Logo";
 
 
-const ChangingUserData = () => {
-    const isLogin = useContext(isLoginContext);
-    const userData = useContext(userDataContext);
-    const whoLogIn = userData.find((item) => String(item.keyId) === String(isLogin[1]));
-    const {onCreateUser, onUpdateUser} = useContext(userContext);
+const ChangingUserData = () => { // 사용자 정보 변경 페이지
+    const isLogin = useContext(isLoginContext); // 로그인 여부와 로그인한 사용자 keyId
+    const userData = useContext(userDataContext); // 사용자의 기존 정보
+    const whoLogIn = userData.find((item) => String(item.keyId) === String(isLogin[1])); // 로그인한 사용자의 기존 정보
+    const {onCreateUser, onUpdateUser} = useContext(userContext); // 사용자 정보 업데이트 함수 받기
     const keyID = whoLogIn.keyId;
     const pw = whoLogIn.passWord;
-    //const name = isLogin[1].name;
-    //const telNum = isLogin[1].telNum;
-    //const userBirth = isLogin[1].birth;
-    //const userZipCode = isLogin[1].zipCode;
-    //const userEmail = isLogin[1].email;
 
-    const pwRef = useRef();
+    const pwRef = useRef(); // 사용자 정보 입력 감지
     const checkPWRef = useRef();
     const nameRef = useRef();
     const telNumRef = useRef();
@@ -25,7 +20,7 @@ const ChangingUserData = () => {
     const zipCodeRef = useRef();
     const navigate = useNavigate();
 
-    const [settedPW, makePW] = useState(pw);
+    const [settedPW, makePW] = useState(pw); // 사용자의 정보를 입력받을 변수, 기존에 저장된 정보로 초기화
     const [checkedPW, checkPW] = useState(pw);
     const [userName, setUserName] = useState(whoLogIn.name);
     const [userPhoneNum, setPhoneNum] = useState(whoLogIn.telNum);
@@ -33,7 +28,7 @@ const ChangingUserData = () => {
     const [zipCode, setZipCode] = useState(whoLogIn.zipCode);
     const [email, setEmail] = useState(whoLogIn.email);
     
-    const settingPW = (e) =>{ makePW(e.target.value);};
+    const settingPW = (e) =>{ makePW(e.target.value);}; // 사용자 정보 입력 받기
     const checkingPW = (e) =>{ checkPW(e.target.value);};
     const settingPhoneNum = (e) =>{ setPhoneNum(e.target.value);};
     const settingName = (e) =>{ setUserName(e.target.value);};
@@ -41,27 +36,27 @@ const ChangingUserData = () => {
     const settingZipCode = (e) =>{ setZipCode(e.target.value);};
     const settingEmail = (e) =>{ setEmail(e.target.value);};
 
-    const onChanegeData = () => {
-        if (!settedPW) {pwRef.current.focus(); return;
+    const onChanegeData = () => { // 변경 버튼을 누른 경우 실행
+        if (!settedPW) {pwRef.current.focus(); return; // 입력이 없을 시 하이라이트
         } else if (!checkedPW) {checkPWRef.current.focus(); return;
         } else if (!userName) {nameRef.current.focus(); return;
         } else if (!userPhoneNum) {telNumRef.current.focus(); return;
         } else if (String(birth).length!==6) {birthRef.current.focus(); return;
         } else if (String(zipCode).length!==5) {zipCodeRef.current.focus(); return;
-        } else if (settedPW !== checkedPW) { 
+        } else if (settedPW !== checkedPW) { // 입력받은 두 비밀번호가 일치하지 않을 시
             checkPWRef.current.focus(); 
             alert("비밀번호가 일치하지 않습니다.");
             return;
         } else {          
-            onUpdateUser(keyID, settedPW, userName, userPhoneNum, birth, zipCode, email);
+            onUpdateUser(keyID, settedPW, userName, userPhoneNum, birth, zipCode, email); // 사용자 정보 업데이트
             alert("개인정보 변경이 완료되었습니다.");
-            navigate("/mypage");
+            navigate("/mypage"); // 마이페이지로 이동
             return;
         };
     };
 
     
-    const onKeyDown = (e) => {
+    const onKeyDown = (e) => { // enter키 입력 시
         if (e.keyCode === 13){
             console.log("enter");
             onChanegeData();

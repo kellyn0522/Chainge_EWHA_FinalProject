@@ -4,27 +4,27 @@ import { useState, useContext } from "react";
 import {itemDataContext} from "../App";
 import "./Home.css";
 
-const Home = () => {
-    const itemData = useContext(itemDataContext);
-    const [search, setSearch] = useState("");
-    const [isSearch, setIsSearch] = useState("");
+const Home = () => { // 홈페이지
+    const itemData = useContext(itemDataContext); // 전체 매물 정보
+    const [search, setSearch] = useState(""); // 검색어를 저장할 변수
+    const [isSearch, setIsSearch] = useState(""); // 검색어 입력을 받을 변수
 
-    const getSearchResult = () => {
+    const getSearchResult = () => { // 검색 함수, 매물의 주소 일부분과 검색어가 일치하는 것만 필터링
         return search === "" 
         ? itemData 
         : itemData.filter((it) => it.location.toLowerCase().includes(search.toLowerCase()));
     }
 
-    const onSearch = () => {
+    const onSearch = () => { // 검색하기 버튼 클릭시, enter 키 입력시 실행
         console.log("검색성공!");
-        setSearch(isSearch);
+        setSearch(isSearch); // 입력받은 검색어로 검색
     };
     
-    const onChangeSearch = (e) => {
+    const onChangeSearch = (e) => { // 검색어 입력 감지
         setIsSearch(e.target.value);
     };
 
-    const onKeyDown = (e) => {
+    const onKeyDown = (e) => { // enter 키 입력시
         if (e.keyCode === 13){
             console.log("enter");
             onSearch();

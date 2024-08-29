@@ -5,39 +5,39 @@ import Logo from "../component/Logo";
 import HouseItem from "../component/HouseItem";
 import "./Mypage.css";
 
-const Mypage = () => {
-    const navigate = useNavigate();
-    const isLogin = useContext(isLoginContext);
-    const userData = useContext(userDataContext);    
-    const whoLogIn = userData.find((item) => String(item.keyId) === String(isLogin[1]));
+const Mypage = () => { // 마이페이지
+    const navigate = useNavigate(); // 페이지 이동
+    const isLogin = useContext(isLoginContext); // 로그인 상태 확인
+    const userData = useContext(userDataContext); // User Data 확인
+    const whoLogIn = userData.find((item) => String(item.keyId) === String(isLogin[1])); // 로그인한 사용자 데이터
 
-    const onChangeData = () => {
-        navigate("/changingUserData");
+    const onChangeData = () => { // 정보변경 버튼을 누른 경우 실행
+        navigate("/changingUserData"); // 정보 변경 페이지로 이동
     }
 
-    const onUnregister = () => {
-        navigate("/unregister");
+    const onUnregister = () => { // 탈퇴 버튼을 누른 경우 실행
+        navigate("/unregister"); // 탈퇴 페이지로 이동
     }
 
-    const onClickChat = () => {
-        navigate("/chat");
+    const onClickChat = () => { // 채팅 버튼을 누른 경우 실행
+        navigate("/chat"); // 채팅 페이지로 이동
     }
 
-    const onContractList = () => {
-        navigate("/contractList");
+    const onContractList = () => { // 거래하기 버튼을 누른 경우 실행
+        navigate("/contractList"); // 거래하기 페이지로 이동
     }
 
-    const onCreateItem = () => {
-        navigate("/createItemPage");
+    const onCreateItem = () => { // 매물 등록 버튼을 누른 경우 실행
+        navigate("/createItemPage"); // 매물 등록 페이지로 이동
     }
 
-    const onDeleteItem = () => {
+    const onDeleteItem = () => { // 매물 삭제 버튼을 누른 경우 실행
         alert("DELETE");
     }
 
-    const ownItem = whoLogIn.ownItem;
-    const likedItem = whoLogIn.likedItemId;
-    const contracts = whoLogIn.contracts;
+    const ownItem = whoLogIn.ownItem; // 사용자의 매물 등록 기록
+    const likedItem = whoLogIn.likedItemId; // 사용자의 매물 좋아요 기록
+    const contracts = whoLogIn.contracts; // 사용자의 거래 기록
 
     return (
         <div className="Mypage">

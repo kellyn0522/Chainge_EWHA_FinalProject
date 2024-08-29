@@ -6,13 +6,13 @@ import Logo from "../component/Logo";
 import "./Item.css";
 
 
-const Item = () => {
+const Item = () => { // 매물 정보 페이지
     const navigate = useNavigate();
-    const {id} = useParams();
+    const {id} = useParams(); // 매물 아이디별로 다른 페이지 할당
     const item = useHouse(id);
 
-    const onHistory = () => {
-        navigate("/userHistory");
+    const onHistory = () => { // 집주인 아이디 클릭시
+        navigate("/userHistory"); // 집주인의 거래 기록 페이지로 이동
     }
 
     return (

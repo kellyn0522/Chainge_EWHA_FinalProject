@@ -8,35 +8,35 @@ import Logo from "../component/Logo";
 export const inputContext = React.createContext();
 export const inputRefContext = React.createContext();
 
-const Login = () => {
-    const [inputID, setID] = useState("");
-    const [inputPW, setPW] = useState("");
+const Login = () => { // 로그인
+    const [inputID, setID] = useState(""); // 입력받은 아이디를 저장하는 변수
+    const [inputPW, setPW] = useState(""); // 입력받은 비밀번호를 저장하는 변수
     const navigate = useNavigate();
-    const userData = useContext(userDataContext);
+    const userData = useContext(userDataContext); // 저장된 user data
     const isLogin = useContext(isLoginContext);
-    const {setIsLogin} = useContext(setLoginContext);
+    const {setIsLogin} = useContext(setLoginContext); // 로그인으로 상태 변경하는 함수
     const inputIDRef = useRef();
     const inputPWRef = useRef();
-    let pw = null;
+    let pw = null; // 사용자 정보를 저장할 변수
 
-    const onClickFindID = () => {
-        navigate("/findId");
+    const onClickFindID = () => { // 아이디 찾기 버튼을 누른 경우
+        navigate("/findId"); // Find ID 페이지로 이동
     }
 
-    const onClickFindPW = () => {
-        navigate("/findPW");
+    const onClickFindPW = () => { // 비밀번호 찾기 버튼을 누른 경우
+        navigate("/findPW"); // Find Passwoed 페이지로 이동
     }
 
-    function onClickButton() {
-        if (!inputID) { inputIDRef.current.focus(); return;
+    function onClickButton() { // 로그인 버튼을 누른 경우 실행
+        if (!inputID) { inputIDRef.current.focus(); return; // 입력이 없으면 하이라이트
         } else if (!inputPW) {inputPWRef.current.focus(); return;
         } else{
-        pw = userData.find((item) => String(item.id) === String(inputID));
-        if(String(inputPW) === String(pw.passWord)){
+        pw = userData.find((item) => String(item.id) === String(inputID)); // 입력받은 ID를 가진 사용자의 저장된 정보
+        if(String(inputPW) === String(pw.passWord)){ // 저장된 비밀번호와 입력받은 비밀번호가 같은 경우
             alert("로그인 되었습니다.");
-            setIsLogin(pw.keyId);
-            navigate("/");
-            } else{
+            setIsLogin(pw.keyId); // 로그인 상태로 변경
+            navigate("/"); // 홈으로 이동
+            } else{ // 저장된 비밀번호와 입력받은 비밀번호가 같지 않은 경우
             alert("아이디/비밀번호가 일치하지 않습니다.");
             return;
             }

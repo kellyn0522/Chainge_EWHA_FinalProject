@@ -1,7 +1,7 @@
 import './App.css';
 import { Routes, Route } from "react-router-dom";
 import React, {useState, useReducer, useEffect, useRef} from "react";
-import Home from "./pages/Home";
+import Home from "./pages/Home";  // import pages
 import Mypage from "./pages/Mypage";
 import Item from "./pages/Item";
 import FindId from "./pages/FindId";
@@ -17,7 +17,7 @@ import ContractList from "./pages/ContractList";
 import UserHistory from "./pages/UserHistory";
 
 
-function userReducer(state, action) {
+function userReducer(state, action) { // user 변수를 변경하는 함수
   switch(action.type){
     case "CREATE": {
       return [action.data, ...state];
@@ -45,7 +45,7 @@ function userReducer(state, action) {
   }
 }
 
-function itemReducer(state, action) {
+function itemReducer(state, action) { // item 변수를 변경하는 함수
   switch(action.type){
     case "CREATE": {
       return [action.itemData, ...state];
@@ -67,7 +67,7 @@ function itemReducer(state, action) {
   }
 }
 
-function logReducer(state, action) {
+function logReducer(state, action) { // 로그인 상태를 변경하는 함수
   switch(action.type){
     case "LOGIN": {
       return state = [1, action.data];
@@ -83,7 +83,7 @@ function logReducer(state, action) {
   }
 }
 
-const mockData = [
+const mockData = [ // 테스트용 user 데이터
   {
     name: "서태웅",
     id: "abcd",
@@ -128,7 +128,7 @@ const mockData = [
   },
 ];
 
-const mockDataItem = [
+const mockDataItem = [ // 테스트용 매물 데이터
   {
     location: "서초구",
     detailAdd:"ooo아파트",
@@ -173,7 +173,7 @@ const mockDataItem = [
   },
 ];
 /*
-const mockDataContract = [
+const mockDataContract = [ // 테스트용 거래 데이터
   {
     userKeyId: 10000001,
     likedItemId: []
@@ -189,7 +189,7 @@ const mockDataContract = [
 ]
 */
 
-export const isLoginContext = React.createContext();
+export const isLoginContext = React.createContext(); // 다른 컴포넌트로 데이터를 전달하기 위함
 export const setLoginContext = React.createContext();
 export const userContext = React.createContext();
 export const userDataContext = React.createContext();
@@ -200,13 +200,13 @@ export const ownItemContext = React.createContext();
 export const contractContext = React.createContext();
 
 function App() {
-  const [isLogin, dispatchLog] = useReducer(logReducer, [1, 10000003]);
+  const [isLogin, dispatchLog] = useReducer(logReducer, [1, 10000003]); // 로그인 상태를 저장한 변수 user keyId 10000003이 로그인한 것으로 초기화
   // [0, undefind]);
-  const [userData, dispatchUser] = useReducer(userReducer, mockData);
-  const [itemData, dispatchItem] = useReducer(itemReducer, mockDataItem);
+  const [userData, dispatchUser] = useReducer(userReducer, mockData); // 사용자 정보를 저장한 변수 배열, 테스트용 데이터로 초기화
+  const [itemData, dispatchItem] = useReducer(itemReducer, mockDataItem); // 매물 정보를 저장한 변수 배열, 테스트용 데이터로 초기화
 
   
-  useEffect(() => {
+  useEffect(() => { // 데이터 초기화
     dispatchLog({
       type: "INIT",
       data: [1, 10000003],
@@ -225,7 +225,7 @@ function App() {
   const userIdRef = useRef(0);
   const itemIdRef = useRef(0);
 
-  const likeItem = (array, itemID, targetId) => {
+  const likeItem = (array, itemID, targetId) => { // 좋아요
     dispatchUser({
       type: "CHANGE",
       data: {
@@ -235,7 +235,7 @@ function App() {
     })
   }
 
-  const cancelLikeItem = (array, itemID, targetId) => {
+  const cancelLikeItem = (array, itemID, targetId) => { // 좋아요 취소
     const likeItemList = array.filter((it) => it !== itemID);
     dispatchUser({
       type: "CHANGE",
@@ -246,7 +246,7 @@ function App() {
     })
   }
 
-  const addOwnItem = (array, itemID, targetId) => {
+  const addOwnItem = (array, itemID, targetId) => { // 매물을 등록
     dispatchUser({
       type: "CHANGE",
       data: {
@@ -256,7 +256,7 @@ function App() {
     })
   }
 
-  const notOwnItem = (array, itemID, targetId) => {
+  const notOwnItem = (array, itemID, targetId) => { // 매물을 삭제
     const ownItemList = array.filter((it) => it !== itemID);
     dispatchUser({
       type: "CHANGE",
@@ -267,7 +267,7 @@ function App() {
     })
   }
 
-  const CreateContract = (array, itemID, targetId) => {
+  const CreateContract = (array, itemID, targetId) => { // 거래
     dispatchUser({
       type: "CHANGE",
       data: {
@@ -277,7 +277,7 @@ function App() {
     })
   }
 
-  const terminateContract = (array, itemID, targetId) => {
+  const terminateContract = (array, itemID, targetId) => { // 거래 취소
     const contractList = array.filter((it) => it !== itemID);
     dispatchUser({
       type: "CHANGE",
@@ -288,21 +288,21 @@ function App() {
     })
   }
 
-  const setIsLogin = (currentUser) => {
+  const setIsLogin = (currentUser) => { // 로그인한 상태로 바꿈
     dispatchLog({
       type: "LOGIN",
       data: currentUser,
     });
   };
 
-  const setIsLogOut = () => {
+  const setIsLogOut = () => { // 로그아웃한 상태로 바꿈
     dispatchLog({
       type: "LOGOUT",
       data: undefined,
     });
   };
 
-  const onCreateUser = (name, id, passWord, telNum, birth, identityNum, zipCode, email) => {
+  const onCreateUser = (name, id, passWord, telNum, birth, identityNum, zipCode, email) => { // 사용자 생성
     dispatchUser({
       type: "CREATE",
       data: {
@@ -323,7 +323,7 @@ function App() {
     userIdRef.current += 1;
   };
     
-  const onUpdateUser = (keyID, settedPW, userName, userPhoneNum, birth, zipCode, email) => {
+  const onUpdateUser = (keyID, settedPW, userName, userPhoneNum, birth, zipCode, email) => { // 사용자 정보 업데이트
     dispatchUser({
       type: "UPDATE",
       data: {
@@ -338,14 +338,14 @@ function App() {
     });
   };
     
-  const onDeleteUser = (targetId) => {
+  const onDeleteUser = (targetId) => { // 사용자 정보 삭제
     dispatchUser({
       type: "DELETE",
       targetId,
     });
   };
 
-  const onCreateItem = (location, detailAdd, ownerID, housePrice, area, type, memo, bedSize, hasItems) => {
+  const onCreateItem = (location, detailAdd, ownerID, housePrice, area, type, memo, bedSize, hasItems) => { // 매물 생성
       dispatchItem({
         type: "CREATE",
         itemData: {
@@ -366,7 +366,7 @@ function App() {
       itemIdRef.current += 1;
   };
   
-  const onUpdateItem = (targetId, ownerID, housePrice, type, memo, tenantID, contractIds, bedSize, hasItems) => {
+  const onUpdateItem = (targetId, ownerID, housePrice, type, memo, tenantID, contractIds, bedSize, hasItems) => { // 매물 정보 업데이트
     console.log(targetId, ownerID, housePrice, type, memo, tenantID, contractIds, bedSize, hasItems);
     dispatchItem({
       type: "UPDATE",
@@ -384,7 +384,7 @@ function App() {
     });
   };
   
-  const onDeleteItem = (targetId) => {
+  const onDeleteItem = (targetId) => { // 매물 정보 삭제
       dispatchItem({
         type: "DELETE",
         targetId,

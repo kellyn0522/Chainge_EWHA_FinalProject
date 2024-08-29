@@ -4,7 +4,7 @@ import {itemDataContext, isLoginContext, userDataContext} from "../App";
 import { useNavigate } from "react-router-dom";
 
 
-const MakeContract = () => {
+const MakeContract = () => { // 거래하기
     const itemData = /*useContext(itemDataContext);*/ 
     {location: "서초구",
     detailAdd:"ooo아파트",
@@ -19,55 +19,53 @@ const MakeContract = () => {
     bedSize: "Queen",
     hasItems: [1,1,1,1,1,1], };
 
-    const isLogin = useContext(isLoginContext);
-    const userData = useContext(userDataContext);
+    const isLogin = useContext(isLoginContext); // 로그인힌 user keyId
+    const userData = useContext(userDataContext); // User Data
     const navigate = useNavigate();
-    const whoLogIn = userData.find((item) => String(item.keyId) === String(isLogin[1]));
+    const whoLogIn = userData.find((item) => String(item.keyId) === String(isLogin[1])); // 로그인한 user 정보
 
-    const depositRef = useRef();
+    const depositRef = useRef(); // 사용자의 입력 감지
     const costRef = useRef();
     const startDateRef = useRef();
     const periodRef = useRef();
     const endDateRef = useRef();
 
-    const userName = whoLogIn.name;
+    const userName = whoLogIn.name; // user의 기존 입력 정보
     const zipCode = whoLogIn.zipCode;
     const birth = whoLogIn.birth;
     const identityNum = whoLogIn.identityNum;
     const telNum = whoLogIn.telNum;
 
-    const location = itemData.location
+    const location = itemData.location // 매물의 기존 입력 정보
     const detailAdd = itemData.detailAdd
     const ownerID = itemData.ownerID
     const area = itemData.area
     const type = itemData.type
     const memo = itemData.memo
-    //const bedSize = itemData.bedSize
-    //const hasItems = itemData.hasItems
 
-    const [cost, setCost] = useState(itemData.housePrice);
+    const [cost, setCost] = useState(itemData.housePrice); // 사용자의 입력을 저장하는 변수
     const [deposit, setDeposit] = useState("");
     const [startDate, setStartDate] = useState("");
     const [period, setPeriod] = useState("");
     const [endDate, setEndDate] = useState("");
 
-    const settingCost = (e) =>{ setCost(e.target.value);};
+    const settingCost = (e) =>{ setCost(e.target.value);}; // 사용자의 입력 저장
     const settingDeposit = (e) =>{ setDeposit(e.target.value);};
     const settingStartDate = (e) =>{ setStartDate(e.target.value);};
     const settingPeriod = (e) =>{ setPeriod(e.target.value);};
     const settingEndDate = (e) =>{ setEndDate(e.target.value);};
    
-    const onMakeContract = () => {
-        if (!cost) {costRef.current.focus(); return;
+    const onMakeContract = () => { // 거래 시작 버튼을 누르면 실행되는 함수
+        if (!cost) {costRef.current.focus(); return; // 입력이 없는 경우 하이라이트
         } else if (!deposit) {depositRef.current.focus(); return;
         } else if (!startDate) {startDateRef.current.focus(); return;
         } else if (!period) {periodRef.current.focus(); return;
         } else if (!endDate) {endDateRef.current.focus(); return;
         } else {
-            navigate("/");
-            return [
+            navigate("/"); // 홈으로 이동
+            return [ // 사용자 입력 전달
                 {userName, zipCode, birth, identityNum, telNum},
-                {location, detailAdd, ownerID, area, type, memo},// bedSize, hasItems},
+                {location, detailAdd, ownerID, area, type, memo},
                 {cost, deposit, startDate, period, endDate}
             ];
         };

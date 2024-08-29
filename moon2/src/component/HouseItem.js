@@ -6,23 +6,23 @@ import DeleteButton from "./DeleteButton.js";
 import LikeButton from "./LikeButton.js";
 
 
-const HouseItem = ({itemId}) => {
+const HouseItem = ({itemId}) => { // 매물 정보 간략히 보여주는 컴포넌트
     const navigate = useNavigate();
-    const itemData = useContext(itemDataContext);
+    const itemData = useContext(itemDataContext); // 매물 정보
     let itemIndex = -1;
-    itemIndex = itemData.findIndex((it) => String(it.itemId) === String(itemId));
+    itemIndex = itemData.findIndex((it) => String(it.itemId) === String(itemId)); // 출력할 매물 ID 저장
 
-    if (itemIndex !== -1) {
+    if (itemIndex !== -1) { // 출력할 매물이 있는 경우
         let location, detailAdd, housePrice, area, type = undefined;
 
-        location = itemData[itemIndex].location;
+        location = itemData[itemIndex].location; // 매물 정보 저장
         detailAdd = itemData[itemIndex].detailAdd;
         housePrice = itemData[itemIndex].housePrice;
         area = itemData[itemIndex].area;
         type = itemData[itemIndex].type;
 
-        const goToItem = () => {
-            navigate(`/item/${itemId}`);
+        const goToItem = () => { // 클릭 시
+            navigate(`/item/${itemId}`); // 해당 매물 상세 페이지로 이동
         }
 
         return (
@@ -43,7 +43,7 @@ const HouseItem = ({itemId}) => {
                 </div>
             </div>
         );
-    } else (
+    } else ( // 출력할 매물이 없는 경우
         console.log("error: item 정보 없음")
     )
 };
