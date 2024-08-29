@@ -1,0 +1,27 @@
+.LikeButton {
+    border: none;
+    margin: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.LikeButton .blue{
+    border: none;
+    margin: 10px;
+    font-size: 10px;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    color: white;
+    background-color: blue;
+}
+
+.LikeButton .gray{
+    border: none;
+    margin: 10px;
+    font-size: 10px;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    background-color: gray;
+}

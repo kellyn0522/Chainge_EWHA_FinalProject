@@ -1,0 +1,21 @@
+.Header{
+    padding-top: 20px;
+    padding-bottom: 20px;
+
+    display: flex;
+    align-items: center;
+    margin: 40px;
+}
+
+.Header > h1 {
+    font-size: 80px;
+    font-weight: bold;
+    justify-content: start;
+}
+
+.Header .userIdentity {
+    width: 25%;
+    font-size: 20px;
+    font-weight: bold;
+    justify-content: end;
+}
