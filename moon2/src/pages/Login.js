@@ -1,13 +1,16 @@
 import UserInput from "../component/UserInput";
 import {useNavigate} from "react-router-dom";
 import React, {useRef, useState, useContext} from "react";
-import "./Login.css";
+// import "./Login.css";
 import {isLoginContext, userDataContext, setLoginContext} from "../App";
 import Logo from "../component/Logo";
+import { Alert, Button, Form, Row, Col, Stack } from "react-bootstrap";
+import { AuthContext } from "../context/AuthContext";
 
 export const inputContext = React.createContext();
 export const inputRefContext = React.createContext();
 
+/*
 const Login = () => { // 로그인
     const [inputID, setID] = useState(""); // 입력받은 아이디를 저장하는 변수
     const [inputPW, setPW] = useState(""); // 입력받은 비밀번호를 저장하는 변수
@@ -62,4 +65,44 @@ const Login = () => { // 로그인
         </inputContext.Provider>
     );
 };
+*/
+
+const Login = () => {
+    const {
+        loginUser,
+        loginError,
+        loginInfo,
+        updateLoginInfo,
+        isLoginLoading,
+    } = useContext(AuthContext);
+
+    return (<>
+        <Form onSubmit ={loginUser}>
+            <Row style={{
+                height: "100vh",
+                justifyContent: "Center",
+                paddingTop: "10%"
+            }}>
+                <Col xs={6}>
+                    <Stack gap={3}>
+                        <h2>Login</h2>
+
+                        <Form.Control type="email" placeholder="Email" onChange={(e) => updateLoginInfo
+                            ({ ...loginInfo, email: e.target.value })} />
+                        <Form.Control type="password" placeholder="Password" onChange={(e) => updateLoginInfo
+                            ({ ...loginInfo, password: e.target.value })}/>
+
+                        <Button variant="primary" type="submit" >
+                            {isLoginLoading? "Getting you in ... " : "Login"}
+                        </Button>
+                        {loginError?.error && 
+                        <Alert variant="danger">
+                            <p>{loginError?.message}</p></Alert>} 
+                    </Stack>
+                </Col>
+            </Row>
+        </Form>
+    </>);
+};
+
 export default Login;
