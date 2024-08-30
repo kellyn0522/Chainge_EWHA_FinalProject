@@ -69,7 +69,7 @@ export const AuthContextProvider = ({ children }) => {
         
 
         const response = await postRequest(
-            `${baseUrl}/users/login`,
+            `${baseUrl}/api/login`,
             JSON.stringify(loginInfo));
 
         setIsLoginLoading(false);

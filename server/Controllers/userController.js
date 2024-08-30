@@ -50,6 +50,7 @@ const registerUser = async (req, res) => {
 };
 
 const loginUser = async (req, res) => {
+    console.log("로그인");
     const { email, password } = req.body;
     try {
         let user = await userModel.findOne({ email });
