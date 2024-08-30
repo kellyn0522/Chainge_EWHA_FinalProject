@@ -66,7 +66,7 @@ const Login = () => {
                         <Stack gap={3}>
                             
                                 <h2>Login</h2>
-                                    <Form.Control type="name" placeholder="name" onChange={(e) => updateLoginInfo ({ ...loginInfo, name: e.target.value})} />
+                                    <Form.Control type="email" placeholder="email" onChange={(e) => updateLoginInfo ({ ...loginInfo, email: e.target.value})} />
                                     <Form.Control type="password" placeholder="password" onChange={(e) => updateLoginInfo ({ ...loginInfo, password: e.target.value})} />
                                     
                                     <Button variant="primary" type="submit">
