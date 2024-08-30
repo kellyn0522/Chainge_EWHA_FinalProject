@@ -1,10 +1,13 @@
-import { createContext, useCallback, useEffect, useState } from "react";
+import React, { createContext, useCallback, useEffect, useState } from "react";
 import { baseUrl, postRequest } from "../utils/services";
+import { useNavigate, UseNavigate } from "react-router-dom";
 
 export const AuthContext = createContext();
 export const AuthContextProvider = ({ children }) => {
 
-    const [user, setUser] = useState(null);
+    const navigate = useNavigate();
+
+    const [user, setUser] = useState("");
     const [registerError, setRegisterError] = useState(null);
     const [isRegisterLoading, setIsRegisterLoading] = useState(false);
     const [registerInfo, setRegisterInfo] = useState({
@@ -16,7 +19,7 @@ export const AuthContextProvider = ({ children }) => {
     const [loginError, setLoginError] = useState(null);
     const [isLoginLoading, setIsLoginLoading] = useState(false);
     const [loginInfo, setLoginInfo] = useState({
-        email: "",
+        name: "",
         password: "",
     });
 

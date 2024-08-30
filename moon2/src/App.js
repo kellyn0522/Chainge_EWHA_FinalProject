@@ -209,7 +209,7 @@ function App() {
   const [userData, dispatchUser] = useReducer(userReducer, mockData); // 사용자 정보를 저장한 변수 배열, 테스트용 데이터로 초기화
   const [itemData, dispatchItem] = useReducer(itemReducer, mockDataItem); // 매물 정보를 저장한 변수 배열, 테스트용 데이터로 초기화
 
-  const {user} = useContext(AuthContext);
+  // const {user} = useContext(AuthContext);
   
   useEffect(() => { // 데이터 초기화
     dispatchLog({
@@ -397,7 +397,7 @@ function App() {
   };
 
   return (
-  <ChatContextProvider user = {user}>
+  // <ChatContextProvider user = {user}>
     <Container> 
     <userContext.Provider value={{onCreateUser, onUpdateUser, onDeleteUser}}>
       <itemContext.Provider value={{onCreateItem, onUpdateItem, onDeleteItem}}>
@@ -436,7 +436,7 @@ function App() {
       </itemContext.Provider>
     </userContext.Provider>
     </Container>
-    </ChatContextProvider>
+    // </ChatContextProvider>
   );
 }
 
