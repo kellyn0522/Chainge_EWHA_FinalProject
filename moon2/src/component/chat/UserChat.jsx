@@ -1,6 +1,6 @@
 import { Stack } from "react-bootstrap";
 import { useFetchRecipientUser } from "../../hooks/useFetchRecipient";
-//import avatar from "../../assets/avatar.svg";
+import avatar from "../../assets/avatar.svg";
 import { useContext } from "react";
 import { ChatContext } from "../../context/ChatContext";
 
@@ -14,7 +14,7 @@ const UserChat = ({ chat, user }) => {
             role="button">
             <div className="d-flex">
                 <div className="me-2">
-                    
+                    <img src={avatar} height="35px" />
                 </div>
                 <div className="text-content">
                     <div className="name">
@@ -38,7 +38,7 @@ const UserChat = ({ chat, user }) => {
             </div>
 
         </Stack>
-    </>); //<img src={avatar} height="35px" /> 빼놨음
+    </>);
 };
 
 export default UserChat;
