@@ -8,6 +8,7 @@ import FindPW from "./pages/FindPW";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import Chat from "./pages/Chat";
+import Register from "./pages/Register";
 import CreateItemPage from "./pages/CreateItemPage";
 import ChangingUserData from "./pages/ChangingUserData";
 import Unregister from "./pages/Unregister";
@@ -209,7 +210,7 @@ function App() {
   const [userData, dispatchUser] = useReducer(userReducer, mockData); // 사용자 정보를 저장한 변수 배열, 테스트용 데이터로 초기화
   const [itemData, dispatchItem] = useReducer(itemReducer, mockDataItem); // 매물 정보를 저장한 변수 배열, 테스트용 데이터로 초기화
 
-  // const {user} = useContext(AuthContext);
+  const {user} = useContext(AuthContext);
   
   useEffect(() => { // 데이터 초기화
     dispatchLog({
@@ -397,7 +398,7 @@ function App() {
   };
 
   return (
-  // <ChatContextProvider user = {user}>
+   <ChatContextProvider user = {user}>
     <Container> 
     <userContext.Provider value={{onCreateUser, onUpdateUser, onDeleteUser}}>
       <itemContext.Provider value={{onCreateItem, onUpdateItem, onDeleteItem}}>
@@ -418,6 +419,7 @@ function App() {
                          <Route path="/signUp" element={<SignUp />} />
                          <Route path="/item/:id" element={<Item />} />
                          <Route path="/chat" element={<Chat />} />
+                         <Route path="/Register" element={<Register />} />
                          <Route path="/unregister" element={<Unregister />} />
                          <Route path="/createItemPage" element={<CreateItemPage />} />
                          <Route path="/makeContract" element={<MakeContract />} />
@@ -436,7 +438,7 @@ function App() {
       </itemContext.Provider>
     </userContext.Provider>
     </Container>
-    // </ChatContextProvider>
+   </ChatContextProvider>
   );
 }
 

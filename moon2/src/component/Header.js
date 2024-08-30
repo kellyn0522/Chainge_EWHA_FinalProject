@@ -16,7 +16,7 @@ const Header = () => { // 헤더에 있는 버튼 제어
         navigate("/mypage"); // 마이페이지로 이동
     }
     const onClickSignUp = () => { // 회원가입 버튼 클릭 시
-        navigate("/signUp"); // 회원가입 페이지로 이동
+        navigate("/Register"); // 회원가입 페이지로 이동
     }
     const onClickChat = () => { // 채팅 버튼 클릭 시
         navigate("/chat"); // 채팅 페이지로 이동
