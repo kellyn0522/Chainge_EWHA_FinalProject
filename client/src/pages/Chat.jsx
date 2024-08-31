@@ -6,7 +6,7 @@ import { AuthContext } from "../context/AuthContext";
 import PotentialChats from "../components/chat/PotentialChats";
 import ChatBox from "../components/chat/ChatBox";
 
-const Chat = () => {    
+const chat = () => {    
     const { user } = useContext(AuthContext);
     const { userChats, isUserChatsLoading, updateCurrentChat } = useContext(ChatContext);
 
@@ -32,4 +32,4 @@ const Chat = () => {
     );
 };
 
-export default Chat;
+export default chat;

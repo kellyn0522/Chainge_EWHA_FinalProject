@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { Alert, Button, Form, Row, Col, Stack } from "react-bootstrap";
 import { AuthContext } from "../context/AuthContext";
 
-
+// 사용자 등록
 const Register = () => {
     const { registerInfo, updateRegisterInfo, registerUser, registerError, isRegisterLoading } = useContext(AuthContext);
     return (<>
@@ -15,12 +15,26 @@ const Register = () => {
                 <Col xs={6}>
                     <Stack gap={3}>
                         <h2>Register</h2>
-
+                        
                         <Form.Control
                             type="text"
                             placeholder="Name"
                             onChange={(e) =>
                                 updateRegisterInfo({ ...registerInfo, name: e.target.value })
+                            }
+                        />
+                        <Form.Control
+                            type="text"
+                            placeholder="Nickname"
+                            onChange={(e) =>
+                                updateRegisterInfo({ ...registerInfo, nickName: e.target.value })
+                            }
+                        />
+                         <Form.Control
+                            type="tel"
+                            placeholder="Phonenumber"
+                            onChange={(e) =>
+                                updateRegisterInfo({ ...registerInfo, phoneNumber: e.target.value })
                             }
                         />
                         <Form.Control 
@@ -29,6 +43,7 @@ const Register = () => {
                         onChange={(e) =>
                             updateRegisterInfo({ ...registerInfo, email: e.target.value })
                         } />
+
                         <Form.Control 
                         type="password" 
                         placeholder="Password" 

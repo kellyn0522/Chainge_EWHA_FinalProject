@@ -16,10 +16,6 @@ export const useFetchRecipientUser =(chat, user) =>{
     useEffect(() =>{
         const getUser = async() =>{
             
-            
-            //console.log('Recipient ID:', recipientId);
-           
-              
             if(!recipientId) {
                 setRecipientUser(null);
                 return ;
