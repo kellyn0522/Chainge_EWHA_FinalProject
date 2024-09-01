@@ -7,7 +7,6 @@ import ChatNotification from "./chat/ChatNotification";
 const NavBar = () => {
     const { user, logoutUser } = useContext(AuthContext);
     
-    const { recipientUser } = useContext(AuthContext);
     
     return (
         <Navbar bg="dark" className="mb-4" style={{ height: "3.75rem" }}>

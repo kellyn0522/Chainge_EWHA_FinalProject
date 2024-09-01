@@ -24,7 +24,6 @@ export const useFetchRecipientUser =(chat, user) =>{
             const response = await getRequest(`${baseUrl}/users/find/${recipientId}`);
 
             //console.log("Apt Url ", `${baseUrl}/users/find/${recipientId}`);
-            
             //console.log('API response for recipient user:', response);
             //console.log('Recipient User Response:', response);
             
