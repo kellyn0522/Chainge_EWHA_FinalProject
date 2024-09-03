@@ -8,6 +8,7 @@ const chatRoute = require("./Routes/chatRoute");
 const messageRoute = require("./Routes/messageRoute");
 
 require("dotenv").config();
+app.set('port', process.env.PORT || 3000);
 
 app.use(express.json());
 app.use(cors());
