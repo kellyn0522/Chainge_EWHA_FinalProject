@@ -16,7 +16,7 @@ const Header = () => {
         navigate("/mypage");
     }
     const onClickSignUp = () => {
-        navigate("/signUp");
+        navigate("/Register");
     }
     const onClickChat = () => {
         navigate("/chat");
