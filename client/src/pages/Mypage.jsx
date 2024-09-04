@@ -6,7 +6,7 @@ import { AuthContext } from "../context/AuthContext";
 
 const Mypage = () => {
     const navigate = useNavigate();
-    const { registerInfo } = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
 
     /*const whoLogIn = { // 데이터 연결필요
         name: "송태섭",
@@ -61,10 +61,10 @@ const Mypage = () => {
                 <div className = "title">MY page</div>
             </div>
             <div className = "UserData">
-                <div>이름: {registerInfo.name}</div>
-                <div>닉네임: {registerInfo.nickName}</div>
-                <div>전화번호: {registerInfo.phoneNumber}</div>
-                <div>Email: {registerInfo.email}</div>
+                <div>이름: {user.name}</div>
+                <div>닉네임: {user.nickName}</div>
+                <div>전화번호: {user.phoneNumber}</div>
+                <div>Email: {user.email}</div>
             </div>
             <div className = "select">
                 <div className = "title">내 매물</div>
