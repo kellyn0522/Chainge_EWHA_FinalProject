@@ -21,8 +21,8 @@ const ChatBox = () => {
 
 
     // 디버깅용 콘솔 로그 추가
-    //console.log('recipientUser:', recipientUser);
-    //console.log('isMessagesLoading:', isMessagesLoading);
+    console.log('recipientUser:', recipientUser);
+    console.log('isMessagesLoading:', isMessagesLoading);
 
     if (!recipientUser) return (
         <p style={{ textAlign: "center", width: "100%" }}>

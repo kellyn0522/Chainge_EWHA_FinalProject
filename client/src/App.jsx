@@ -72,7 +72,7 @@ function itemReducer(state, action) { // item 변수를 변경하는 함수
       return state;
   }
 }
-
+/*
 const mockData = [ // 테스트용 user 데이터
   {
     name: "서태웅",
@@ -116,7 +116,7 @@ const mockData = [ // 테스트용 user 데이터
     likedItemId: [2,3],
     contracts: [2]
   },
-];
+];*/
 
 const mockDataItem = [ // 테스트용 매물 데이터
   {
@@ -328,14 +328,15 @@ function App() {
                          <Route path="/login" element={<Login />} />
                          <Route path="/item/:id" element={<Item />} />
                          <Route path="/chat" element={<Chat />} />
-                         <Route path="/Register" element={<Register />} />
+                         <Route path="/register" element={user? <Home/>:<Register />} />
                          <Route path="/unregister" element={<Unregister />} />
                          <Route path="/createItemPage" element={<CreateItemPage />} />
                          <Route path="/makeContract" element={<MakeContract />} />
                          <Route path="/contractList" element={<ContractList />} />
                          <Route path="/changingUserData" element={<ChangingUserData />} />
                          <Route path="/userHistory" element={<UserHistory />} />
-                       </Routes>
+                          <Route path="*" element ={<Navigate to ="/"/>} />
+                         </Routes>
                       </div>
                     </contractContext.Provider>
                   </ownItemContext.Provider>
