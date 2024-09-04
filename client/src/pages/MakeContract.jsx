@@ -1,10 +1,12 @@
 import {useRef, useState, useContext} from "react";
 import Logo from "../component/Logo";
-import {itemDataContext, isLoginContext, userDataContext} from "../App";
+import {itemDataContext } from "../App";
 import { useNavigate } from "react-router-dom";
 
 
 const MakeContract = () => {
+    const navigate = useNavigate();
+
     const itemData = /*useContext(itemDataContext);*/ 
     {location: "서초구",
     detailAdd:"ooo아파트",
@@ -19,10 +21,20 @@ const MakeContract = () => {
     bedSize: "Queen",
     hasItems: [1,1,1,1,1,1], };
 
-    const isLogin = useContext(isLoginContext);
-    const userData = useContext(userDataContext);
-    const navigate = useNavigate();
-    const whoLogIn = userData.find((item) => String(item.keyId) === String(isLogin[1]));
+    const whoLogIn = { // 데이터 연결 필요
+        name: "송태섭",
+        id: "ijkl",
+        passWord: "1234",
+        keyId: 10000003,
+        telNum:111,
+        birth:111113,
+        identityNum:3333333,
+        zipCode: 33333, 
+        email: undefined,
+        ownItem: [1],
+        likedItemId: [2,3],
+        contracts: [2]
+      };
 
     const depositRef = useRef();
     const costRef = useRef();
