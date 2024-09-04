@@ -1,10 +1,14 @@
 import {useNavigate} from "react-router-dom";
 import Logo from "../component/Logo";
 import HouseItem from "../component/HouseItem";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 const Mypage = () => {
     const navigate = useNavigate();
-    const whoLogIn = { // 데이터 연결필요
+    const { registerInfo } = useContext(AuthContext);
+
+    /*const whoLogIn = { // 데이터 연결필요
         name: "송태섭",
         id: "ijkl",
         passWord: "1234",
@@ -17,7 +21,7 @@ const Mypage = () => {
         ownItem: [1],
         likedItemId: [2,3],
         contracts: [2]
-    };
+    };*/
 
     const onChangeData = () => {
         navigate("/changingUserData");
@@ -43,9 +47,12 @@ const Mypage = () => {
         alert("DELETE");
     }
 
-    const ownItem = whoLogIn.ownItem;
-    const likedItem = whoLogIn.likedItemId;
-    const contracts = whoLogIn.contracts;
+    //const ownItem = registerInfo;
+    //const likedItem = registerInfo;
+    //const contracts = registerInfo;
+    const ownItem = [1];
+    const likedItem = [2,3];
+    const contracts = [2];
 
     return (
         <div className="Mypage">
@@ -54,11 +61,10 @@ const Mypage = () => {
                 <div className = "title">MY page</div>
             </div>
             <div className = "UserData">
-                <div>이름: {whoLogIn.name}</div>
-                <div>전화번호: {whoLogIn.telNum}</div>
-                <div>생년월일: {whoLogIn.birth}</div>
-                <div>우편번호: {whoLogIn.zipCode}</div>
-                <div>Email: {whoLogIn.email}</div>
+                <div>이름: {registerInfo.name}</div>
+                <div>닉네임: {registerInfo.nickName}</div>
+                <div>전화번호: {registerInfo.phoneNumber}</div>
+                <div>Email: {registerInfo.email}</div>
             </div>
             <div className = "select">
                 <div className = "title">내 매물</div>
