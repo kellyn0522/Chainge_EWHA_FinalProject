@@ -1,4 +1,4 @@
-import Header from "../component/Header";
+import NavBar from "../components/NavBar";
 import HouseItem from "../component/HouseItem";
 import { useState, useContext } from "react";
 import {itemDataContext} from "../App";
@@ -33,7 +33,7 @@ const Home = () => {
     
     return (
         <div className="Home">
-            <div className = "header"><Header /></div>
+            <div className = "header"><NavBar /></div>
             <div className="search_wrapper">
                 <input 
                     className = "searchbar"

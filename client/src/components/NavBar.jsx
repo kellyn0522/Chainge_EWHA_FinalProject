@@ -3,9 +3,17 @@ import { Container, Nav, Navbar, Stack } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import ChatNotification from "./chat/ChatNotification";
+import { useNavigate } from "react-router-dom";
 
 const NavBar = () => {
     const { user, logoutUser } = useContext(AuthContext);
+    const navigate = useNavigate();
+    const onClickChat = () => {
+        navigate("/chat");
+    }
+    const onClickMypage = () => {
+        navigate("/mypage");
+    }
     
     const { recipientUser } = useContext(AuthContext);
     
@@ -14,7 +22,7 @@ const NavBar = () => {
             <Container>
                 <h2>
                     <Link to="/" className="link-light text-decoration-none">
-                        Chat App
+                        문방구
                     </Link>
                 </h2>
                 { user && ( <span className="text-warning">Hello {user?.nickName} ! </span> )}
@@ -26,7 +34,10 @@ const NavBar = () => {
                                 <Link onClick={() => logoutUser()} to="/login" className="link-light text-decoration-none">
                                     Logout
                                 </Link>
-
+                                <div className = "userData"> 
+                                    <button onClick={onClickMypage}>마이페이지</button>                                    
+                                    <button onClick={onClickChat}>채팅</button>
+                                </div>
                             </>)
                         }
                         {!user && (<>
@@ -46,3 +57,4 @@ const NavBar = () => {
 };
 
 export default NavBar;
+
