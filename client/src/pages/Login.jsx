@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { Alert, Button, Form, Row, Col, Stack } from "react-bootstrap";
 import { AuthContext } from "../context/AuthContext";
+import Logo from "../component/Logo";
 
 
 const Login = () => {
@@ -21,6 +22,7 @@ const Login = () => {
             }}>
                 <Col xs={6}>
                     <Stack gap={3}>
+                        <div className = "logo"><Logo /></div>
                         <h2>Login</h2>
 
                         <Form.Control type="email" placeholder="Email" onChange={(e) => updateLoginInfo

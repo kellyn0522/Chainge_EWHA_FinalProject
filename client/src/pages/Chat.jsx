@@ -5,6 +5,7 @@ import  UserChat  from "../components/chat/UserChat";
 import { AuthContext } from "../context/AuthContext";
 import PotentialChats from "../components/chat/PotentialChats";
 import ChatBox from "../components/chat/ChatBox";
+import Logo from "../component/Logo";
 
 const chat = () => {    
     const { user } = useContext(AuthContext);
@@ -12,6 +13,7 @@ const chat = () => {
 
     return (
         <Container>
+            <div className = "logo"><Logo /></div>
             <PotentialChats/>
             {userChats?.length < 1 ? null : (
                 <Stack direction="horizontal" gap={4} className="align-items-start">

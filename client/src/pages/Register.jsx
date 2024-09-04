@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { Alert, Button, Form, Row, Col, Stack } from "react-bootstrap";
 import { AuthContext } from "../context/AuthContext";
+import Logo from "../component/Logo";
 
 // 사용자 등록
 const Register = () => {
@@ -14,6 +15,7 @@ const Register = () => {
             }}>
                 <Col xs={6}>
                     <Stack gap={3}>
+                        <div className = "logo"><Logo /></div>
                         <h2>Register</h2>
                         
                         <Form.Control
