@@ -1,6 +1,6 @@
 import {useRef, useState, useContext} from "react";
 import Logo from "../component/Logo";
-import {itemContext, isLoginContext} from "../App";
+import {itemContext} from "../App";
 import { useNavigate } from "react-router-dom";
 
 const CreateItemPage = () => {
@@ -13,8 +13,7 @@ const CreateItemPage = () => {
     check.current = 0;
 
     const {onCreateItem} = useContext(itemContext);
-    const isLogin = useContext(isLoginContext);
-    const ownerID =isLogin[1];
+    const ownerID = 10000003; // 데이터 연결 필요
 
     const navigate = useNavigate();
 

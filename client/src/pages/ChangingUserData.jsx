@@ -1,21 +1,27 @@
 import { useNavigate } from "react-router-dom";
 import {useRef, useState, useContext} from "react";
-import {userContext,isLoginContext, userDataContext} from "../App";
 import Logo from "../component/Logo";
 
 
 const ChangingUserData = () => {
-    const isLogin = useContext(isLoginContext);
-    const userData = useContext(userDataContext);
-    const whoLogIn = userData.find((item) => String(item.keyId) === String(isLogin[1]));
-    const {onCreateUser, onUpdateUser} = useContext(userContext);
+    
+    const whoLogIn = { // 데이터 연결필요
+        name: "송태섭",
+        id: "ijkl",
+        passWord: "1234",
+        keyId: 10000003,
+        telNum:111,
+        birth:111113,
+        identityNum:3333333,
+        zipCode: 33333, 
+        email: undefined,
+        ownItem: [1],
+        likedItemId: [2,3],
+        contracts: [2]
+      };
+
     const keyID = whoLogIn.keyId;
     const pw = whoLogIn.passWord;
-    //const name = isLogin[1].name;
-    //const telNum = isLogin[1].telNum;
-    //const userBirth = isLogin[1].birth;
-    //const userZipCode = isLogin[1].zipCode;
-    //const userEmail = isLogin[1].email;
 
     const pwRef = useRef();
     const checkPWRef = useRef();
@@ -53,7 +59,7 @@ const ChangingUserData = () => {
             alert("비밀번호가 일치하지 않습니다.");
             return;
         } else {          
-            onUpdateUser(keyID, settedPW, userName, userPhoneNum, birth, zipCode, email);
+            console.log(keyID, settedPW, userName, userPhoneNum, birth, zipCode, email); // 수정필요
             alert("개인정보 변경이 완료되었습니다.");
             navigate("/mypage");
             return;

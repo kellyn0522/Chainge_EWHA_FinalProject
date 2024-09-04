@@ -1,14 +1,23 @@
 import {useNavigate} from "react-router-dom";
-import { useContext } from "react";
-import {isLoginContext, userDataContext} from "../App";
 import Logo from "../component/Logo";
 import HouseItem from "../component/HouseItem";
 
 const Mypage = () => {
     const navigate = useNavigate();
-    const isLogin = useContext(isLoginContext);
-    const userData = useContext(userDataContext);    
-    const whoLogIn = userData.find((item) => String(item.keyId) === String(isLogin[1]));
+    const whoLogIn = { // 데이터 연결필요
+        name: "송태섭",
+        id: "ijkl",
+        passWord: "1234",
+        keyId: 10000003,
+        telNum:111,
+        birth:111113,
+        identityNum:3333333,
+        zipCode: 33333, 
+        email: undefined,
+        ownItem: [1],
+        likedItemId: [2,3],
+        contracts: [2]
+    };
 
     const onChangeData = () => {
         navigate("/changingUserData");

@@ -1,14 +1,26 @@
 import { useContext } from "react";
-import {isLoginContext, likeItemContext, userDataContext} from "../App";
+import {isLoginContext, likeItemContext} from "../App";
 
 
 const LikeButton = ({itemID}) => {
     const {likeItem, cancelLikeItem} = useContext(likeItemContext);
-    const isLogin = useContext(isLoginContext);
-    const userData = useContext(userDataContext);    
-    const whoLogIn = userData.find((item) => String(item.keyId) === String(isLogin[1]));
+    const {isLogin} = useContext(isLoginContext); 
+    const whoLogIn = { // 데이터 연결 필요
+        name: "송태섭",
+        id: "ijkl",
+        passWord: "1234",
+        keyId: 10000003,
+        telNum:111,
+        birth:111113,
+        identityNum:3333333,
+        zipCode: 33333, 
+        email: undefined,
+        ownItem: [1],
+        likedItemId: [2,3],
+        contracts: [2]
+      };
 
-    if(String(isLogin[0]) === String(1)){
+    if(String(isLogin) === String(1)){
         const likedItem = whoLogIn.likedItemId;
         let isLike = likedItem.includes(itemID);
         let color;

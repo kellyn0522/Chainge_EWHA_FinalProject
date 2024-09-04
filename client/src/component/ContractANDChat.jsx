@@ -3,7 +3,7 @@ import { useContext } from "react";
 import {isLoginContext} from "../App";
 
 const ContractANDChat = () => {
-    const isLogin = useContext(isLoginContext);
+    const {isLogin} = useContext(isLoginContext);
     const navigate = useNavigate();
 
     const onClickChat = () => {
@@ -12,7 +12,7 @@ const ContractANDChat = () => {
     const onMakeContract = () => {
         navigate("/makeContract");
     }
-    if(String(isLogin[0]) === String(1)){
+    if(String(isLogin) === String(1)){
         return (
             <div className="ContractANDChat">
                     <button className = "button" onClick = {onClickChat}>채팅</button>

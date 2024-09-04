@@ -1,19 +1,15 @@
 import { useContext } from "react";
-import {setLoginContext, userContext, userDataContext, isLoginContext} from "../App"
+import {isLoginContext} from "../App"
 import { useNavigate } from "react-router-dom";
 
 const Unregister = () => {
-    const {setIsLogin, setIsLogOut} = useContext(setLoginContext);
-    const {onCreateUser, onUpdateUser, onDeleteUser} = useContext(userContext);
-    const isLogin = useContext(isLoginContext);
-    const data = useContext(userDataContext);
+    const {isLogin,setIsLogIn} = useContext(isLoginContext);
     const navigate = useNavigate();
 
     const onClickUnregister = () => {
-        onDeleteUser(isLogin[1]);
+        console.log(isLogin, " 탈퇴 완료");
         alert("회원탈퇴를 완료하였습니다.");
-        setIsLogOut();
-        console.log(data);
+        setIsLogIn = 1;
         navigate("/");
     }
 

@@ -1,14 +1,13 @@
 //import "./Header.css";
 import { useContext } from "react";
-import {isLoginContext, setLoginContext} from "../App"
+import {isLoginContext} from "../App"
 import { useNavigate } from "react-router-dom";
 
 
 const Header = () => {
-    const isLogin = useContext(isLoginContext);
-    const {setIsLogin, setIsLogOut} = useContext(setLoginContext);
+    const {isLogin} = useContext(isLoginContext);
     const navigate = useNavigate();
-    console.log(3,isLogin);
+
     const onClickLogin = () => {
         navigate("/login");
     }
@@ -16,7 +15,7 @@ const Header = () => {
         navigate("/mypage");
     }
     const onClickSignUp = () => {
-        navigate("/signUp");
+        navigate("/Register");
     }
     const onClickChat = () => {
         navigate("/chat");
@@ -26,7 +25,7 @@ const Header = () => {
         alert("로그아웃 되었습니다.");
     }
 
-    if (String(isLogin[0]) === String(1)){
+    if (String(isLogin) === String(1)){
         return (
             <div className="Header">
                 <h1>문방구</h1>
