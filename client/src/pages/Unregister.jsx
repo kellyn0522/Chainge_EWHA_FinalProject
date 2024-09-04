@@ -9,7 +9,7 @@ const Unregister = () => {
     const onClickUnregister = () => {
         console.log(isLogin, " 탈퇴 완료");
         alert("회원탈퇴를 완료하였습니다.");
-        setIsLogIn = 1;
+        setIsLogIn(1);
         navigate("/");
     }
 
