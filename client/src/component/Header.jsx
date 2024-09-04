@@ -1,4 +1,5 @@
 //import "./Header.css";
+import { AuthContext } from "../context/AuthContext";
 import { useContext } from "react";
 import {isLoginContext} from "../App"
 import { useNavigate } from "react-router-dom";
@@ -6,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 const Header = () => {
     const {isLogin} = useContext(isLoginContext);
+    const {logoutUser} = useContext(AuthContext);
     const navigate = useNavigate();
 
     const onClickLogin = () => {
@@ -21,7 +23,7 @@ const Header = () => {
         navigate("/chat");
     }
     const onClickLogOut = () => {
-        setIsLogOut();
+        logoutUser();
         alert("로그아웃 되었습니다.");
     }
 
