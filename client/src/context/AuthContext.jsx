@@ -1,9 +1,10 @@
 import { createContext, useCallback, useEffect, useState } from "react";
 import { baseUrl, postRequest } from "../utils/services";
+import {useNavigate} from "react-router-dom";
 
 export const AuthContext = createContext();
 export const AuthContextProvider = ({ children }) => {
-
+    const navigate = useNavigate();
     const [user, setUser] = useState(null);
     const [registerError, setRegisterError] = useState(null);
     const [isRegisterLoading, setIsRegisterLoading] = useState(false);
@@ -15,7 +16,19 @@ export const AuthContextProvider = ({ children }) => {
         phoneNumber:"",
         password: "",
     });
+// 임의로 추가
+    const [updateError, setUpdateError] = useState(null);
+    const [isUpdateLoading, setIsUpdateLoading] = useState(false);
 
+    const [updaterInfo, setUpdaterInfo] = useState({
+        nickName: "", 
+        phoneNumber: "", 
+        password: "", 
+        identityNum: "", 
+        zipCode: "", 
+        houseAddres: "",
+    });
+//여기까지
     const [loginError, setLoginError] = useState(null);
     const [isLoginLoading, setIsLoginLoading] = useState(false);
 
@@ -97,12 +110,14 @@ export const AuthContextProvider = ({ children }) => {
         }
         localStorage.setItem("user", JSON.stringify(response));
         setUser(response);
+        navigate("/");
 
     }, [loginInfo]);
 
     const logoutUser = useCallback(() => {
         localStorage.removeItem("user");
         setUser(null);
+        navigate("/");
     }, []);
 
 

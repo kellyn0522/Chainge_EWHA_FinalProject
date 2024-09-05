@@ -50,6 +50,35 @@ const registerUser = async (req, res) => {
     }
 };
 
+// 임의로 추가
+const updateUser = async (req, res) => {
+
+    try {
+        const { nickName, phoneNumber, password, identityNum, zipCode, houseAddress } = req.body;
+
+        console.log("Received data:", { nickName, phoneNumber, password, identityNum, zipCode, houseAddress });
+
+        let nickNameExists = await userModel.findOne({ nickName });
+        let phoneNumberExists = await userModel.findOne({ phoneNumber });
+
+        if (nickNameExists) return res.status(400).json("User with the given nickName already exists... ");
+        if (phoneNumberExists ) return res.status(400).json("User with the given phoneNumber already exists... ");
+
+
+        if (!nickName || !phoneNumber || !password || !identityNum || !zipCode || !houseAddress ) return res.status(400).json("All fields are required");
+
+        if (!validator.isStrongPassword(password)) return res.status(400).json("Password must be a strong password");
+
+        user = new userModel({ nickName, phoneNumber, password, identityNum, zipCode, houseAddress });
+
+        res.status(200).json({ nickName : user.nickName , phoneNumber : user.phoneNumber, password : user.password, identityNum : user.identityNum, zipCode : user.zipCode, houseAddress : user.houseAddress });
+
+    } catch (error) {
+        console.log(error); // 에러 로그
+        res.status(500).json(error);
+    }
+};
+
 const loginUser = async (req, res) => {
     const { email, password } = req.body;
     try {
@@ -93,4 +122,4 @@ const getUsers = async(req, res) =>{
     }
 };
 
-module.exports = { registerUser, loginUser, findUser, getUsers };
+module.exports = { registerUser, updateUser, loginUser, findUser, getUsers };
