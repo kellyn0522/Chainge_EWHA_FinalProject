@@ -57,6 +57,64 @@ export const AuthContextProvider = ({ children }) => {
         setUser(response);
         navigate("/");
     }, [updaterInfo]);
+
+    /*
+    const updateUser = async (req, res) => {
+
+    try {
+        const { name, nickName, email, phoneNumber, password, birth, identityNum, zipCode, houseAddress } = req.body;
+        let user = await userModel.findOne({ email });
+
+        console.log("Received data:", { nickName, phoneNumber, password, birth, identityNum, zipCode, houseAddress });
+
+        let nickNameExists = await userModel.findOne({ nickName });
+        let phoneNumberExists = await userModel.findOne({ phoneNumber });
+        let identityNumExists = await userModel.findOne({ identityNum });
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // 사용자 정보를 업데이트
+
+        user.phoneNumber = phoneNumber || user.phoneNumber;
+        user.password = password ? await bcrypt.hash(user.password, salt) : user.password; // 비밀번호 암호화 필요
+        user.birth = birth || user.birth;
+        user.identityNum = identityNum || user.identityNum;
+        user.zipCode = zipCode || user.zipCode;
+        user.houseAddress = houseAddress || user.houseAddress;
+
+        // 업데이트된 정보 저장
+        await user.save();
+
+        if (nickNameExists) return res.status(400).json("User with the given nickName already exists... ");
+        if (phoneNumberExists ) return res.status(400).json("User with the given phoneNumber already exists... ");
+        if (identityNumExists ) return res.status(400).json("User with the given identity number already exists... ");
+
+
+        //if (!nickName || !phoneNumber || !password || !birth || !identityNum || !zipCode || !houseAddress ) return res.status(400).json("All fields are required");
+
+        if (!validator.isStrongPassword(password)) return res.status(400).json("Password must be a strong password");
+
+        res.status(200).json({ 
+            _id: user._id, 
+            name : user.name, 
+            email : user.email,
+            nickName : user.nickName , 
+            phoneNumber : user.phoneNumber, 
+            password : user.password, 
+            birth : user.birth, 
+            identityNum : user.identityNum, 
+            zipCode : user.zipCode, 
+            houseAddress : user.houseAddress
+        });
+
+    } catch (error) {
+        console.log(error); // 에러 로그
+        res.status(500).json(error);
+    }
+};
+*/
 //여기까지
     const [loginError, setLoginError] = useState(null);
     const [isLoginLoading, setIsLoginLoading] = useState(false);

@@ -40,7 +40,7 @@ const registerItem = async (req, res) => {
       
 
         Item = new itemModel({ 
-            ownerName, itemLocate, zipCode, houseAddress, location, itemId, ownerId, housePrice, memo, type, isContract, bedSize, hasItems });
+            ownerName, zipCode, houseAddress, location, area, itemId, ownerId, housePrice, memo, type, isContract, bedSize, hasItems });
 
 
         await item.save();
