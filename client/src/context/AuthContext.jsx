@@ -24,6 +24,7 @@ export const AuthContextProvider = ({ children }) => {
         nickName: "", 
         phoneNumber: "", 
         password: "", 
+        birth: "",
         identityNum: "", 
         zipCode: "", 
         houseAddres: "",

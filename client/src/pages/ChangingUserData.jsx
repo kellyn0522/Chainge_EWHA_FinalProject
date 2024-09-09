@@ -6,23 +6,9 @@ import Logo from "../component/Logo";
 
 
 const ChangingUserData = () => {
-    
-    const whoLogIn = { // 데이터 연결필요
-        name: "송태섭",
-        id: "ijkl",
-        passWord: "1234",
-        keyId: 10000003,
-        telNum:111,
-        birth:111113,
-        identityNum:3333333,
-        zipCode: 33333, 
-        email: undefined,
-        ownItem: [1],
-        likedItemId: [2,3],
-        contracts: [2]
-      };
 
       const { 
+        user,
         updaterInfo,
         updateUpdaterInfo,
         updaterUser,
@@ -44,12 +30,12 @@ const ChangingUserData = () => {
   
                           <Form.Control 
                             type="text" 
-                            placeholder="이름" 
+                            placeholder={user.name} 
                             disabled 
                             />
                           <Form.Control 
                             type="email" 
-                            placeholder="Email" 
+                            placeholder={user.email} 
                             disabled 
                             />
                           <Form.Control 
@@ -61,23 +47,24 @@ const ChangingUserData = () => {
                           />
                           <Form.Control
                               type="text"
-                              placeholder="Nickname"
+                              placeholder={user.nickName}
                               onChange={(e) =>
                                 updateUpdaterInfo({ ...updaterInfo, nickName: e.target.value })
                               }
                           />
                            <Form.Control
                               type="tel"
-                              placeholder="Phonenumber"
+                              placeholder={user.phoneNumber}
                               onChange={(e) =>
                                 updateUpdaterInfo({ ...updaterInfo, phoneNumber: e.target.value })
                               }
                           />
                           <Form.Control 
                             type="text" 
-                            placeholder="Birth" 
-                            disabled 
-                            />
+                            placeholder="생년월일" 
+                            onChange={(e) =>
+                                updateUpdaterInfo({ ...updaterInfo, birth: e.target.value })
+                            } />
                         <Form.Control 
                             type="password" 
                             placeholder="주민등록번호" 
@@ -92,7 +79,7 @@ const ChangingUserData = () => {
                             } />
                             <Form.Control 
                                 type="text" 
-                                placeholder="houseAddres" 
+                                placeholder="House Addres" 
                                 onChange={(e) =>
                                     updateUpdaterInfo({ ...updaterInfo, houseAddres: e.target.value })
                                 } />
