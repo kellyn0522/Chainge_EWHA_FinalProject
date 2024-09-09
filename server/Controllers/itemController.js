@@ -14,13 +14,12 @@ const createToken = (_itemId) => {
 const registerItem = async (req, res) => {
 
     try {
+        /*
         const newItem = new Item({
             ownerName: req.body.ownerName,
-            itemLocate: req.body.itemLocate,
             zipCode: req.body.zipCode,
             houseAddress: req.body.houseAddress,
             location: req.body.location,
-            itemId: req.body.itemId,
             ownerId: req.body.ownerId,
             housePrice: req.body.housePrice,
             memo: req.body.memo,
@@ -30,9 +29,10 @@ const registerItem = async (req, res) => {
             hasItems: req.body.hasItems,
             hasAgent :  req.body.hasItems,
 
-        }) 
+        })*/
+       const{ownerName, zipCode, houseAddress, location, area, ownerId, housePrice, memo, type, isContract, bedSize, hasItems } = req.body;
 
-        console.log("Received data:", {ownerName,itemId,location });
+        console.log("Received data:", {ownerName, location });
 
         let itemExists = await userModel.findOne({ _itemId });
 
@@ -40,7 +40,7 @@ const registerItem = async (req, res) => {
       
 
         Item = new itemModel({ 
-            ownerName, zipCode, houseAddress, location, area, itemId, ownerId, housePrice, memo, type, isContract, bedSize, hasItems });
+            ownerName, zipCode, houseAddress, location, area, ownerId, housePrice, memo, type, isContract, bedSize, hasItems });
 
 
         await item.save();

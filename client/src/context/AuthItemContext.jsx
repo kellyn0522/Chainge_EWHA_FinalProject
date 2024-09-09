@@ -41,7 +41,7 @@ export const AuthItemContextProvider = ({ children }) => {
         setCreateItemError(null);
 
         const response = await postRequest(
-            `${baseUrl}/users/createItem`, ///////
+            `${baseUrl}/items/createItem`, ///////
             JSON.stringify(createItemInfo));
 
             setIsCreateItemLoading(false);
