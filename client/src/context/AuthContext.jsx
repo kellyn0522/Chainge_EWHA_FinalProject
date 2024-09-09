@@ -55,6 +55,7 @@ export const AuthContextProvider = ({ children }) => {
         localStorage.setItem("user", JSON.stringify(response));
 
         setUser(response);
+        navigate("/");
     }, [updaterInfo]);
 //여기까지
     const [loginError, setLoginError] = useState(null);
@@ -118,6 +119,7 @@ export const AuthContextProvider = ({ children }) => {
         localStorage.setItem("user", JSON.stringify(response));
 
         setUser(response);
+        navigate("/");
     }, [registerInfo]);
 
     const loginUser = useCallback(async (e) => {
