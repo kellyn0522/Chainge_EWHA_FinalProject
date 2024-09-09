@@ -28,6 +28,33 @@ export const AuthContextProvider = ({ children }) => {
         zipCode: "", 
         houseAddres: "",
     });
+
+    const updateUpdaterInfo = useCallback((info) => {
+        setUpdaterInfo((prevInfo) => ({ ...prevInfo, ...info }));
+    }, []);
+
+    const updaterUser = useCallback(async(e) => {
+        e.preventDefault();
+        setIsUpdateLoading(true);
+        setUpdateError(null);
+
+        const response = await postRequest(
+            `${baseUrl}/users/update`,
+            JSON.stringify(updaterInfo));
+
+        setIsUpdateLoading(false);
+
+        console.log("updater response ", response);
+        
+
+        if (response.error) {
+            return setUpdateError(response);
+        }
+
+        localStorage.setItem("user", JSON.stringify(response));
+
+        setUser(response);
+    }, [updaterInfo]);
 //여기까지
     const [loginError, setLoginError] = useState(null);
     const [isLoginLoading, setIsLoginLoading] = useState(false);
@@ -129,6 +156,13 @@ export const AuthContextProvider = ({ children }) => {
             registerUser,
             registerError,
             isRegisterLoading,
+
+            updaterInfo,
+            updateUpdaterInfo,
+            updaterUser,
+            updateError,
+            isUpdateLoading,
+            
             logoutUser,
             loginUser,
             loginError,
