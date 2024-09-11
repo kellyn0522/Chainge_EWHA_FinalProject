@@ -48,6 +48,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import {Container} from "react-bootstrap";
 import { useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
+//import { AuthItemContext } from "./context/AuthItemContext";
 import { ChatContextProvider } from "./context/ChatContext";
 
 
@@ -179,7 +180,7 @@ const mockDataContract = [ // 테스트용 거래 데이터
 ]
 */
 
-
+export const ItemContextProvider = React.createContext();
 export const isLoginContext = React.createContext();
 export const itemContext = React.createContext();
 export const itemDataContext = React.createContext();
@@ -192,7 +193,14 @@ function App() {
   const [itemData, dispatchItem] = useReducer(itemReducer, mockDataItem); // 매물 정보를 저장한 변수 배열, 테스트용 데이터로 초기화
 
   const {user} = useContext(AuthContext);
-  
+/*  const { 
+    createItemInfo,
+    updateCreateItemInfo,
+    createItem,
+    createItemError,
+    isCreateItemLoading,
+} = useContext(AuthItemContext);
+*/  
   useEffect(() => { // 데이터 초기화
     dispatchItem({
       type: "INIT",

@@ -1,22 +1,18 @@
-import {useContext} from "react";
-import Logo from "../component/Logo";
-import { useNavigate } from "react-router-dom";
+//import { AuthItemContext } from "../context/AuthItemContext";
+import { useContext, useState } from "react";
 import { Alert, Button, Form, Row, Col, Stack } from "react-bootstrap";
-import { AuthItemContext } from "../context/AuthItemContext";
 import { AuthContext } from "../context/AuthContext";
+import Logo from "../component/Logo";
 
 const CreateItemPage = () => {
+
     const { 
+        user,
         createItemInfo,
         updateCreateItemInfo,
         createItem,
         createItemError,
         isCreateItemLoading,
-    } = useContext(AuthItemContext);
-    
-
-    const { 
-        user
     } = useContext(AuthContext);
 
     let hasBed, hasWasher, hasDryer, hasTV, hasAirConditioner, hasHeater, hasBlinds = 0;
@@ -27,6 +23,14 @@ const CreateItemPage = () => {
     const [memo, setMemo] = useState(undefined);
     const [bedSize, setBedSize] = useState(undefined);
     const [hasItems, setHasItems] = useState([hasBed, hasWasher, hasDryer, hasTV, hasAirConditioner, hasHeater, hasBlinds]);
+    
+    const settingType = (e) =>{ setType(e.target.value);};
+    const settingBedSize = (e) =>{ setBedSize(e.target.value);};
+
+    const onChangeCheckbox = (e) => {
+        //console.log(String(e.current));
+        //switch(String(e.current))
+    }
 /*
 
     const locationRef = useRef();
@@ -48,15 +52,8 @@ const CreateItemPage = () => {
     const [memo, setMemo] = useState(undefined);
     const [bedSize, setBedSize] = useState(undefined);
     const [hasItems, setHasItems] = useState([hasBed, hasWasher, hasDryer, hasTV, hasAirConditioner, hasHeater, hasBlinds]);
-
-    const settingLocation = (e) =>{ setLocation(e.target.value);};
-    const settingdetailAdd = (e) =>{ setdetailAdd(e.target.value);};
-    const settingHousePrice = (e) =>{ setHousePrice(e.target.value);};
-    const settingArea = (e) =>{ setArea(e.target.value);};
-    const settingType = (e) =>{ setType(e.target.value);};
-    const settingMemo = (e) =>{ setMemo(e.target.value);};
-    const settingBedSize = (e) =>{ setBedSize(e.target.value);};
-
+*/
+/*
     const onCheck = () => {
         if (!location) { locationRef.current.focus(); return;
         } else if (!detailAdd) { detailAddRef.current.focus(); return;
@@ -114,62 +111,82 @@ const CreateItemPage = () => {
                         <Form.Control 
                         type="text" 
                         placeholder={user.name}
-                        disabled
-                        onChange={(e) =>
-                            updateCreateItemInfo({ ...createItemInfo, ownerName: user.name })
-                        } />
+                        disabled/>
+
                         <Form.Control 
                         type="text" 
                         placeholder="Location" 
-                        onChange={(e) =>
-                            updateCreateItemInfo({ ...createItemInfo, location: e.target.value })
+                        onChange={
+                            (e) => updateCreateItemInfo({ ...createItemInfo, location: e.target.value })
                         } />
 
                         <Form.Control 
                         type="text" 
                         placeholder="Detail Location" 
-                        onChange={(e) =>
-                            updateCreateItemInfo({ ...createItemInfo, houseAddress: e.target.value })
+                        onChange={ 
+                            (e) => updateCreateItemInfo({ ...createItemInfo, houseAddress: e.target.value })
                         } />
 
                         <Form.Control
                             type="text"
                             placeholder="ZipCode"
-                            onChange={(e) =>
-                                updateCreateItemInfo({ ...createItemInfo, zipCode: e.target.value })
+                            onChange={ 
+                                (e) => updateCreateItemInfo({ ...createItemInfo, zipCode: e.target.value })
                             }
                         />
                         
                         <Form.Control
                             type="text"
                             placeholder="월세 (단위:월)"
-                            onChange={(e) =>
-                                updateCreateItemInfo({ ...createItemInfo, housePrice: e.target.value })
+                            onChange={ 
+                                (e) => updateCreateItemInfo({ ...createItemInfo, housePrice: e.target.value })
                             }
                         />
                         <Form.Control
                             type="text"
                             placeholder="공급 면적"
-                            onChange={(e) =>
-                                updateCreateItemInfo({ ...createItemInfo, area: e.target.value })
+                            onChange={ 
+                                (e) => updateCreateItemInfo({ ...createItemInfo, area: e.target.value })
                             }
                         />
-                        <Form.Control>
-                            <select className = "typeSelect" onClick={settingType} onKeyDown = {onKeyDown} ref={typeRef}>
+                        
+                        <Form.Control
+                            type="text"
+                            placeholder="Memo"
+                            onChange={ 
+                                (e) => updateCreateItemInfo({ ...createItemInfo, memo: e.target.value })
+                            }
+                        />
+
+                        
+                        <Button variant="primary" type="submit" >
+                            { isCreateItemLoading? "Creating your Item":"Register"}
+                        </Button>
+                        {
+                            createItemError?.error && <Alert variant="danger">
+                            <p>{createItemError?.message}</p></Alert>
+                        }
+                        
+                    </Stack>
+                </Col>
+            </Row>
+        </Form>
+        <div className = "type">  
+                            <select className = "typeSelect" onClick={settingType} >
                                 <option value = "select">매물 종류</option>
                                 <option value = "아파트">아파트</option>
                                 <option value = "오피스텔">오피스텔</option>
                                 <option value = "단독주택">단독주택</option>
                                 <option value = "상가">상가</option>
                             </select>
-                        </Form.Control>
-                        <Form.Control>
+                        </div>   
+                        <div className = "bedSize"> 
                             <div className="text">침대 옵션 여부</div>
                             <input type = "checkbox" checked = {hasBed} onChange = {onChangeCheckbox} />
                             <div className="text">침대 크기</div>
-                            <input value={bedSize} onChange={settingBedSize} className="set" onKeyDown = {onKeyDown} maxLength="6" />
-                        </Form.Control>
-                        <Form.Control>
+                            <input value={bedSize} onChange={settingBedSize} className="set"  maxLength="6" />
+                        </div>
+                        <div className = "hasItem"> 
                             <div className="text">옵션 여부 (옵션인 경우 체크해주세요.)</div>
                             <div className="hasWasher">
                                 <div className="text">세탁기</div>
@@ -195,27 +212,7 @@ const CreateItemPage = () => {
                                 <div className="text">블라인드</div>
                                 <input type = "checkbox" checked = {hasBlinds} onChange = {onChangeCheckbox} />
                             </div>
-                        </Form.Control>
-                        <Form.Control
-                            type="text"
-                            placeholder="Memo"
-                            onChange={(e) =>
-                                updateCreateItemInfo({ ...createItemInfo, memo: e.target.value })
-                            }
-                        />
-                    
-                        <Button variant="primary" type="submit" >
-                            { isCreateItemLoading? "Creating your Item":"Register"}
-                        </Button>
-                        {
-                            createItemError?.error && <Alert variant="danger">
-                            <p>{createItemError?.message}</p></Alert>
-                        }
-                        
-                    </Stack>
-                </Col>
-            </Row>
-        </Form>
+                        </div>
     </>);
 };
 

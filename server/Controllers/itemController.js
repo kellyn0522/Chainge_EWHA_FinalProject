@@ -1,7 +1,8 @@
 const itemModel = require('../Models/itemModel');
 const jwt = require("jsonwebtoken");
-const { default: Item } = require('../../client/src/pages/Item');
-
+const bcrypt = require("bcrypt");
+const validator = require("validator");
+//const { default: Item } = require('../../client/src/pages/Item');
 
 
 const createToken = (_itemId) => {
@@ -11,6 +12,7 @@ const createToken = (_itemId) => {
     return jwt.sign({ _itemId }, jwtkey, { expiresIn: "3d" });
 };
 
+    
 const registerItem = async (req, res) => {
 
     try {
@@ -43,11 +45,25 @@ const registerItem = async (req, res) => {
             ownerName, zipCode, houseAddress, location, area, ownerId, housePrice, memo, type, isContract, bedSize, hasItems });
 
 
-        await item.save();
+        await Item.save();
 
         const token = createToken(Item._itemId); // id 받아서 토큰 생성
 
-        res.status(200).json({ itemId: Item._itemId,  token });
+        res.status(200).json({ 
+            _itemId: Item._itemId,  
+            ownerName: Item.ownerName, 
+            zipCode: Item.zipCode, 
+            houseAddress: Item.houseAddress, 
+            location: Item.location, 
+            area: Item.area, 
+            ownerId: Item.ownerId, 
+            housePrice: Item.housePrice, 
+            memo: Item.memo, 
+            type: Item.type, 
+            isContract: Item.isContract, 
+            bedSize: Item.bedSize, 
+            hasItems: Item.hasItems,
+            token });
 
     } catch (error) {
         console.log(error); // 에러 로그

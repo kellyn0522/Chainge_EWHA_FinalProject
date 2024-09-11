@@ -27,7 +27,7 @@ export const AuthItemContextProvider = ({ children }) => {
     console.log("createItemInfo", createItemInfo);
 
     useEffect(() => {
-        const storedItem = localStorage.getItem("item");
+        const storedItem = localStorage.getItem("Item");
         setItem(JSON.parse(storedItem));
     }, []);
 

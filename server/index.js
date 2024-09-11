@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const mongoose = require("mongoose");
+const itemRoute = require("./Routes/itemRoute");
 const userRoute = require("./Routes/userRoute");
 const chatRoute = require("./Routes/chatRoute");
 

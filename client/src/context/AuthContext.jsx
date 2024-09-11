@@ -208,6 +208,61 @@ export const AuthContextProvider = ({ children }) => {
         navigate("/");
     }, []);
 
+    const [item, setItem] = useState(null);
+    const [createItemError, setCreateItemError] = useState(null);
+    const [isCreateItemLoading, setIsCreateItemLoading] = useState(false);
+
+    const [createItemInfo, setCreateItemInfo] = useState({
+        ownerName:"", 
+        zipCode:"", 
+        houseAddress:"", 
+        location:"", 
+        area:"", 
+        ownerId:"", 
+        housePrice:"", 
+        memo:"", 
+        type:"", 
+        isContract:"", 
+        bedSize:"", 
+        hasItems:"",
+    });
+
+    console.log("createItemInfo", createItemInfo);
+
+    useEffect(() => {
+        const storedItem = localStorage.getItem("Item");
+        setItem(JSON.parse(storedItem));
+    }, []);
+
+    const updateCreateItemInfo = useCallback((info) => {
+        setCreateItemInfo((prevInfo) => ({ ...prevInfo, ...info }));
+    }, []);
+
+    const createItem = useCallback(async(e) => {
+        e.preventDefault();
+        setIsCreateItemLoading(true);
+        setCreateItemError(null);
+
+        const response = await postRequest(
+            `${baseUrl}/items/createItem`, ///////
+            JSON.stringify(createItemInfo));
+
+            setIsCreateItemLoading(false);
+
+        console.log("Create Item response ", response);
+        
+
+        if (response.error) {
+            return setCreateItemError(response);
+        }
+
+        localStorage.setItem("Item", JSON.stringify(response));
+
+        setItem(response);
+        navigate("/");
+    }, [createItemInfo]);
+
+
 
     return (<AuthContext.Provider
         value={{
@@ -230,6 +285,13 @@ export const AuthContextProvider = ({ children }) => {
             loginInfo,
             updateLoginInfo,
             isLoginLoading,
+
+            item,
+            createItemInfo,
+            updateCreateItemInfo,
+            createItem,
+            createItemError,
+            isCreateItemLoading,
         }}
     >
         {children}
