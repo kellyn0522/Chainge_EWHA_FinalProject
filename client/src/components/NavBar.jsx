@@ -14,6 +14,10 @@ const NavBar = () => {
     const onClickMypage = () => {
         navigate("/mypage");
     }
+    const onClickLogout = () => {
+        alert("로그아웃 되었습니다.");
+        logoutUser();
+    }
     
     const { recipientUser } = useContext(AuthContext);
     
@@ -31,7 +35,7 @@ const NavBar = () => {
                         {
                             user && (<>
                             <ChatNotification/>
-                                <Link onClick={() => logoutUser()} to="/login" className="link-light text-decoration-none">
+                                <Link onClick={onClickLogout} to="/" className="link-light text-decoration-none">
                                     Logout
                                 </Link>
                                 <div className = "userData"> 
