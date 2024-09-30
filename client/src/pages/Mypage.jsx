@@ -6,7 +6,7 @@ import { AuthContext } from "../context/AuthContext";
 
 const Mypage = () => {
     const navigate = useNavigate();
-    const { user } = useContext(AuthContext);
+    const { user, item } = useContext(AuthContext);
 
     /*const whoLogIn = { // 데이터 연결필요
         name: "송태섭",

@@ -224,7 +224,14 @@ export const AuthContextProvider = ({ children }) => {
         type:"", 
         isContract:"", 
         bedSize:"", 
-        hasItems:"",
+        hasItems:{
+            hasWasher : false,
+            hasDryer : false, 
+            hasTV : false, 
+            hasAirConditioner : false, 
+            hasHeater : false, 
+            hasBlinds : false
+        },
     });
 
     console.log("createItemInfo", createItemInfo);

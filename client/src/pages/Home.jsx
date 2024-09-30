@@ -2,17 +2,26 @@ import NavBar from "../components/NavBar";
 import HouseItem from "../component/HouseItem";
 import { useState, useContext } from "react";
 import {itemDataContext} from "../App";
+import { AuthContext } from "../context/AuthContext";
 
 
 const Home = () => {
-    const itemData = useContext(itemDataContext);
     const [search, setSearch] = useState("");
     const [isSearch, setIsSearch] = useState("");
+    const { item } = useContext(AuthContext);
 
     const getSearchResult = () => {
         return search === "" 
-        ? itemData 
-        : itemData.filter((it) => it.location.toLowerCase().includes(search.toLowerCase()));
+        ? item 
+        : item.filter((it) => it.location.toLowerCase().includes(search.toLowerCase()));
+    }
+
+    const getResult = () => {
+        return getSearchResult()
+        ?getSearchResult().map((it) => (
+            <HouseItem key = {it.itemId} itemId = {it.itemId} />
+        ))
+        :0
     }
 
     const onSearch = () => {
@@ -45,9 +54,7 @@ const Home = () => {
                 <button className = "button" onClick = {onSearch}>검색</button>
             </div>
             <div className= "list_wrapper">
-                {getSearchResult().map((it) => (
-                    <HouseItem key = {it.itemId} itemId = {it.itemId} />
-                ))}
+                {getSearchResult()}
             </div>
         </div>
     );
