@@ -1,25 +1,26 @@
 //import { AuthItemContext } from "../context/AuthItemContext";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { Alert, Button, Form, Row, Col, Stack } from "react-bootstrap";
+import { AuthItemContext } from "../context/AuthItemContext";
 import { AuthContext } from "../context/AuthContext";
 import Logo from "../component/Logo";
+import axios from "axios";
 
 const CreateItemPage = () => {
 
     const { 
-        user,
+        //item,
         createItemInfo,
         updateCreateItemInfo,
         createItem,
         createItemError,
         isCreateItemLoading,
-    } = useContext(AuthContext);
+    } = useContext(AuthItemContext);
+    const{user} = useContext(AuthContext);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [successMessage, setSuccessMessage] = useState(null);
+    const [error, setError] = useState(null);
 
-    const[isContract, setIsContract] = useState(0);
-    const ownerID = 10000003; // 데이터 연결 필요
-
-    const [type, setType] = useState(undefined);
-    const [memo, setMemo] = useState(undefined);
     const [bedExist, setBedExist] = useState(false);
     const [hasItems, setHasItems] = useState({
         hasWasher : false,
@@ -30,21 +31,70 @@ const CreateItemPage = () => {
         hasBlinds : false});
 
     const onChangebedExist = (e) => {
-        setBedExist(e.target.checked);
-        () => updateCreateItemInfo({ ...createItemInfo, bedSize: bedExist })
+        const checked = e.target.checked
+        setBedExist(checked);
+        () => updateCreateItemInfo({ ...createItemInfo, bedSize: checked? createItemInfo.bedSize: "" })
     };
 
     const onChangeCheckbox = (e) => {
         const { name, checked } = e.target;
         setHasItems((prevState) => {
             const newState = {...prevState, [name]:checked};
-            updateCreateItemInfo({ ...createItemInfo, hasItems: newState});
             return newState;
         });
     };
 
+    useEffect(() => {
+        updateCreateItemInfo({ ...createItemInfo, hasItems});
+    },[hasItems]);
+
+    useEffect(() => {
+        updateCreateItemInfo({ ...createItemInfo, bedSize: bedExist? createItemInfo.bedSize: "" })
+    }, [bedExist])
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setIsSubmitting(true);
+        setError(null);
+        setSuccessMessage(null);
+
+        // FormData 생성
+        const formData = new FormData();
+        formData.append("ownerName", createItemInfo.ownerName);
+        formData.append("zipCode", createItemInfo.zipCode);
+        formData.append("houseAddress", createItemInfo.houseAddress);
+        formData.append("location", createItemInfo.location);
+        formData.append("area", createItemInfo.area);
+        formData.append("housePrice", createItemInfo.housePrice);
+        formData.append("memo", createItemInfo.memo);
+        formData.append("type", createItemInfo.type);
+        formData.append("bedSize", createItemInfo.bedSize);
+        formData.append("hasItems", JSON.stringify(createItemInfo.hasItems));
+        formData.append("imageFile", createItemInfo.imageFile); // 이미지 파일
+
+        try {
+            // axios를 이용한 POST 요청
+            const response = await axios.post("http://localhost:5000/api/items/createItem", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
+
+            setIsSubmitting(false);
+            setSuccessMessage("매물이 성공적으로 등록되었습니다!");
+            console.log("Item created successfully:", response.data);
+
+            // 필요한 경우 홈이나 다른 페이지로 이동
+            navigate("/");
+        } catch (err) {
+            console.error("Error creating item:", err);
+            setError("매물 등록에 실패했습니다. 다시 시도해주세요.");
+            setIsSubmitting(false);
+        }
+    };
+
     return (<>
-        <Form onSubmit={createItem}>
+        <Form onSubmit={handleSubmit}>
             <Row style={{
                 height: "100vh",
                 justifyContent: "Center",
@@ -54,6 +104,10 @@ const CreateItemPage = () => {
                     <Stack gap={3}>
                         <div className = "logo"><Logo /></div>
                         <h2>매물 등록</h2>
+                        <Form.Control
+                                type="file"
+                                onChange={(e) => updateCreateItemInfo({ ...createItemInfo, imageFile: e.target.files[0] })}
+                        />
 
                         <Form.Control 
                         type="text" 
@@ -64,7 +118,7 @@ const CreateItemPage = () => {
                         type="text" 
                         placeholder="Location" 
                         onChange={
-                            (e) => updateCreateItemInfo({ ...createItemInfo, location: e.target.value })
+                            (e) => updateCreateItemInfo({ ...createItemInfo, location: e.target.value, ownerName: user.name, itemID: new Date().getTime(), ownerId: user.email })
                         } />
 
                         <Form.Control 

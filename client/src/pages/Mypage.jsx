@@ -3,25 +3,12 @@ import Logo from "../component/Logo";
 import HouseItem from "../component/HouseItem";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import { AuthItemContext } from "../context/AuthItemContext";
 
 const Mypage = () => {
     const navigate = useNavigate();
-    const { user, item } = useContext(AuthContext);
-
-    /*const whoLogIn = { // 데이터 연결필요
-        name: "송태섭",
-        id: "ijkl",
-        passWord: "1234",
-        keyId: 10000003,
-        telNum:111,
-        birth:111113,
-        identityNum:3333333,
-        zipCode: 33333, 
-        email: undefined,
-        ownItem: [1],
-        likedItemId: [2,3],
-        contracts: [2]
-    };*/
+    const { user } = useContext(AuthContext);
+    const { item } = useContext(AuthItemContext);
 
     const onChangeData = () => {
         navigate("/changingUserData");

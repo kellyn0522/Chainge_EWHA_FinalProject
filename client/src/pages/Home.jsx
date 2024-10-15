@@ -1,19 +1,32 @@
 import NavBar from "../components/NavBar";
 import HouseItem from "../component/HouseItem";
-import { useState, useContext } from "react";
-import {itemDataContext} from "../App";
-import { AuthContext } from "../context/AuthContext";
+import { useState, useContext, useEffect } from "react";
+import { AuthItemContext } from "../context/AuthItemContext";
 
 
 const Home = () => {
     const [search, setSearch] = useState("");
     const [isSearch, setIsSearch] = useState("");
-    const { item } = useContext(AuthContext);
+    const { getItem, getItemError } = useContext(AuthItemContext);
+    const [items, setItems] = useState([]);
+
+    useEffect(() => {
+        const fetchItems = async () => {
+            const allItems = await getItem();
+            if (Array.isArray(allItems)){
+                setItems(allItems);
+            } else {
+                console.error('Failed to fetch items.');
+            }
+        };
+        fetchItems();
+    }, [getItem]);
 
     const getSearchResult = () => {
+        if(!Array.isArray(items)) return [];
         return search === "" 
-        ? item 
-        : item.filter((it) => it.location.toLowerCase().includes(search.toLowerCase()));
+        ? items 
+        : items.filter((it) => it.location.toLowerCase().includes(search.toLowerCase()));
     }
 
     const getResult = () => {
@@ -39,7 +52,7 @@ const Home = () => {
             onSearch();
         }
     }
-    
+    //<HouseItem key = {it.itemId} itemId = {it.itemId} />
     return (
         <div className="Home">
             <div className = "header"><NavBar /></div>
@@ -54,7 +67,10 @@ const Home = () => {
                 <button className = "button" onClick = {onSearch}>검색</button>
             </div>
             <div className= "list_wrapper">
-                {getSearchResult()}
+                {getItemError && <p>Error: {getItemError}</p>}
+                {getSearchResult().map(it => (
+                    <div key = {it.itemID}>{it.location} = {it.itemID} </div>
+                ))}
             </div>
         </div>
     );
