@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 
 const registerItem = async (req, res) => {
     const imageFile = req.file ? req.file.path : null;
-    console.log("Received data:", { ownerName, zipCode, houseAddress, location, area, ownerId, housePrice, memo, type, isContract, bedSize, hasItems });
+    //console.log("Received data:", { ownerName, zipCode, houseAddress, location, area, ownerId, housePrice, memo, type, isContract, bedSize, hasItems });
     console.log("Received file:", imageFile);
 
     try {

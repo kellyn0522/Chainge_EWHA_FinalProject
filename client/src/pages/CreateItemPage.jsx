@@ -4,7 +4,6 @@ import { Alert, Button, Form, Row, Col, Stack } from "react-bootstrap";
 import { AuthItemContext } from "../context/AuthItemContext";
 import { AuthContext } from "../context/AuthContext";
 import Logo from "../component/Logo";
-import axios from "axios";
 
 const CreateItemPage = () => {
 
@@ -52,49 +51,8 @@ const CreateItemPage = () => {
         updateCreateItemInfo({ ...createItemInfo, bedSize: bedExist? createItemInfo.bedSize: "" })
     }, [bedExist])
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setIsSubmitting(true);
-        setError(null);
-        setSuccessMessage(null);
-
-        // FormData 생성
-        const formData = new FormData();
-        formData.append("ownerName", createItemInfo.ownerName);
-        formData.append("zipCode", createItemInfo.zipCode);
-        formData.append("houseAddress", createItemInfo.houseAddress);
-        formData.append("location", createItemInfo.location);
-        formData.append("area", createItemInfo.area);
-        formData.append("housePrice", createItemInfo.housePrice);
-        formData.append("memo", createItemInfo.memo);
-        formData.append("type", createItemInfo.type);
-        formData.append("bedSize", createItemInfo.bedSize);
-        formData.append("hasItems", JSON.stringify(createItemInfo.hasItems));
-        formData.append("imageFile", createItemInfo.imageFile); // 이미지 파일
-
-        try {
-            // axios를 이용한 POST 요청
-            const response = await axios.post("http://localhost:5000/api/items/createItem", formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-            });
-
-            setIsSubmitting(false);
-            setSuccessMessage("매물이 성공적으로 등록되었습니다!");
-            console.log("Item created successfully:", response.data);
-
-            // 필요한 경우 홈이나 다른 페이지로 이동
-            navigate("/");
-        } catch (err) {
-            console.error("Error creating item:", err);
-            setError("매물 등록에 실패했습니다. 다시 시도해주세요.");
-            setIsSubmitting(false);
-        }
-    };
-
     return (<>
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={createItem}>
             <Row style={{
                 height: "100vh",
                 justifyContent: "Center",

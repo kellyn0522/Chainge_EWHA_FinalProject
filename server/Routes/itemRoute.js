@@ -17,7 +17,18 @@ const storage = multer.diskStorage({
 
 
 // 매물 등록 시 multer 미들웨어를 추가하여 파일 처리
-router.post("/createItem", upload.single('imageFile'), registerItem);
+router.post("/createItem", upload.single('imageFile'),(req,res) => { 
+    try{
+        if(!req.file){
+            return res.status(400).json({ error: "파일이 업로드되지 않았습니다."});
+        }
+
+        registerItem(req, res);
+    } catch (error){
+        console.error('Error in createItem:', error);
+        res.status(500).json({error: '서버에서 오류가 발생했습니다.'});
+    }
+});
 
 
 router.post("/createItem", registerItem);

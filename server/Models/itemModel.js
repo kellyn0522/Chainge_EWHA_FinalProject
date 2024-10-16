@@ -14,7 +14,7 @@ const itemSchema = new mongoose.Schema({
     bedSize: {type : String,required: false, maxlength: 10 },
     hasItems: {type : Object,required: true, maxlength: 30 },
     hasAgent: {type : Boolean,required: false, maxlength: 3 },
-    imageFime: {type: String, required: false}
+    imageFile: {type: String, required: false}
 }, {
     timestamps: true,
 }

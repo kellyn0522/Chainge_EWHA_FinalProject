@@ -1,6 +1,7 @@
 import { createContext, useCallback, useEffect, useState } from "react";
 import { baseUrl, postRequest, getRequest } from "../utils/services";
 import {useNavigate} from "react-router-dom";
+import axios from "axios";
 
 export const AuthItemContext = createContext();
 export const AuthItemContextProvider = ({ children }) => {
@@ -52,23 +53,47 @@ export const AuthItemContextProvider = ({ children }) => {
         setIsCreateItemLoading(true);
         setCreateItemError(null);
 
-        const response = await postRequest(
-            `${baseUrl}/items/createItem`,
-            JSON.stringify(createItemInfo));
+        // FormData 생성
+        const formData = new FormData();
+        formData.append("itemID", createItemInfo.itemID);
+        formData.append("ownerId", createItemInfo.ownerId);
+        formData.append("ownerName", createItemInfo.ownerName);
+        formData.append("zipCode", createItemInfo.zipCode);
+        formData.append("houseAddress", createItemInfo.houseAddress);
+        formData.append("location", createItemInfo.location);
+        formData.append("area", createItemInfo.area);
+        formData.append("housePrice", createItemInfo.housePrice);
+        formData.append("memo", createItemInfo.memo);
+        formData.append("type", createItemInfo.type);
+        formData.append("bedSize", createItemInfo.bedSize);
+        formData.append("hasItems", JSON.stringify(createItemInfo.hasItems));
+        formData.append("isContract", createItemInfo.isContract);
+        formData.append("imageFile", createItemInfo.imageFile); // 이미지 파일
+
+        try{
+            const response = await axios.post("http://localhost:5000/api/items/createItem", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
 
             setIsCreateItemLoading(false);
 
-        console.log("Create Item response ", response);
+            console.log("Create Item response ", response);
         
 
-        if (response.error) {
-            return setCreateItemError(response);
+            if (response.error) {
+                return setCreateItemError(response);
+            }
+
+            localStorage.setItem("item", JSON.stringify(response));
+            setItem(response);
+            navigate("/");
+        }catch(err){
+            console.error("Error creatind item:", err);
+            setCreateItemError("매물 등록에 실패했습니다. 다시 시도해주세요.");
+            setIsCreateItemLoading(false)
         }
-
-        localStorage.setItem("item", JSON.stringify(response));
-
-        setItem(response);
-        navigate("/");
     }, [createItemInfo]);
 
     const getItem = useCallback(async(e) => {

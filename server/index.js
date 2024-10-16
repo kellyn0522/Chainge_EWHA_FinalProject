@@ -12,7 +12,7 @@ require("dotenv").config();
 
 app.use(express.json());
 app.use(cors());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({extended: false}));
 app.use("/api/items", itemRoute);
 app.use("/api/users", userRoute);
 app.use("/api/chats" , chatRoute);
