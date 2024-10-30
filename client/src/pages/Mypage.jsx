@@ -42,37 +42,34 @@ const Mypage = () => {
     const contracts = [2];
 
     return (
-        <div className="Mypage">
-            <div className = "titleSet">
-                <div className = "logo"><Logo /></div>
-                <div className = "title">MY page</div>
-            </div>
-            <div className = "UserData">
-                <div>이름: {user.name}</div>
-                <div>닉네임: {user.nickName}</div>
-                <div>전화번호: {user.phoneNumber}</div>
-                <div>Email: {user.email}</div>
-            </div>
-            <div className = "select">
-                <div className = "title">내 매물</div>
-                {ownItem.map((it) => <HouseItem key = {it} itemId = {it} type = {"OWN"} />)}
-                <button className = "create" onClick = {onCreateItem}>+</button>
-            </div>
-            <div className = "select">
-                <div className = "title">찜한 매물</div>
-                {likedItem.map((it) => <HouseItem key = {it} itemId = {it} />)}
-            </div>
-            <div className = "select">
-                <div className = "title">거래 내역</div>
-                {contracts.map((it) => <HouseItem key = {it} itemId = {it} type = {"CONTRACT"} />)}
-                <button className = "create" onClick = {onContractList}>+</button>
-            </div>
-            <div className = "buttonWrapper">
-                <button className = "button" onClick = {onClickChat}>채팅</button>
-                <button className = "button" onClick = {onChangeData}>정보 변경</button>
-                <button className = "button" onClick = {onUnregister}>회원 탈퇴</button>
-            </div>
-        </div>
-    )
+        <div>
+                        <div className = "logo"><Logo /></div>
+                        <div className = "title">MY page</div>
+                        <div className = "UserData">
+                            <div>이름: {user.name}</div>
+                            <div>닉네임: {user.nickName}</div>
+                            <div>전화번호: {user.phoneNumber}</div>
+                            <div>Email: {user.email}</div>
+                        </div>
+                        <div className = "select">
+                            <div className = "title">내 매물</div>
+                            {ownItem.map((it) => <HouseItem key = {it} itemId = {it} type = {"OWN"} />)}
+                            <button className = "create" onClick = {onCreateItem}>+</button>
+                        </div>
+                        <div className = "select">
+                            <div className = "title">찜한 매물</div>
+                            {likedItem.map((it) => <HouseItem key = {it} itemId = {it} />)}
+                        </div>
+                        <div className = "select">
+                            <div className = "title">거래 내역</div>
+                            {contracts.map((it) => <HouseItem key = {it} itemId = {it} type = {"CONTRACT"} />)}
+                            <button className = "create" onClick = {onContractList}>+</button>
+                        </div>
+                        <div className = "buttonWrapper">
+                            <button className = "button" onClick = {onClickChat}>채팅</button>
+                            <button className = "button" onClick = {onChangeData}>정보 변경</button>
+                            <button className = "button" onClick = {onUnregister}>회원 탈퇴</button>
+                        </div>
+    </div>);
 };
 export default Mypage;

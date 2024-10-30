@@ -89,6 +89,7 @@ const CreateItemPage = () => {
                         <Form.Control
                             type="text"
                             placeholder="ZipCode"
+                            maxLength="5"
                             onChange={ 
                                 (e) => updateCreateItemInfo({ ...createItemInfo, zipCode: e.target.value })
                             }

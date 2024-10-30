@@ -40,3 +40,23 @@ export const getRequest = async (url) => {
     return data;
 
 };
+
+export const deleteRequest = async (url, body) => {
+    try{
+        const response = await fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type' : 'application/jason',
+            },
+            body: JSON.stringify(body),
+        });
+
+        if (!response.ok) {
+            throw new Error("An error occured...");
+        }
+        return await response.json();
+    }catch(error){
+        console.error("Error deleting user", error);
+        throw error;
+    }
+};

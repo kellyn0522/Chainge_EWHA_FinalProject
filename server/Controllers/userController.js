@@ -54,24 +54,31 @@ const registerUser = async (req, res) => {
 const updateUser = async (req, res) => {
 
     try {
-        const { nickName, phoneNumber, password, birth,identityNum, zipCode, houseAddress } = req.body;
+        const { id, nickName, phoneNumber, password, birth,identityNum, zipCode, houseAddress } = req.body;
 
-        console.log("Received data:", { nickName, phoneNumber, password, birth, identityNum, zipCode, houseAddress });
+        console.log("Received data:", { id, nickName, phoneNumber, password, birth, identityNum, zipCode, houseAddress });
+
+        const user = await userModel.findById( id );
+        if (!user) return res.status(400).json("User Not Found");
 
         let nickNameExists = await userModel.findOne({ nickName });
         let phoneNumberExists = await userModel.findOne({ phoneNumber });
 
-        if (nickNameExists) return res.status(400).json("User with the given nickName already exists... ");
-        if (phoneNumberExists ) return res.status(400).json("User with the given phoneNumber already exists... ");
+        if (nickNameExists && user._id !== nickNameExists._id) return res.status(400).json("User with the given nickName already exists... ");
+        if (phoneNumberExists && user._id !== phoneNumberExists._id) return res.status(400).json("User with the given phoneNumber already exists... ");
 
 
         //if (!nickName || !phoneNumber || !password || !birth || !identityNum || !zipCode || !houseAddress ) return res.status(400).json("All fields are required");
 
         if (!validator.isStrongPassword(password)) return res.status(400).json("Password must be a strong password");
 
-        user = new userModel({ nickName, phoneNumber, password, birth, identityNum, zipCode, houseAddress });
-
-        res.status(200).json({ nickName : user.nickName , phoneNumber : user.phoneNumber, password : user.password, birth : user.birth, identityNum : user.identityNum, zipCode : user.zipCode, houseAddress : user.houseAddress });
+        result = await userModel.updateOne({_id : user._id}, {$set : {nickName, phoneNumber, password, birth, identityNum, zipCode, houseAddress} });
+        if (result.nModified > 0){
+            const update = await userModel.findById.apply(user._id);
+            res.status(200).json({ nickName : update.nickName , phoneNumber : update.phoneNumber, password : update.password, birth : update.birth, identityNum : update.identityNum, zipCode : update.zipCode, houseAddress : update.houseAddress });
+        } else{
+            return res.status(400).json({error : "사용자를 찾을 수 없습니다."});
+        }
 
     } catch (error) {
         console.log(error); // 에러 로그
@@ -111,6 +118,22 @@ const findUser = async(req, res) =>{
     }
 };
 
+const deleteUser = async(req, res) =>{
+    const { id } = req.body;
+    try {
+        const user = await userModel.findOne({ id });
+
+        if (!user){
+            return res.status(404).json({messege:"User not found"});
+        }
+        await userModel.deleteOne({id})
+        res.status(200).json("Unregister"); 
+    }catch(error){
+        console.log(error); 
+        res.status(500).json(error);
+    }
+};
+
 const getUsers = async(req, res) =>{
     try{
         const users = await userModel.find();
@@ -122,4 +145,4 @@ const getUsers = async(req, res) =>{
     }
 };
 
-module.exports = { registerUser, updateUser, loginUser, findUser, getUsers };
+module.exports = { registerUser, updateUser, loginUser, findUser, getUsers, deleteUser };

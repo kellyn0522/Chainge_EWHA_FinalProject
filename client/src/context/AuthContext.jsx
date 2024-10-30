@@ -1,5 +1,5 @@
 import { createContext, useCallback, useEffect, useState } from "react";
-import { baseUrl, postRequest } from "../utils/services";
+import { baseUrl, postRequest, deleteRequest } from "../utils/services";
 import {useNavigate} from "react-router-dom";
 
 export const AuthContext = createContext();
@@ -21,6 +21,7 @@ export const AuthContextProvider = ({ children }) => {
     const [isUpdateLoading, setIsUpdateLoading] = useState(false);
 
     const [updaterInfo, setUpdaterInfo] = useState({
+        id: "",
         nickName: "", 
         phoneNumber: "", 
         password: "", 
@@ -29,6 +30,11 @@ export const AuthContextProvider = ({ children }) => {
         zipCode: "", 
         houseAddres: "",
     });
+    useEffect(()=>{
+        if (user){
+            setUpdaterInfo((prevInfo) => ({ ...prevInfo, id : user._id }));
+        }
+    }, [user]);
 
     const updateUpdaterInfo = useCallback((info) => {
         setUpdaterInfo((prevInfo) => ({ ...prevInfo, ...info }));
@@ -45,7 +51,7 @@ export const AuthContextProvider = ({ children }) => {
 
         setIsUpdateLoading(false);
 
-        console.log("updater response ", response);
+        //console.log("updater response ", response);
         
 
         if (response.error) {
@@ -150,6 +156,42 @@ export const AuthContextProvider = ({ children }) => {
         navigate("/");
     }, []);
 
+    const [deleteError, setDeleteError] = useState(null);
+    const [isDeleteLoading, setIsDeleteLoading] = useState(false);
+
+    const unregisterUser = useCallback(async(e) => {
+        console.log("delete called");
+        e.preventDefault();
+        setIsDeleteLoading(true);
+        setDeleteError(null);
+
+        if (!user){
+            setDeleteError({message: "User is not logged in."});
+            setIsDeleteLoading(false);
+            return;
+        }
+        
+        try{
+            const response = await deleteRequest(
+                `${baseUrl}/users/unregister`,
+                {id: user._id}
+            );
+
+            console.log("deleter response ", response);
+        
+            if (response.error) {
+                return setDeleteError(response);
+            }
+            localStorage.removeItem("user");
+            setUser(null);
+            navigate("/");
+            setIsDeleteLoading(false);
+        }catch(error){
+            console.error("Falied to unregister:", error);
+            setDeleteError({message: "Falied to unregister user"});
+        }
+    }, [user, navigate, setUser, setDeleteError, setIsDeleteLoading]);
+
 
     return (<AuthContext.Provider
         value={{
@@ -172,6 +214,10 @@ export const AuthContextProvider = ({ children }) => {
             loginInfo,
             updateLoginInfo,
             isLoginLoading,
+
+            unregisterUser,
+            deleteError,
+            isDeleteLoading,
         }}
     >
         {children}

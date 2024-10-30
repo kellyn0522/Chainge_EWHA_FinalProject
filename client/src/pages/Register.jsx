@@ -49,6 +49,7 @@ const Register = () => {
                          <Form.Control
                             type="tel"
                             placeholder="Phonenumber"
+                            maxLength="11"
                             onChange={(e) =>
                                 updateRegisterInfo({ ...registerInfo, phoneNumber: e.target.value })
                             }
