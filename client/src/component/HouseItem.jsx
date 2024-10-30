@@ -1,49 +1,57 @@
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
-import {itemDataContext} from "../App";
 import DeleteButton from "./DeleteButton.jsx";
 import LikeButton from "./LikeButton.jsx";
+import { useState, useContext, useEffect } from "react";
+import { AuthItemContext } from "../context/AuthItemContext";
 
 
 const HouseItem = ({itemId}) => {
     const navigate = useNavigate();
-    const itemData = useContext(itemDataContext);
-    let itemIndex = -1;
-    itemIndex = itemData.findIndex((it) => String(it.itemId) === String(itemId));
+    const { 
+        findItem,
+        findItemError,
+        isFindItemLoading,
+    } = useContext(AuthItemContext);
+    const [item, setItem] = useState(null)
 
-    if (itemIndex !== -1) {
-        let location, detailAdd, housePrice, area, type = undefined;
+    useEffect(() => {
+        const fetchItem = async () => {
+            if (!findItemError && !isFindItemLoading){
+                const result = await findItem(itemId);
+                setItem(result);
+            }
+        };
+        fetchItem();
+    }, [findItem, findItemError,isFindItemLoading]);
 
-        location = itemData[itemIndex].location;
-        detailAdd = itemData[itemIndex].detailAdd;
-        housePrice = itemData[itemIndex].housePrice;
-        area = itemData[itemIndex].area;
-        type = itemData[itemIndex].type;
+    console.log(item)
+    const goToItem = () => {
+        navigate("/");
+    }
 
-        const goToItem = () => {
-            navigate(`/item/${itemId}`);
-        }
+    if (isFindItemLoading){
+        return <div>Loding...</div>
+    }
+    if (findItemError || !item){
+        return <div>Error: {findItemError?.message || 'Item not found'}</div>
+    }
 
-        return (
-            <div className = "HouseItem" onClick = {goToItem}>
-                <div className = "HouseImage">"집 사진"</div>
-                <div className = "HouseDetail">
-                    <div className = "HouseName">{detailAdd}</div>
-                    <div className = "HouseAddress">위치: {location}</div>
-                </div>
-                <div className = "PriceAndStar">
-                    <div className = "Price">월세: {housePrice}만원</div>
-                    <div className = "Type">건물 종류: {type}</div>
-                    <div className = "Area">{area}평</div>
-                </div>
-                <div className = "button">
-                    <LikeButton itemID = {itemId} />
-                    <DeleteButton type = {type} itemID = {itemId} />
-                </div>
+    return (
+        <div className = "HouseItem" onClick = {goToItem}>
+            <div className = "HouseImage">"집 사진"</div>
+            <div className = "HouseDetail">
+                <div className = "HouseAddress">위치: {item.location}</div>
+                <div className = "HouseAddress">{item.houseAddress}</div>
+                <div className = "HouseAddress">{item.zipCode}</div>
             </div>
-        );
-    } else (
-        console.log("error: item 정보 없음")
+            <div className = "PriceAndStar">
+                    <div className = "Price">월세: {item.housePrice}만원</div>
+                    <div className = "Type">건물 종류: {item.type}</div>
+                    <div className = "Area">{item.area}평</div>
+                    <div>판매자: {item.ownerName}</div>
+                    <div className = "Memo">특이사항: {item.memo}</div>
+            </div>
+        </div>
     )
 };
 

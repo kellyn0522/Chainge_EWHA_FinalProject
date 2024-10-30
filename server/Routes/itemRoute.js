@@ -32,7 +32,7 @@ router.post("/createItem", upload.single('imageFile'),(req,res) => {
 
 
 router.post("/createItem", registerItem);
-router.get("/find/:itemId", findItem);
+router.get("/find/:itemID", findItem);
 router.get("/", getItems);
 
 

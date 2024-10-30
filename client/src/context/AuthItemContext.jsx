@@ -10,6 +10,8 @@ export const AuthItemContextProvider = ({ children }) => {
     const [createItemError, setCreateItemError] = useState(null);
     const [getItemError, setGetItemError] = useState(null);
     const [isCreateItemLoading, setIsCreateItemLoading] = useState(false);
+    const [findItemError, setFindItemError] = useState(null);
+    const [isFindItemLoading, setIsFindItemLoading] = useState(false);
 
     const [createItemInfo, setCreateItemInfo] = useState({
         itemID:"",
@@ -114,6 +116,34 @@ export const AuthItemContextProvider = ({ children }) => {
         }
     }, []);
 
+    const findItem = useCallback(async(itemID) => { 
+        setFindItemError(null);
+        setIsFindItemLoading(true)
+        
+        try{
+            if(!itemID){
+                setFindItemError("Invalid item ID");
+                setIsFindItemLoading(false);
+                throw new Error("Invalid item ID");
+            }
+
+            const response = await getRequest(
+                `${baseUrl}/items/find/${itemID}`);
+
+            console.log("Find Item response ", response);
+        
+            if (response.error) {
+                return setFindItemError(response.error);
+            }
+            setIsFindItemLoading(false);
+            return response;
+        } catch (error){
+            setFindItemError(error.message)
+        }
+    }, []);
+
+
+
     return (<AuthItemContext.Provider
         value={{
             item,
@@ -124,6 +154,9 @@ export const AuthItemContextProvider = ({ children }) => {
             isCreateItemLoading,
             getItem,
             getItemError,
+            findItem,
+            findItemError,
+            isFindItemLoading,
         }}
         >
             {children}

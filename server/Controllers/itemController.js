@@ -48,9 +48,12 @@ const registerItem = async (req, res) => {
 
 
 const findItem = async(req, res) =>{
-    const itemID = req.params.itemId;
     try{
-        const item = await itemModel.findById(itemID);
+        const itemID = req.params.itemID;
+        const item = await itemModel.findOne({itemID});
+        if (!item){
+            return res.status(404).json({messege:"Item not found"});
+        }
         res.status(200).json(item); 
 
     }catch(error){
