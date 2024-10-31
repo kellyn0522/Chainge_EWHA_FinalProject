@@ -69,12 +69,6 @@ const Home = () => {
             <div className= "list_wrapper">
                 {getItemError && <p>Error: {getItemError}</p>}
                 {getSearchResult().map(it => (
-                    <div key = {it.itemID}>{it.location} = {it.itemID} </div>
-                ))}
-            </div>
-            <div className= "list_wrapper">
-                {getItemError && <p>Error: {getItemError}</p>}
-                {getSearchResult().map(it => (
                     <HouseItem itemId={it.itemID} />
                 ))}
             </div>

@@ -6,7 +6,7 @@ const Logo = () => {
         navigate("/");
     }
     return (
-        <div className="Logo" onClick = {onClick}>문방구</div>
+        <div className="Logo" onClick = {onClick}>CHAINGE</div>
     );
 };
 
