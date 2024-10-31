@@ -4,6 +4,7 @@ import HouseItem from "../component/HouseItem";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { AuthItemContext } from "../context/AuthItemContext";
+import { Card, Button } from "react-bootstrap";
 
 const Mypage = () => {
     const navigate = useNavigate();
@@ -37,39 +38,43 @@ const Mypage = () => {
     //const ownItem = registerInfo;
     //const likedItem = registerInfo;
     //const contracts = registerInfo;
+    /*
     const ownItem = [1];
     const likedItem = [2,3];
     const contracts = [2];
-
+    
+    {ownItem.map((it) => <HouseItem key = {it} itemId = {it} type = {"OWN"} />)} 
+    {likedItem.map((it) => <HouseItem key = {it} itemId = {it} />)}
+    {contracts.map((it) => <HouseItem key = {it} itemId = {it} type = {"CONTRACT"} />)}
+    */
     return (
         <div>
-                        <div className = "logo"><Logo /></div>
-                        <div className = "title">MY page</div>
-                        <div className = "UserData">
-                            <div>이름: {user.name}</div>
-                            <div>닉네임: {user.nickName}</div>
-                            <div>전화번호: {user.phoneNumber}</div>
-                            <div>Email: {user.email}</div>
-                        </div>
-                        <div className = "select">
-                            <div className = "title">내 매물</div>
-                            {ownItem.map((it) => <HouseItem key = {it} itemId = {it} type = {"OWN"} />)}
-                            <button className = "create" onClick = {onCreateItem}>+</button>
-                        </div>
-                        <div className = "select">
-                            <div className = "title">찜한 매물</div>
-                            {likedItem.map((it) => <HouseItem key = {it} itemId = {it} />)}
-                        </div>
-                        <div className = "select">
-                            <div className = "title">거래 내역</div>
-                            {contracts.map((it) => <HouseItem key = {it} itemId = {it} type = {"CONTRACT"} />)}
-                            <button className = "create" onClick = {onContractList}>+</button>
-                        </div>
-                        <div className = "buttonWrapper">
-                            <button className = "button" onClick = {onClickChat}>채팅</button>
-                            <button className = "button" onClick = {onChangeData}>정보 변경</button>
-                            <button className = "button" onClick = {onUnregister}>회원 탈퇴</button>
-                        </div>
+            <div className = "logo"><Logo /></div>
+            <div className = "title">MY page</div>
+            <Card>
+                <Card.Body>
+                    <Card.Text>이름: {user.name}</Card.Text>
+                    <Card.Text>닉네임: {user.nickName}</Card.Text>
+                    <Card.Text>전화번호: {user.phoneNumber}</Card.Text>
+                    <Card.Text>Email: {user.email}</Card.Text>
+                </Card.Body>
+            </Card>
+            <div className = "select">
+                <div className = "title">내 매물</div>                   
+                <button className = "create" onClick = {onCreateItem}>+</button>
+            </div>
+            <div className = "select">
+                <div className = "title">찜한 매물</div>
+            </div>
+            <div className = "select">
+                <div className = "title">거래 내역</div>
+                <button className = "create" onClick = {onContractList}>+</button>
+            </div>
+            <div className = "buttonWrapper">
+                <Button className = "btn btn-info" onClick = {onClickChat}>채팅</Button>
+                <Button className = "btn btn-warning" onClick = {onChangeData}>정보 변경</Button>
+                <Button className = "btn btn-success" onClick = {onUnregister}>회원 탈퇴</Button>
+            </div>
     </div>);
 };
 export default Mypage;

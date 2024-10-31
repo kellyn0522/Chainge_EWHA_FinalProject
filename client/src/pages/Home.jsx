@@ -2,13 +2,16 @@ import NavBar from "../components/NavBar";
 import HouseItem from "../component/HouseItem";
 import { useState, useContext, useEffect } from "react";
 import { AuthItemContext } from "../context/AuthItemContext";
-
+import "../component/HouseItem.css";
+import { Button } from "react-bootstrap";
+import {useNavigate} from "react-router-dom";
 
 const Home = () => {
     const [search, setSearch] = useState("");
     const [isSearch, setIsSearch] = useState("");
     const { getItem, getItemError } = useContext(AuthItemContext);
     const [items, setItems] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchItems = async () => {
@@ -52,10 +55,15 @@ const Home = () => {
             onSearch();
         }
     }
+
+    const onCreateItem = () => {
+        navigate("/createItemPage");
+    }
     //<HouseItem key = {it.itemId} itemId = {it.itemId} />
     return (
         <div className="Home">
             <div className = "header"><NavBar /></div>
+            <Button style = {{backgroundColor: '#8977ab', color: 'white', border: 'none'}} onClick = {onCreateItem}>매물 등록</Button>
             <div className="search_wrapper">
                 <input 
                     className = "searchbar"
