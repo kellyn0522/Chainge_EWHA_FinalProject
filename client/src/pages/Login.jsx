@@ -23,14 +23,14 @@ const Login = () => {
                 <Col xs={6}>
                     <Stack gap={3}>
                         <div className = "logo"><Logo /></div>
-                        <h2>Login</h2>
+                        <h2 className="gugi-regular">Login</h2>
 
                         <Form.Control type="email" placeholder="Email" onChange={(e) => updateLoginInfo
                             ({ ...loginInfo, email: e.target.value })} />
                         <Form.Control type="password" placeholder="Password" onChange={(e) => updateLoginInfo
                             ({ ...loginInfo, password: e.target.value })}/>
 
-                        <Button variant="primary" type="submit" >
+                        <Button className="gugi-regular" variant="primary" type="submit" >
                             {isLoginLoading? "Getting you in ... " : "Login"}
                         </Button>
                         {loginError?.error && 

@@ -1,22 +1,22 @@
 import {useNavigate} from "react-router-dom";
 import Logo from "../component/Logo";
 import HouseItem from "../component/HouseItem";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { AuthItemContext } from "../context/AuthItemContext";
 import { Card, Button } from "react-bootstrap";
+import Unregister from "./Unregister";
 
 const Mypage = () => {
     const navigate = useNavigate();
     const { user } = useContext(AuthContext);
     const { item } = useContext(AuthItemContext);
+    const [showModal, setShowModal] = useState(false);
+    const handleShow = () => setShowModal(true);
+    const handleClose = () => setShowModal(false);
 
     const onChangeData = () => {
         navigate("/changingUserData");
-    }
-
-    const onUnregister = () => {
-        navigate("/unregister");
     }
 
     const onClickChat = () => {
@@ -49,10 +49,10 @@ const Mypage = () => {
     */
     return (
         <div>
-            <div className = "logo"><Logo /></div>
-            <div className = "title">MY page</div>
+            <div className = "logo" ><Logo /></div>
+            <div className="gugi-regular" >MY page</div>
             <Card>
-                <Card.Body>
+                <Card.Body className="noto-sans-kr">
                     <Card.Text>이름: {user.name}</Card.Text>
                     <Card.Text>닉네임: {user.nickName}</Card.Text>
                     <Card.Text>전화번호: {user.phoneNumber}</Card.Text>
@@ -71,9 +71,10 @@ const Mypage = () => {
                 <button className = "create" onClick = {onContractList}>+</button>
             </div>
             <div className = "buttonWrapper">
-                <Button className = "btn btn-info" onClick = {onClickChat}>채팅</Button>
-                <Button className = "btn btn-warning" onClick = {onChangeData}>정보 변경</Button>
-                <Button className = "btn btn-success" onClick = {onUnregister}>회원 탈퇴</Button>
+                <Button style = {{backgroundColor: '#00462a', color: 'white', border: 'none', margin: '10px'}} onClick = {onClickChat}>채팅</Button>
+                <Button style = {{backgroundColor: '#00462a', color: 'white', border: 'none', margin: '10px'}} onClick = {onChangeData}>정보 변경</Button>
+                <Button style = {{backgroundColor: '#00462a', color: 'white', border: 'none', margin: '10px'}} onClick = {handleShow} >회원 탈퇴</Button>
+                <Unregister show={showModal} handleClose={handleClose} />
             </div>
     </div>);
 };

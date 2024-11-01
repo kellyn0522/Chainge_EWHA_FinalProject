@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Logo from "../component/Logo";
 import { useState, useContext, useEffect } from "react";
 import { AuthItemContext } from "../context/AuthItemContext";
-import { Card } from "react-bootstrap";
+import { Card, Row, Col, Container } from "react-bootstrap";
 
 const Item = () => {
     //const navigate = useNavigate();
@@ -38,23 +38,31 @@ const Item = () => {
     }
 
     return (
-        <Card>
-            <div className = "logo"><Logo /></div>
-            <Card.Img variant = 'top' src = {item.imageFile} />
-            <Card.Body>
-                <Card.Text>위치: {item.location}</Card.Text>
-                <Card.Text>{item.houseAddress}</Card.Text>
-                <Card.Text>우편번호: {item.zipCode}</Card.Text>
+        <Container>
+            <Row>
+                <Col>
+                    <div className = "logo"><Logo /></div>
+                    <img src = {item.imageFile} style = {{width: '300px', height: 'auto', border: '2px solid #ccc', display: ' block', margin: '0 auto'}} />
+                    <div>
+                        <h5>위치: {item.location}</h5>
+                        <h5>{item.houseAddress}</h5>
+                        <h5>우편번호: {item.zipCode}</h5>
 
-                <Card.Text>월세: {item.housePrice}만원</Card.Text>
-                <Card.Text>건물 종류: {item.type}</Card.Text>
-                <Card.Text>크기: {item.area}평</Card.Text>
-                <Card.Text>판매자: {item.ownerName}</Card.Text>
+                        <h5>월세: {item.housePrice}만원</h5>
+                        <h5>건물 종류: {item.type}</h5>
+                        <h5>크기: {item.area}평</h5>
+                        <h5>판매자: {item.ownerName}</h5>
 
-                <Card.Text>상세설명</Card.Text>
-                <Card.Text>*** {item.memo} ***</Card.Text>
-            </Card.Body>
-        </Card>
+                        <Card>
+                            <Card.Title>상세설명</Card.Title>
+                            <Card.Body>
+                                <Card.Text>{item.memo}</Card.Text>
+                            </Card.Body>
+                        </Card>
+                    </div>
+                </Col>
+            </Row>
+        </Container>
     )
 };
 export default Item;

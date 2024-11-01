@@ -19,7 +19,7 @@ const HouseItem = ({itemId}) => {
     } = useContext(AuthContext);
     const [item, setItem] = useState(null)
     const [liked, setLiked] = useState(false);
-    const [userLike, setUserLike] = useState(user.likedItemId)
+    //const [userLike, setUserLike] = useState(user.likedItemId)
     const handleLike = (event) => {
         event.stopPropagation();
         setLiked(prevLiked => !prevLiked);
@@ -48,11 +48,14 @@ const HouseItem = ({itemId}) => {
     if (findItemError || !item){
         return <div>Error: {findItemError?.message || 'Item not found'}</div>
     }
+    //<Badge bg = { liked ? 'success' : 'secondary' } onClick = {handleLike}>
+    //                { liked ? 'LIKED' : 'LIKE' }
+    //            </Badge>
 
     return (
         <Card style = {{ width : '200px' }} onClick = {goToItem}>
             <Card.Img variant = 'top' src = {item.imageFile} />
-            <Card.Body>
+            <Card.Body className = "noto-sans-kr">
                 <Card.Text>위치: {item.location}</Card.Text>
                 <Card.Text>{item.houseAddress}</Card.Text>
 
@@ -60,9 +63,7 @@ const HouseItem = ({itemId}) => {
                 <Card.Text>건물 종류: {item.type}</Card.Text>
                 <Card.Text>크기: {item.area}평</Card.Text>
 
-                <Badge bg = { liked ? 'success' : 'secondary' } onClick = {handleLike}>
-                    { liked ? 'LIKED' : 'LIKE' }
-                </Badge>
+                <span className={`material-symbols-outlined ${liked? 'liked':'dontlike'}`} style={{cursor: "pointer"}} onClick = {handleLike}>favorite</span>
             </Card.Body>
         </Card>
     )

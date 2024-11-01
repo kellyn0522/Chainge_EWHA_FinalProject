@@ -50,6 +50,9 @@ import { useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
 import { AuthItemContext } from "./context/AuthItemContext";
 import { ChatContextProvider } from "./context/ChatContext";
+import "./pont.css";
+import "./icons.css";
+//import "./index.css";
 
 
 function itemReducer(state, action) { // item 변수를 변경하는 함수
@@ -337,7 +340,6 @@ function App() {
                          <Route path="/item/:id" element={<Item />} />
                          <Route path="/chat" element={<Chat />} />
                          <Route path="/register" element={user? <Home/>:<Register />} />
-                         <Route path="/unregister" element={<Unregister />} />
                          <Route path="/createItemPage" element={<CreateItemPage />} />
                          <Route path="/makeContract" element={<MakeContract />} />
                          <Route path="/contractList" element={<ContractList />} />

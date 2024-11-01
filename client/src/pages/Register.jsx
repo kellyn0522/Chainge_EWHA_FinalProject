@@ -16,7 +16,7 @@ const Register = () => {
                 <Col xs={6}>
                     <Stack gap={3}>
                         <div className = "logo"><Logo /></div>
-                        <h2>Register</h2>
+                        <h2 className="gugi-regular">Register</h2>
 
                         <Form.Control 
                         type="email" 
@@ -55,7 +55,7 @@ const Register = () => {
                             }
                         />
                     
-                        <Button variant="primary" type="submit" >
+                        <Button className="gugi-regular" variant="primary" type="submit" >
                             { isRegisterLoading? "Creating your account":"Register"}
                         </Button>
                         {

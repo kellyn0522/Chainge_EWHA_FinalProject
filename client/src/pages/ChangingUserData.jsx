@@ -46,7 +46,7 @@ const ChangingUserData = () => {
                           />
                           <Form.Control
                               type="text"
-                              placeholder={user.nickName}
+                              placeholder={user.nickName || "Nickname"}
                               maxLength="10"
                               onChange={(e) =>
                                 updateUpdaterInfo({nickName: e.target.value })
@@ -54,7 +54,7 @@ const ChangingUserData = () => {
                           />
                            <Form.Control
                               type="tel"
-                              placeholder={user.phoneNumber}
+                              placeholder={user.phoneNumber || "Phone Number"}
                               maxLength="13"
                               onChange={(e) =>
                                 updateUpdaterInfo({phoneNumber: e.target.value })
@@ -89,7 +89,7 @@ const ChangingUserData = () => {
                                     updateUpdaterInfo({ houseAddres: e.target.value })
                                 } />
                       
-                          <Button variant="primary" type="submit" >
+                          <Button style = {{backgroundColor: '#00462a', color: 'white', border: 'none'}} type="submit" >
                               { isUpdateLoading? "Updating your account":"정보변경"}
                           </Button>
                           {

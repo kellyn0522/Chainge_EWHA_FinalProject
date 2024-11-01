@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 const NavBar = () => {
     const { user, logoutUser } = useContext(AuthContext);
     const navigate = useNavigate();
+
     const onClickChat = () => {
         navigate("/chat");
     }
@@ -18,37 +19,35 @@ const NavBar = () => {
         alert("로그아웃 되었습니다.");
         logoutUser();
     }
-    
+    //<Link to="/" className="link-light text-decoration-none"></Link>
+    //<ChatNotification/>
     const { recipientUser } = useContext(AuthContext);
     
     return (
-        <Navbar bg="dark" className="mb-4" style={{ height: "3.75rem" }}>
-            <Container>
-                <h2>
-                    <Link to="/" className="link-light text-decoration-none">
-                        CHAINGE
-                    </Link>
+        <Navbar className="mb-4" style={{ height: "3.75rem", alignItems:"center", marginTop:'20px'}}>
+            <Container className='d-flex justify-content-between align-items-csnter'>
+                <h2 className="gugi-regular mb-0" >
+                    CHAINGE
                 </h2>
-                { user && ( <span className="text-warning">Hello {user?.nickName} ! </span> )}
                 <Nav>
-                    <Stack direction="horizontal" gap={3}>
+                    <Stack className='align-items-csnter' direction="horizontal" gap={3}>
                         {
                             user && (<>
-                            <ChatNotification/>
-                                <Link onClick={onClickLogout} to="/" className="link-light text-decoration-none">
+                                <Link onClick={onClickLogout} to="/" className="gugi-regular text-decoration-none" style = {{color : 'black'}}>
                                     Logout
                                 </Link>
-                                <div className = "userData"> 
-                                    <button onClick={onClickMypage}>마이페이지</button>                                    
-                                    <button onClick={onClickChat}>채팅</button>
+                                { user && ( <span className="gugi-regular">{user?.nickName}</span> )}
+                                <div className = "userData">
+                                    <span className="material-symbols-outlined size-40" style = {{cursor: "pointer"}} onClick={onClickMypage}>account_circle</span>
+                                    
                                 </div>
                             </>)
                         }
                         {!user && (<>
-                            <Link to="/login" className="link-light text-decoration-none">
+                            <Link to="/login" className="gugi-regular text-decoration-none" style = {{color : 'grey'}}>
                                 Login
                             </Link>
-                            <Link to="/register" className="link-light text-decoration-none">
+                            <Link to="/register" className="gugi-regular text-decoration-none" style = {{color : 'grey'}}>
                                 Register
                             </Link>
                         </>)}

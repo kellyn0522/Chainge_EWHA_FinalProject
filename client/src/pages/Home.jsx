@@ -3,7 +3,7 @@ import HouseItem from "../component/HouseItem";
 import { useState, useContext, useEffect } from "react";
 import { AuthItemContext } from "../context/AuthItemContext";
 import "../component/HouseItem.css";
-import { Button } from "react-bootstrap";
+import { Button, Form, Row, Col, Container } from "react-bootstrap";
 import {useNavigate} from "react-router-dom";
 
 const Home = () => {
@@ -12,6 +12,9 @@ const Home = () => {
     const { getItem, getItemError } = useContext(AuthItemContext);
     const [items, setItems] = useState([]);
     const navigate = useNavigate();
+
+    ByteLengthQueuingStrategy.href
+    //,account_circle,bookmark,chat,chat_bubble,bed,ac_unit,kitchen,tv_gen,single_bed,dresser,blinds,king_bed,heat,dishwasher_gen
 
     useEffect(() => {
         const fetchItems = async () => {
@@ -61,26 +64,34 @@ const Home = () => {
     }
     //<HouseItem key = {it.itemId} itemId = {it.itemId} />
     return (
-        <div className="Home">
-            <div className = "header"><NavBar /></div>
-            <Button style = {{backgroundColor: '#8977ab', color: 'white', border: 'none'}} onClick = {onCreateItem}>매물 등록</Button>
-            <div className="search_wrapper">
-                <input 
-                    className = "searchbar"
-                    value = {isSearch}
-                    onChange = {onChangeSearch}
-                    placeholder="매물 검색" 
-                    onKeyDown = {onKeyDown}
-                />
-                <button className = "button" onClick = {onSearch}>검색</button>
-            </div>
-            <div className= "list_wrapper">
-                {getItemError && <p>Error: {getItemError}</p>}
-                {getSearchResult().map(it => (
-                    <HouseItem itemId={it.itemID} />
-                ))}
-            </div>
-        </div>
+        <Container>
+            <Row>
+                <Col>
+                    <div className = "header"><NavBar /></div>
+                    <div className = 'secondHeader'>
+                    <Form className = 'd-flex'>
+                        <Form.Control
+                            type = 'text' 
+                            className = "searchbar"
+                            value = {isSearch}
+                            style = {{width : '400px', marginRight: '10px'}}
+                            onChange = {onChangeSearch}
+                            placeholder="매물 검색" 
+                            onKeyDown = {onKeyDown}
+                        />
+                        <span className="material-symbols-outlined size-40" style = {{cursor: "pointer"}} onClick = {onSearch}>search</span>
+                    </Form>
+                    <Button className = "button" style = {{backgroundColor: '#00462a', color: 'white', border: 'none'}} onClick = {onCreateItem}>매물 등록</Button>
+                    </div>
+                    <div className= "list_wrapper">
+                        {getItemError && <p>Error: {getItemError}</p>}
+                        {getSearchResult().map(it => (
+                            <HouseItem itemId={it.itemID} />
+                        ))}
+                    </div>
+                </Col>
+            </Row>
+        </Container>
     );
 };
 export default Home;

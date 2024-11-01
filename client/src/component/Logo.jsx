@@ -6,7 +6,7 @@ const Logo = () => {
         navigate("/");
     }
     return (
-        <div className="Logo" onClick = {onClick}>CHAINGE</div>
+        <div className="gugi-regular" style={{size: '50px', marginTop: '30px', marginLeft: '20px', marginBottom: '30px'}} onClick = {onClick}>CHAINGE</div>
     );
 };
 
