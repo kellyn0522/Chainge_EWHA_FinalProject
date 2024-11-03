@@ -6,6 +6,8 @@ import { AuthContext } from "../context/AuthContext";
 import { AuthItemContext } from "../context/AuthItemContext";
 import { Card, Button } from "react-bootstrap";
 import Unregister from "./Unregister";
+import chat from '../icons/chat.svg';
+import account from '../icons/account.svg';
 
 const Mypage = () => {
     const navigate = useNavigate();
@@ -46,20 +48,9 @@ const Mypage = () => {
     {ownItem.map((it) => <HouseItem key = {it} itemId = {it} type = {"OWN"} />)} 
     {likedItem.map((it) => <HouseItem key = {it} itemId = {it} />)}
     {contracts.map((it) => <HouseItem key = {it} itemId = {it} type = {"CONTRACT"} />)}
-    */
-    return (
-        <div>
-            <div className = "logo" ><Logo /></div>
-            <div className="gugi-regular" >MY page</div>
-            <Card>
-                <Card.Body className="noto-sans-kr">
-                    <Card.Text>이름: {user.name}</Card.Text>
-                    <Card.Text>닉네임: {user.nickName}</Card.Text>
-                    <Card.Text>전화번호: {user.phoneNumber}</Card.Text>
-                    <Card.Text>Email: {user.email}</Card.Text>
-                </Card.Body>
-            </Card>
-            <div className = "select">
+
+
+    <div className = "select">
                 <div className = "title">내 매물</div>                   
                 <button className = "create" onClick = {onCreateItem}>+</button>
             </div>
@@ -70,11 +61,27 @@ const Mypage = () => {
                 <div className = "title">거래 내역</div>
                 <button className = "create" onClick = {onContractList}>+</button>
             </div>
-            <div className = "buttonWrapper">
-                <Button style = {{backgroundColor: '#00462a', color: 'white', border: 'none', margin: '10px'}} onClick = {onClickChat}>채팅</Button>
-                <Button style = {{backgroundColor: '#00462a', color: 'white', border: 'none', margin: '10px'}} onClick = {onChangeData}>정보 변경</Button>
-                <Button style = {{backgroundColor: '#00462a', color: 'white', border: 'none', margin: '10px'}} onClick = {handleShow} >회원 탈퇴</Button>
-                <Unregister show={showModal} handleClose={handleClose} />
+    */
+    return (
+        <div>
+            <div className = "logo" ><Logo /></div>
+            <div className = 'intro' style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px'}}>
+                <h4 className="gugi-regular" >MY page</h4>
+                <img src={account} alt='account_circle' width = '200px' height = 'auto' />
+                <Card>
+                    <Card.Body className="noto-sans-kr">
+                        <Card.Text>이름: {user.name}</Card.Text>
+                        <Card.Text>닉네임: {user.nickName}</Card.Text>
+                        <Card.Text>전화번호: {user.phoneNumber}</Card.Text>
+                        <Card.Text>Email: {user.email}</Card.Text>
+                    </Card.Body>
+                    <div style = {{display: 'grid', gridTemplateColumns: '1fr 1fr 1fr'}}>
+                        <Button style = {{backgroundColor: '#00462a', color: 'white', border: 'none', margin: '10px'}} onClick = {onClickChat}>채팅</Button>
+                        <Button style = {{backgroundColor: '#00462a', color: 'white', border: 'none', margin: '10px'}} onClick = {onChangeData}>정보 변경</Button>
+                        <Button style = {{backgroundColor: '#00462a', color: 'white', border: 'none', margin: '10px'}} onClick = {handleShow} >회원 탈퇴</Button>
+                        <Unregister show={showModal} handleClose={handleClose} />
+                    </div>
+                </Card>
             </div>
     </div>);
 };
