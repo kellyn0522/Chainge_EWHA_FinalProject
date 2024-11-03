@@ -1,8 +1,12 @@
 import { Stack } from "react-bootstrap";
 import { useFetchRecipientUser } from "../../hooks/useFetchRecipient";
 import avatar from "../../assets/avatar.svg";
+import account from "../../icons/account.svg";
+import account_box from "../../icons/account_box.svg";
+import person from "../../icons/person.svg";
 import { useContext } from "react";
 import { ChatContext } from "../../context/ChatContext";
+import "../../index.css"
 //import moment from "moment";
 
 const UserChat = ({ chat, user }) => {
@@ -14,9 +18,9 @@ const UserChat = ({ chat, user }) => {
     return (<>
         <Stack direction="horizontal" gap={3} className="user-card align-items-center p-2 justify-content-between"
             role="button">
-            <div className="d-flex">
+            <div className="d-flex align-items-center">
                 <div className="me-2">
-                    <img src={avatar} height="35px" />
+                    <img src={account} height="35px" />
                 </div>
                 <div className="text-content">
                     <div className="name">

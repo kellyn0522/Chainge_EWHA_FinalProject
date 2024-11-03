@@ -22,3 +22,8 @@ span.dontlike{
     color: red;
     font-variation-settings: 'FILL' 0;
 }
+
+span.size-200{
+    font-size: 200px;
+    font-variation-settings: 'OPSZ' 1, 'WGHT' 1;
+}

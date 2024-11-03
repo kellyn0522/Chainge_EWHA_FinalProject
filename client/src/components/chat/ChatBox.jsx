@@ -5,6 +5,7 @@ import { ChatContext } from "../../context/ChatContext";
 import Stack from 'react-bootstrap/Stack';
 import moment from "moment";
 import InputEmoji from "react-input-emoji";
+import "../../index.css"
 
 const ChatBox = () => {
     const { user } = useContext(AuthContext);

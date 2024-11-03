@@ -67,7 +67,7 @@ const Mypage = () => {
             <div className = "logo" ><Logo /></div>
             <div className = 'intro' style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px'}}>
                 <h4 className="gugi-regular" >MY page</h4>
-                <img src={account} alt='account_circle' width = '200px' height = 'auto' />
+                <span className="material-symbols-outlined size-200">account_circle</span> 
                 <Card>
                     <Card.Body className="noto-sans-kr">
                         <Card.Text>이름: {user.name}</Card.Text>
@@ -75,8 +75,8 @@ const Mypage = () => {
                         <Card.Text>전화번호: {user.phoneNumber}</Card.Text>
                         <Card.Text>Email: {user.email}</Card.Text>
                     </Card.Body>
-                    <div style = {{display: 'grid', gridTemplateColumns: '1fr 1fr 1fr'}}>
-                        <Button style = {{backgroundColor: '#00462a', color: 'white', border: 'none', margin: '10px'}} onClick = {onClickChat}>채팅</Button>
+                    <div style = {{display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', alignItems:'center'}}>
+                        <img src={chat} alt='chat' width = '35px' height = 'auto' onClick = {onClickChat} style ={{justifySelf : 'center'}} />
                         <Button style = {{backgroundColor: '#00462a', color: 'white', border: 'none', margin: '10px'}} onClick = {onChangeData}>정보 변경</Button>
                         <Button style = {{backgroundColor: '#00462a', color: 'white', border: 'none', margin: '10px'}} onClick = {handleShow} >회원 탈퇴</Button>
                         <Unregister show={showModal} handleClose={handleClose} />
