@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import ChatNotification from "./chat/ChatNotification";
 import { useNavigate } from "react-router-dom";
+import chat from '../icons/chat.svg';
 
 const NavBar = () => {
     const { user, logoutUser } = useContext(AuthContext);
@@ -37,10 +38,8 @@ const NavBar = () => {
                                     Logout
                                 </Link>
                                 { user && ( <span className="gugi-regular">{user?.nickName}</span> )}
-                                <div className = "userData">
-                                    <span className="material-symbols-outlined size-40" style = {{cursor: "pointer"}} onClick={onClickMypage}>account_circle</span>
-                                    
-                                </div>
+                                <span className="material-symbols-outlined size-40" style = {{cursor: "pointer"}} onClick={onClickMypage}>account_circle</span>
+                                <img src={chat} alt='chat' width = '30px' height = '30px' style = {{cursor: "pointer"}} onClick = {onClickChat} />
                             </>)
                         }
                         {!user && (<>

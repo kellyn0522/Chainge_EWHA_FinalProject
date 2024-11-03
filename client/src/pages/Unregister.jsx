@@ -14,18 +14,18 @@ const Unregister = ({show,handleClose}) => {
 
 
     return (<>
-        <Modal show = {show} onHide={handleClose} style={{width: '100%', height: '70%'}}>
+        <Modal show = {show} onHide={handleClose}>
             <Modal.Header closeButton>
                 <div className = "logo"><Logo /></div>
             </Modal.Header>
-            <Modal.Body>
+            <Modal.Body className = "noto-sans-kr">
                 <Form onSubmit ={unregisterUser}>
                     <Row style={{
-                        height: "100vh",
+                        height: "500px",
                         justifyContent: "Center",
                         paddingTop: "10%"
                     }}>
-                        <Col xs={6}>
+                        <Col xs={9} style = {{height: "400px"}}>
                             <Stack gap={3}>
                                 <h4 style={{marginBottom: "30px"}}>Do you want to delete your account?</h4>
                                 <Button style = {{backgroundColor: '#00462a', color: 'white', border: 'none'}} type="submit">{isDeleteLoading? "Deleting you in ... " : "Delete my account"}</Button>

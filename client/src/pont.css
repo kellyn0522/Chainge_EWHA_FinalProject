@@ -10,3 +10,57 @@
   font-weight: 500;
   font-style: normal;
 }
+
+.creatPageItem{
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 23px;
+}
+
+.creatPageText{
+  margin-right: 10px;
+}
+
+.information{
+  margin-top: 10px;
+  display: flex;
+}
+
+.infoTitle{
+  margin-top:20px;
+  margin-left:25px;
+  font-size: 18px;
+}
+
+.info{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 15px;
+  font-size: 14px;
+}
+
+.info div:nth-child(2){
+  margin-right:30px;
+}
+
+.infotype{
+  color: #00462a;
+  margin-left: 10px;
+}
+
+.infoName{
+  font-size: 15px;
+}
+
+.optionCard{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 10px;
+}
+
+.infoText{
+  font-size:15px; 
+  margin-bottom:10px; 
+  margin-left:10px
+}

@@ -5,6 +5,7 @@ import { AuthItemContext } from "../context/AuthItemContext";
 import { AuthContext } from "../context/AuthContext";
 import Logo from "../component/Logo";
 
+
 const CreateItemPage = () => {
 
     const { 
@@ -52,16 +53,19 @@ const CreateItemPage = () => {
     }, [bedExist])
 
     return (<>
-        <Form onSubmit={createItem}>
-            <Row style={{
-                height: "100vh",
-                justifyContent: "Center",
-                paddingTop: "10%"
-            }}>
-                <Col xs={6}>
-                    <Stack gap={3}>
-                        <div className = "logo"><Logo /></div>
-                        <h2>매물 등록</h2>
+        <div>
+            <div className = "logo"><Logo /></div>
+            <Form className="noto-sans-kr" onSubmit={createItem}>
+                <Row style={{
+                    height: "100%",
+                    justifyContent: "Center",
+                    paddingTop: "10px",
+                    paddingBottom:"10%"
+                }}>
+                    <Col xs={6}>
+                        <Stack gap={3}>
+                        
+                        <h2 style={{marginBottom: '10px'}}>매물 등록</h2>
                         <Form.Control
                                 type="file"
                                 onChange={(e) => updateCreateItemInfo({ ...createItemInfo, imageFile: e.target.files[0] })}
@@ -127,45 +131,46 @@ const CreateItemPage = () => {
                                 <option value = "단독주택">단독주택</option>
                                 <option value = "상가">상가</option>
                             </select>
-                        </div>   
-                        <div className = "bedSize"> 
-                            <div className="text">침대 옵션 여부</div>
-                            <input type = "checkbox" checked = {bedExist} onChange = {onChangebedExist} />
-                            <div className="text">침대 크기</div>
-                            <input onChange={
-                                (e) => updateCreateItemInfo({ ...createItemInfo, bedSize: e.target.value })
-                            } className="set"  maxLength="6" disabled = {!bedExist} />
                         </div>
-                        <div className = "hasItem"> 
-                            <div className="text">옵션 여부 (옵션인 경우 체크해주세요.)</div>
-                            <div className="hasWasher">
-                                <div className="text">세탁기</div>
+                        <div className = "creatPageHasItem" style={{marginTop: '10px'}}>
+                            <div className="text" style = {{marginBottom: '15px'}}>옵션 여부 (옵션인 경우 체크해주세요.)</div>   
+                            <div className = "creatPageItem"> 
+                                <div className="creatPageText">침대</div>
+                                <input type = "checkbox" checked = {bedExist} onChange = {onChangebedExist} />
+ 
+                                <div className="creatPageText" style = {{marginLeft: '15px'}}>침대 크기</div>
+                                <input onChange={
+                                    (e) => updateCreateItemInfo({ ...createItemInfo, bedSize: e.target.value })
+                                } className="set"  maxLength="6" disabled = {!bedExist} />
+                            </div>
+                            <div className="creatPageItem">
+                                <div className="creatPageText">세탁기</div>
                                 <input type = "checkbox" name = "hasWasher" checked = {hasItems.hasWasher} onChange = {onChangeCheckbox} />
                             </div>
-                            <div className="hasDryer">
-                                <div className="text">드라이기</div>
+                            <div className="creatPageItem">
+                                <div className="creatPageText">드라이기</div>
                                 <input type = "checkbox" name = "hasDryer" checked = {hasItems.hasDryer} onChange = {onChangeCheckbox} />
                             </div>
-                            <div className="hasTV">
-                                <div className="text">TV</div>
+                            <div className="creatPageItem">
+                                <div className="creatPageText">TV</div>
                                 <input type = "checkbox" name = "hasTV" checked = {hasItems.hasTV} onChange = {onChangeCheckbox} />
                             </div>
-                            <div className="hasAirConditioner">
-                                <div className="text">에어컨</div>
+                            <div className="creatPageItem">
+                                <div className="creatPageText">에어컨</div>
                                 <input type = "checkbox" name = "hasAirConditioner" checked = {hasItems.hasAirConditioner} onChange = {onChangeCheckbox} />
                             </div>
-                            <div className="hasHeater">
-                                <div className="text">난방</div>
+                            <div className="creatPageItem">
+                                <div className="creatPageText">난방</div>
                                 <input type = "checkbox" name = "hasHeater" checked = {hasItems.hasHeater} onChange = {onChangeCheckbox} />
                             </div>
-                            <div className="hasBlinds">
-                                <div className="text">블라인드</div>
+                            <div className="creatPageItem">
+                                <div className="creatPageText">블라인드</div>
                                 <input type = "checkbox" name = "hasBlinds" checked = {hasItems.hasBlinds} onChange = {onChangeCheckbox} />
                             </div>
                         </div>
 
                         
-                        <Button variant="primary" type="submit" >
+                        <Button style = {{backgroundColor: '#00462a', color: 'white', border: 'none', marginTop: '5px'}} type="submit" >
                             { isCreateItemLoading? "Creating your Item":"매물 등록"}
                         </Button>
                         {
@@ -173,10 +178,11 @@ const CreateItemPage = () => {
                             <p>{createItemError?.message}</p></Alert>
                         }
                         
-                    </Stack>
-                </Col>
-            </Row>
-        </Form>
+                        </Stack>
+                    </Col>
+                </Row>
+            </Form>
+        </div>
     </>);
 };
 

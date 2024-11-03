@@ -68,7 +68,7 @@ const Home = () => {
             <Row>
                 <Col>
                     <div className = "header"><NavBar /></div>
-                    <div className = 'secondHeader'>
+                    <div className = 'noto-sans-kr secondHeader'>
                     <Form className = 'd-flex'>
                         <Form.Control
                             type = 'text' 
@@ -81,7 +81,7 @@ const Home = () => {
                         />
                         <span className="material-symbols-outlined size-40" style = {{cursor: "pointer"}} onClick = {onSearch}>search</span>
                     </Form>
-                    <Button className = "button" style = {{backgroundColor: '#00462a', color: 'white', border: 'none'}} onClick = {onCreateItem}>매물 등록</Button>
+                    <Button className="noto-sans-kr" style = {{backgroundColor: '#00462a', color: 'white', border: 'none'}} onClick = {onCreateItem}>매물 등록</Button>
                     </div>
                     <div className= "list_wrapper">
                         {getItemError && <p>Error: {getItemError}</p>}
