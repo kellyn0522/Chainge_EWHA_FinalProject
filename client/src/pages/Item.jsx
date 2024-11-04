@@ -78,7 +78,7 @@ const Item = () => {
                                 <div style = {{display : 'flex', alignItems: 'center', gap: '20px', marginBottom : '10px'}}>
                                     <span className={`material-symbols-outlined ${liked? 'liked':'dontlike'}`} style={{cursor: "pointer"}} onClick = {handleLike}>favorite</span>
                                     <img src={chat} alt='chat' width = '30px' height = '30px' style = {{cursor: "pointer"}} onClick = {onClickChat} />
-                                    <Button className="noto-sans-kr" style = {{backgroundColor: '#00462a', color: 'white', border: 'none'}} onClick = {makeContract}>거래하기</Button>
+                                    <Button className="noto-sans-kr green" style = {{color: 'white', border: 'none'}} onClick = {makeContract}>거래하기</Button>
                                 </div>
                                 <Card className = "information" style={{marginBottom:"10px"}}>
                                     <Card.Title className = "infoTitle">상세 설명</Card.Title>

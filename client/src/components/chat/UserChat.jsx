@@ -19,12 +19,12 @@ const UserChat = ({ chat, user }) => {
         <Stack direction="horizontal" gap={3} className="user-card align-items-center p-2 justify-content-between"
             role="button">
             <div className="d-flex align-items-center">
-                <div className="me-2">
+                <div className="me-3">
                     <img src={account} height="35px" />
                 </div>
                 <div className="text-content">
                     <div className="name">
-                        {recipientUser?.nickName}
+                        {recipientUser?.nickName || 'Nickname'}
                     </div>
                     <div className="text">
                         Text Message

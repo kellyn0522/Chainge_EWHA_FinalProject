@@ -30,17 +30,19 @@ body{
 }
 
 .user-card .text-content {
+  color: #59595B;
   width: 170px;
 }
 
 .user-card .name {
+  color: #59595B;
   font-weight: 700;
 }
 
 .user-card .text,
 .user-card .date {
   font-size: 14px;
-  color: rgb(180, 180, 180);
+  color: #59595B
 }
 
 .user-online {
@@ -60,11 +62,11 @@ body{
 .chat-box {
   max-height: calc(100vh - 10rem);
   overflow-y: auto;
-  background:#80A295;
+  background:#7DA1CB;
   color: white;
   border-radius: 10px;
 }
-
+/*background:#A1C4EB;*/
 .messages-box {
   height: 85vh;
 }
@@ -77,7 +79,7 @@ body{
   justify-content: center;
   padding: 0.75rem;
   color: white;
-  background:#80A295;
+  background:#7DA1CB;
 }
 
 /* Messages */
@@ -98,7 +100,7 @@ body{
 
 .message.self {
  
-  background: #DCDCDC
+  background: #D6C2E2
 }
 
 .message-footer {
@@ -108,20 +110,29 @@ body{
 }
 
 /* Chat Input  */
-/*
-.chat-input {
-  width: 100%;
-  background: rgb(30, 30, 30);
-  padding: 1rem;
-}
+
 .send-btn {
   border: none;
   background: rgba(72, 112, 223, 1);
   color: white;
   height: 40px;
   width: 40px;
-  border-radius: 50%;
-}*/
+  border-radius: 20%;
+}
+.chat-input {
+  width: 100%;
+  background: #7DA1CB;
+  padding: 1rem;
+}
+
+.react-input-emoji--button svg{
+  fill:#D3D3D3 !important;
+}
+
+.react-input-emoji--button__show svg{
+  fill: #E2F1E7 !important;
+}
+
 
 /* Notification */
 /*
@@ -205,12 +216,13 @@ body{
 */
 .this-user-notifications {
   display: flex;
-  background: #00462a;
-  height: 20px;
-  width: 20px;
+  background: #002D72;
+  height: 18px;
+  width: 18px;
   font-size: 12px;
   font-weight: 700;
   border-radius: 50%;
+  margin-top:3px;
   align-items: center;
   justify-content: center;
 }

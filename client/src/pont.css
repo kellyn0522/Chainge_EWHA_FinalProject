@@ -11,6 +11,13 @@
   font-style: normal;
 }
 
+.green{
+  background-color: #002D72;
+}
+.green:hover{
+  background-color: #002D72;
+}
+
 .creatPageItem{
   display: flex;
   align-items: center;
@@ -51,7 +58,7 @@
 }
 
 .infotype{
-  color: #00462a;
+  color: #002D72;
   margin-left: 10px;
 }
 

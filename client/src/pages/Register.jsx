@@ -55,7 +55,7 @@ const Register = () => {
                             }
                         />
                     
-                        <Button className="gugi-regular" variant="primary" type="submit" >
+                        <Button className="gugi-regular green" type="submit" >
                             { isRegisterLoading? "Creating your account":"Register"}
                         </Button>
                         {

@@ -170,7 +170,7 @@ const CreateItemPage = () => {
                         </div>
 
                         
-                        <Button style = {{backgroundColor: '#00462a', color: 'white', border: 'none', marginTop: '5px'}} type="submit" >
+                        <Button className = 'green' style = {{color: 'white', border: 'none', marginTop: '5px'}} type="submit" >
                             { isCreateItemLoading? "Creating your Item":"매물 등록"}
                         </Button>
                         {

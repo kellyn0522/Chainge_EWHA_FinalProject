@@ -30,7 +30,7 @@ const Login = () => {
                         <Form.Control type="password" placeholder="Password" onChange={(e) => updateLoginInfo
                             ({ ...loginInfo, password: e.target.value })}/>
 
-                        <Button className="gugi-regular" variant="primary" type="submit" >
+                        <Button className="gugi-regular green" type="submit" >
                             {isLoginLoading? "Getting you in ... " : "Login"}
                         </Button>
                         {loginError?.error && 

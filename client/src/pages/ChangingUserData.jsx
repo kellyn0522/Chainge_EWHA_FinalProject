@@ -95,7 +95,7 @@ const ChangingUserData = () => {
                                 } 
                             />
                       
-                            <Button style = {{backgroundColor: '#00462a', color: 'white', border: 'none'}} type="submit" >
+                            <Button className = 'green' style = {{color: 'white', border: 'none'}} type="submit" >
                                 { isUpdateLoading? "Updating your account":"정보변경"}
                             </Button>
                             {

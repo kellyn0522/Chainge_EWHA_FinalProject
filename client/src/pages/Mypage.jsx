@@ -76,9 +76,9 @@ const Mypage = () => {
                         <Card.Text>Email: {user.email}</Card.Text>
                     </Card.Body>
                     <div style = {{display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', alignItems:'center'}}>
-                        <img src={chat} alt='chat' width = '35px' height = 'auto' onClick = {onClickChat} style ={{justifySelf : 'center'}} />
-                        <Button style = {{backgroundColor: '#00462a', color: 'white', border: 'none', margin: '10px'}} onClick = {onChangeData}>정보 변경</Button>
-                        <Button style = {{backgroundColor: '#00462a', color: 'white', border: 'none', margin: '10px'}} onClick = {handleShow} >회원 탈퇴</Button>
+                        <Button className = 'green' style = {{color: 'white', border: 'none', margin: '10px'}} onClick = {onClickChat}>채팅</Button>
+                        <Button className = 'green' style = {{color: 'white', border: 'none', margin: '10px'}} onClick = {onChangeData}>정보 변경</Button>
+                        <Button className = 'green' style = {{color: 'white', border: 'none', margin: '10px'}} onClick = {handleShow} >회원 탈퇴</Button>
                         <Unregister show={showModal} handleClose={handleClose} />
                     </div>
                 </Card>

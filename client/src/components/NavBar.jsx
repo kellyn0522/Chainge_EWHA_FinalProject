@@ -38,8 +38,8 @@ const NavBar = () => {
                                     Logout
                                 </Link>
                                 { user && ( <span className="gugi-regular">{user?.nickName}</span> )}
-                                <span className="material-symbols-outlined size-40" style = {{cursor: "pointer"}} onClick={onClickMypage}>account_circle</span>
                                 <img src={chat} alt='chat' width = '30px' height = '30px' style = {{cursor: "pointer"}} onClick = {onClickChat} />
+                                <span className="material-symbols-outlined size-40" style = {{cursor: "pointer"}} onClick={onClickMypage}>account_circle</span>
                             </>)
                         }
                         {!user && (<>

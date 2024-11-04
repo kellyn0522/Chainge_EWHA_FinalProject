@@ -28,8 +28,8 @@ const Unregister = ({show,handleClose}) => {
                         <Col xs={9} style = {{height: "400px"}}>
                             <Stack gap={3}>
                                 <h4 style={{marginBottom: "30px"}}>Do you want to delete your account?</h4>
-                                <Button style = {{backgroundColor: '#00462a', color: 'white', border: 'none'}} type="submit">{isDeleteLoading? "Deleting you in ... " : "Delete my account"}</Button>
-                                <Button className = "no" style = {{backgroundColor: '#00462a', color: 'white', border: 'none'}} onClick={handleClose}>Cancel</Button>
+                                <Button  className = 'green' style = {{color: 'white', border: 'none'}} type="submit">{isDeleteLoading? "Deleting you in ... " : "Delete my account"}</Button>
+                                <Button className = "no green" style = {{color: 'white', border: 'none'}} onClick={handleClose}>Cancel</Button>
                                 {deleteError?.error && 
                                 <Alert variant="danger">
                                     <p>{deleteError?.message}</p></Alert>} 
