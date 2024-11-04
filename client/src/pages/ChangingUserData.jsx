@@ -91,19 +91,14 @@ const ChangingUserData = () => {
                                 placeholder="House Address" 
                                 maxLength="100"
                                 onChange={(e) =>
-                                    updateUpdaterInfo({ houseAddres: e.target.value })
+                                    updateUpdaterInfo({ houseAddress: e.target.value })
                                 } 
                             />
                       
                             <Button className = 'green' style = {{color: 'white', border: 'none'}} type="submit" >
                                 { isUpdateLoading? "Updating your account":"정보변경"}
                             </Button>
-                            {
-                                updateError?.error && (
-                                    <Alert variant="danger">
-                                        <p>{updateError.message|| 'error'}</p>
-                                    </Alert>)
-                            }
+                            
                         </Stack>
                     </Col>
                 </Row>

@@ -51,7 +51,7 @@ export const AuthContextProvider = ({ children }) => {
 
         setIsUpdateLoading(false);
 
-        //console.log("updater response ", response);
+        console.log("updater response ", response);
         
 
         if (response.error) {
@@ -61,7 +61,7 @@ export const AuthContextProvider = ({ children }) => {
         localStorage.setItem("user", JSON.stringify(response));
 
         setUser(response);
-        navigate("/");
+        navigate("/mypage");
     }, [updaterInfo]);
 //여기까지
     const [loginError, setLoginError] = useState(null);

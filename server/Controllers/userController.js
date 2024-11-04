@@ -60,6 +60,7 @@ const updateUser = async (req, res) => {
 
         const user = await userModel.findById( id );
         if (!user) return res.status(400).json("User Not Found");
+        console.log(user);
 
         let nickNameExists = await userModel.findOne({ nickName });
         let phoneNumberExists = await userModel.findOne({ phoneNumber });
@@ -73,9 +74,10 @@ const updateUser = async (req, res) => {
         if (!validator.isStrongPassword(password)) return res.status(400).json("Password must be a strong password");
 
         result = await userModel.updateOne({_id : user._id}, {$set : {nickName, phoneNumber, password, birth, identityNum, zipCode, houseAddress} });
-        if (result.nModified > 0){
-            const update = await userModel.findById.apply(user._id);
-            res.status(200).json({ nickName : update.nickName , phoneNumber : update.phoneNumber, password : update.password, birth : update.birth, identityNum : update.identityNum, zipCode : update.zipCode, houseAddress : update.houseAddress });
+        if (result.modifiedCount > 0){
+            const update = await userModel.findById(user._id);
+            console.log(update);
+            res.status(200).json({ _id: update._id, name: update.name, nickName: update.nickName, email: update.email, phoneNumber: update.phoneNumber, birth : update.birth, identityNum : update.identityNum, zipCode : update.zipCode, houseAddress : update.houseAddress });
         } else{
             return res.status(400).json({error : "사용자를 찾을 수 없습니다."});
         }

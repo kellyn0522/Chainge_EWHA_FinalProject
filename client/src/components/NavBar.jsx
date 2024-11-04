@@ -37,8 +37,8 @@ const NavBar = () => {
                                 <Link onClick={onClickLogout} to="/" className="gugi-regular text-decoration-none" style = {{color : 'black'}}>
                                     Logout
                                 </Link>
-                                { user && ( <span className="gugi-regular">{user?.nickName}</span> )}
                                 <img src={chat} alt='chat' width = '30px' height = '30px' style = {{cursor: "pointer"}} onClick = {onClickChat} />
+                                { user && ( <span className="noto-sans-kr">{user?.nickName}</span> )}
                                 <span className="material-symbols-outlined size-40" style = {{cursor: "pointer"}} onClick={onClickMypage}>account_circle</span>
                             </>)
                         }
