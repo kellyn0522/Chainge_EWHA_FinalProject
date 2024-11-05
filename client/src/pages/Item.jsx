@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Logo from "../component/Logo";
 import { useState, useContext, useEffect } from "react";
 import { AuthItemContext } from "../context/AuthItemContext";
+import { AuthContext } from "../context/AuthContext";
 import { Button, Card, Row, Col, Container } from "react-bootstrap";
 import ac from '../icons/ac_unit.svg';
 import bed from '../icons/bed.svg';
@@ -23,6 +24,9 @@ const Item = () => {
     const navigate = useNavigate();
     const {id} = useParams();
     const [liked, setLiked] = useState(false);
+    const { 
+        user
+    } = useContext(AuthContext);
 
     //const onHistory = () => {
     //    navigate("/userHistory");
@@ -58,7 +62,9 @@ const Item = () => {
         navigate("/chat");
     }
     const makeContract = () => {
-        navigate("/");
+        if(!isFindItemLoading && !findItemError && item){
+            navigate(`/makeContract/${item.itemID}`);
+        }
     }
     //<img src = {item.imageFile} style = {{width: '300px', height: 'auto', border: '2px solid #ccc', display: ' block', margin: '0 auto'}} />
                     
@@ -75,11 +81,13 @@ const Item = () => {
                                     <div>{item.location} {item.houseAddress}</div>
                                     <div>{item.type} / {item.area}평</div> 
                                 </div>
-                                <div style = {{display : 'flex', alignItems: 'center', gap: '20px', marginBottom : '10px'}}>
-                                    <span className={`material-symbols-outlined ${liked? 'liked':'dontlike'}`} style={{cursor: "pointer"}} onClick = {handleLike}>favorite</span>
-                                    <img src={chat} alt='chat' width = '30px' height = '30px' style = {{cursor: "pointer"}} onClick = {onClickChat} />
-                                    <Button className="noto-sans-kr green" style = {{color: 'white', border: 'none'}} onClick = {makeContract}>거래하기</Button>
-                                </div>
+                                {user && (<>
+                                    <div style = {{display : 'flex', alignItems: 'center', gap: '20px', marginBottom : '10px'}}>
+                                        <span className={`material-symbols-outlined ${liked? 'liked':'dontlike'}`} style={{cursor: "pointer"}} onClick = {handleLike}>favorite</span>
+                                        <img src={chat} alt='chat' width = '30px' height = '30px' style = {{cursor: "pointer"}} onClick = {onClickChat} />
+                                        <Button className="noto-sans-kr green" style = {{color: 'white', border: 'none'}} onClick = {makeContract}>거래하기</Button>
+                                    </div>
+                                </>)}
                                 <Card className = "information" style={{marginBottom:"10px"}}>
                                     <Card.Title className = "infoTitle">상세 설명</Card.Title>
                                     <Card.Body>

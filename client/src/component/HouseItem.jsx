@@ -63,7 +63,9 @@ const HouseItem = ({itemId}) => {
                 <Card.Text>건물 종류: {item.type}</Card.Text>
                 <Card.Text>크기: {item.area}평</Card.Text>
 
+                {user && (<>
                 <span className={`material-symbols-outlined ${liked? 'liked':'dontlike'}`} style={{cursor: "pointer"}} onClick = {handleLike}>favorite</span>
+                </>)}
             </Card.Body>
         </Card>
     )

@@ -341,7 +341,7 @@ function App() {
                          <Route path="/chat" element={<Chat />} />
                          <Route path="/register" element={user? <Home/>:<Register />} />
                          <Route path="/createItemPage" element={<CreateItemPage />} />
-                         <Route path="/makeContract" element={<MakeContract />} />
+                         <Route path="/makeContract/:id" element={<MakeContract />} />
                          <Route path="/contractList" element={<ContractList />} />
                          <Route path="/changingUserData" element={<ChangingUserData />} />
                          <Route path="/userHistory" element={<UserHistory />} />

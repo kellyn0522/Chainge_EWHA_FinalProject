@@ -123,13 +123,14 @@ const findUser = async(req, res) =>{
 const deleteUser = async(req, res) =>{
     const { id } = req.body;
     try {
-        const user = await userModel.findOne({ id });
+        const user = await userModel.findOne({ _id:id });
 
         if (!user){
             return res.status(404).json({messege:"User not found"});
         }
-        await userModel.deleteOne({id})
+        await userModel.deleteOne({_id:id});
         res.status(200).json("Unregister"); 
+        console.log("Delete success");
     }catch(error){
         console.log(error); 
         res.status(500).json(error);

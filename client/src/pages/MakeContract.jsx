@@ -1,74 +1,46 @@
-import {useRef, useState, useContext} from "react";
+import {useEffect, useState, useContext} from "react";
 import Logo from "../component/Logo";
-import {itemDataContext } from "../App";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { AuthItemContext } from "../context/AuthItemContext";
+import { AuthContext } from "../context/AuthContext";
+import { Button, Card, Row, Col, Container, Stack } from "react-bootstrap";
 
 
 const MakeContract = () => {
     const navigate = useNavigate();
+    const {id} = useParams();
+    const { user } = useContext(AuthContext);
+    const {
+        findItem,
+        findItemError,
+        isFindItemLoading,
+    } = useContext(AuthItemContext);
+    const [item, setItem] = useState(null)
 
-    const itemData = /*useContext(itemDataContext);*/ 
-    {location: "서초구",
-    detailAdd:"ooo아파트",
-    itemId: 1,
-    ownerID: 10000001,
-    housePrice: 150,
-    area: 20,
-    type: "아파트",
-    memo: "역세권입니다.",
-    tenantID: "",
-    contractIds: -1,
-    bedSize: "Queen",
-    hasItems: [1,1,1,1,1,1], };
+    useEffect(() => {
+        const fetchItem = async () => {
+            if (!findItemError && !isFindItemLoading){
+                const result = await findItem(id);
+                setItem(result);
+            }
+        };
+        fetchItem();
+    }, [findItem, findItemError]);
 
-    const whoLogIn = { // 데이터 연결 필요
-        name: "송태섭",
-        id: "ijkl",
-        passWord: "1234",
-        keyId: 10000003,
-        telNum:111,
-        birth:111113,
-        identityNum:3333333,
-        zipCode: 33333, 
-        email: undefined,
-        ownItem: [1],
-        likedItemId: [2,3],
-        contracts: [2]
-      };
-
-    const depositRef = useRef();
-    const costRef = useRef();
-    const startDateRef = useRef();
-    const periodRef = useRef();
-    const endDateRef = useRef();
-
-    const userName = whoLogIn.name;
-    const zipCode = whoLogIn.zipCode;
-    const birth = whoLogIn.birth;
-    const identityNum = whoLogIn.identityNum;
-    const telNum = whoLogIn.telNum;
-
-    const location = itemData.location
-    const detailAdd = itemData.detailAdd
-    const ownerID = itemData.ownerID
-    const area = itemData.area
-    const type = itemData.type
-    const memo = itemData.memo
-    //const bedSize = itemData.bedSize
-    //const hasItems = itemData.hasItems
-
-    const [cost, setCost] = useState(itemData.housePrice);
-    const [deposit, setDeposit] = useState("");
-    const [startDate, setStartDate] = useState("");
-    const [period, setPeriod] = useState("");
-    const [endDate, setEndDate] = useState("");
-
-    const settingCost = (e) =>{ setCost(e.target.value);};
-    const settingDeposit = (e) =>{ setDeposit(e.target.value);};
-    const settingStartDate = (e) =>{ setStartDate(e.target.value);};
-    const settingPeriod = (e) =>{ setPeriod(e.target.value);};
-    const settingEndDate = (e) =>{ setEndDate(e.target.value);};
+    if (isFindItemLoading){
+        return <div>Loding...</div>
+    }
+    if (findItemError || !item){
+        return <div>Error: {findItemError?.message || 'Page not found'}</div>
+    }
+    
+    const goToItem = () => {
+        if(!isFindItemLoading && !findItemError && item){
+            navigate(`/item/${item.itemID}`);
+        }
+    }
    
+    /*
     const onMakeContract = () => {
         if (!cost) {costRef.current.focus(); return;
         } else if (!deposit) {depositRef.current.focus(); return;
@@ -84,88 +56,95 @@ const MakeContract = () => {
             ];
         };
     };
-
+    */
 
     return (
-        <div className = "MakeContract">
-            <div className = "header">
-                <div className = "logo"><Logo /></div>
-                <div className = "Title">거래하기</div>
-            </div>
-            <div className = "CheckIdentity">
-                <div className = "text">개인정보 확인</div>
-                <div className = "name">
-                    <div className="text">이름</div>
-                    <input value={userName} className="set" disabled />
-                </div>
-                <div className = "zipCode">
-                    <div className="text">우편번호</div>
-                    <input value={zipCode} className="set" disabled />
-                </div>
-                <div className = "IdentityNum">
-                    <div className ="text">주민등록번호</div>
-                    <div className = "content">
-                        <input value={birth} className="set" disabled />
-                        <div className = "sep">-</div>
-                        <input value={identityNum} className="set" disabled />
-                    </div>
-                </div>
-                <div className = "telNum">
-                    <div className="text">전화번호</div>
-                    <input value={telNum} className="set" disabled />
-                </div>
-            </div>
-            <div className = "CheckHouse">
-                <div className = "text">매물 정보 확인</div>
-                <div className = "location">
-                    <div className="text">주소</div>
-                    <input value={location} className="set" disabled />
-                </div>
-                <div className = "detailAdd">
-                    <input value={detailAdd} className="set" disabled />
-                </div>
-                <div className = "ownerID">
-                    <div className="text">소유주</div>
-                    <input value={ownerID} className="set" disabled />
-                </div>
-                <div className = "area">
-                    <div className="text">공급면적</div>
-                    <input value={area} className="set" disabled />
-                </div>
-                <div className = "type">
-                    <div className="text">주소</div>
-                    <input value={type} className="set" disabled />
-                </div>
-                <div className = "memo">
-                    <div className="text">상세설명</div>
-                    <textarea value={memo} className="set" disabled />
-                </div>
-            </div>
-            <div className = "contractInfo">
-                <div className = "text">추가 정보 입력</div>
-                <div className = "cost">
-                    <div className="text">월세</div>
-                    <input value={cost} onChange={settingCost} className="set" ref={costRef} maxLength="7" />
-                </div>
-                <div className = "deposit">
-                    <div className="text">보증금</div>
-                    <input  value={deposit} onChange={settingDeposit} className="set" ref={depositRef} maxLength="6" />
-                </div>
-                <div className = "startDate">
-                    <div className="text">계약 시작 날짜</div>
-                    <input type = "date" value={startDate} onChange={settingStartDate} className="set" ref={startDateRef} />
-                </div>
-                <div className = "period">
-                    <div className="text">기간</div>
-                    <input  value={period} onChange={settingPeriod} className="set" ref={periodRef} />
-                </div>
-                <div className = "endDate">
-                    <div className="text">계약 종료 날짜</div>
-                    <input type = "date" value={endDate} onChange={settingEndDate} className="set" ref={endDateRef} />
-                </div>
-            </div>
-            <button className = "button" onClick = {onMakeContract}>거래 시작</button>
-        </div>
+        <Container>
+            <div className = "logo"><Logo /></div>
+            <Row className = "noto-sans-kr"
+            style={{
+                    height: "100%",
+                    justifyContent: "Center",
+                    paddingTop: "10px",
+                    paddingBottom:"10%",
+                    margin:"10px"
+                }}>
+                    <Col xs={10}>
+                        <h2 style={{marginBottom: '20px'}}>거래 시작</h2>
+                        <Card className = "information" style={{marginBottom:"30px"}}>
+                            <Card.Title className = "infoTitle">개인정보 확인</Card.Title>
+                            <Card.Body className = "info">
+                                <div className="infotype">이름</div>
+                                <div className = "infoName">{user.name}</div>
+                                <div className="infotype">우편번호</div>
+                                <div className = "infoName">{user.zipCode}</div>
+                                <div className ="infotype">주민등록번호</div>
+                                <div className = "infoName">{user.birth}-{user.identityNum}</div>
+                                <div className="infotype">전화번호</div>
+                                <div className = "infoName">{user.phoneNumber}</div>
+                            </Card.Body>
+                        </Card>
+                        <Card>
+                            <Card.Title className = "infoTitle">계약 상세</Card.Title>
+                            <Card.Body className = "inputCard">
+                                <div className="infotype">계약 시작 날짜</div>
+                                <input type = "date" className="set" />
+                                <div className="infotype">계약 종료 날짜</div>
+                                <input type = "date" className="set" />
+                                <div className="infotype">계약 기간</div>
+                                <input placeholder=" 개월 수" className="set" />
+                            </Card.Body>
+                        </Card>
+                        <Card className = "information">
+                            <Card.Title className = "infoTitle">매물 정보 확인</Card.Title>
+                            <Card.Body className = "info">
+                                <div className="infotype">소유주</div>
+                                <div className = "infoName">{item.ownerName}</div>
+                                <div className = "infotype">월세</div> 
+                                <div className = "infoName">{item.housePrice}</div>
+                                <div className = "infotype">보증금</div> 
+                                <div className = "infoName">1억 5000만원</div>
+                                <div className = "infotype">건물 주소</div> 
+                                <div className = "infoName">{item.location}</div>
+                                <div className = "infotype">면적(평)</div> 
+                                <div className = "infoName">{item.area}평</div>
+                                <div className = "infotype">전용/계약면적</div>
+                                <div className = "infoName">전용/계약면적</div>
+                                <div className = "infotype">건물 이름</div> 
+                                <div className = "infoName">{item.houseAddress}</div>
+                                <div className = "infotype">방 종류</div> 
+                                <div className = "infoName">{item.type}</div>
+                                <div className = "infotype">해당층/건물층</div>
+                                <div className = "infoName">25층/50층</div>
+                                <div className = "infotype">복층 여부</div>
+                                <div className = "infoName">단층</div>  
+                                <div className = "infotype">방 수/욕실 수</div>
+                                <div className = "infoName">2/1</div>
+                                <div className = "infotype">방향</div>
+                                <div className = "infoName">남서향</div>
+                                <div className = "infotype">엘리베이터</div>
+                                <div className = "infoName">없음</div>
+                                <div className = "infotype">반려동물 가능 여부</div>
+                                <div className = "infoName">가능</div>
+                                <div className = "infotype">해당 면적 세대수</div>
+                                <div className = "infoName">50세대</div>
+                                <div className = "infotype">총 세대수</div>
+                                <div className = "infoName">50세대</div>
+                                <div className = "infotype">총 주차대수</div>
+                                <div className = "infoName">30대</div>
+                                <div className = "infotype">현관유형</div>
+                                <div className = "infoName">복도식</div>
+                                <div className = "infotype">건축물 용도</div>
+                                <div className = "infoName">상가</div>
+                            </Card.Body>
+                        </Card>
+                        <div className='contractButton'>
+                            <Button style = {{backgroundColor: '#5B6A82', color: 'white', border: 'none', marginTop: '5px'}} onClick = {goToItem}>뒤로가기</Button>
+                            <Button className="green" style = {{color: 'white', border: 'none', marginTop: '5px'}}>거래 시작</Button>
+                        </div>
+                    </Col>
+            </Row>
+        </Container>
     )
 };
 export default MakeContract;

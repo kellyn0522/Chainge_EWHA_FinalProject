@@ -29,6 +29,13 @@
   margin-right: 10px;
 }
 
+.inputCard{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  font-size: 14px;
+}
+
 .intro{
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -103,4 +110,11 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 20px;
+}
+
+.contractButton{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
 }

@@ -174,21 +174,25 @@ export const AuthContextProvider = ({ children }) => {
         try{
             const response = await deleteRequest(
                 `${baseUrl}/users/unregister`,
-                {id: user._id}
+                {
+                    id: user._id
+                }
             );
 
             console.log("deleter response ", response);
-        
-            if (response.error) {
-                return setDeleteError(response);
-            }
             localStorage.removeItem("user");
             setUser(null);
             navigate("/");
             setIsDeleteLoading(false);
+        
+            if (response.error) {
+                return setDeleteError(response);
+            }
+
         }catch(error){
             console.error("Falied to unregister:", error);
             setDeleteError({message: "Falied to unregister user"});
+            setIsDeleteLoading(false);
         }
     }, [user, navigate, setUser, setDeleteError, setIsDeleteLoading]);
 

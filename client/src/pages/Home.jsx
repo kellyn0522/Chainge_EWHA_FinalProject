@@ -2,6 +2,7 @@ import NavBar from "../components/NavBar";
 import HouseItem from "../component/HouseItem";
 import { useState, useContext, useEffect } from "react";
 import { AuthItemContext } from "../context/AuthItemContext";
+import { AuthContext } from "../context/AuthContext";
 import "../component/HouseItem.css";
 import { Button, Form, Row, Col, Container } from "react-bootstrap";
 import {useNavigate} from "react-router-dom";
@@ -12,8 +13,9 @@ const Home = () => {
     const { getItem, getItemError } = useContext(AuthItemContext);
     const [items, setItems] = useState([]);
     const navigate = useNavigate();
-
-    ByteLengthQueuingStrategy.href
+    const { 
+        user
+    } = useContext(AuthContext);
     //,account_circle,bookmark,chat,chat_bubble,bed,ac_unit,kitchen,tv_gen,single_bed,dresser,blinds,king_bed,heat,dishwasher_gen
 
     useEffect(() => {
@@ -81,7 +83,9 @@ const Home = () => {
                         />
                         <span className="material-symbols-outlined size-40" style = {{cursor: "pointer"}} onClick = {onSearch}>search</span>
                     </Form>
-                    <Button className="noto-sans-kr green" style = {{color: 'white', border: 'none'}} onClick = {onCreateItem}>매물 등록</Button>
+                    {user && (<>
+                        <Button className="noto-sans-kr green" style = {{color: 'white', border: 'none'}} onClick = {onCreateItem}>매물 등록</Button>
+                    </>)}
                     </div>
                     <div className= "list_wrapper">
                         {getItemError && <p>Error: {getItemError}</p>}
