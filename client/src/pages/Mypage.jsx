@@ -98,7 +98,7 @@ const Mypage = () => {
                             <Card style = {{marginTop:"10px", marginBottom:"30px", width: '300px'}}>
                                 <div style = {{display:'flex', alignItems: 'center'}}>
                                     <Card.Title className = 'infoTitle'>반포 자이아파트</Card.Title>
-                                    <Badge className = "bg-success" style = {{marginLeft:"15px", marginTop:"12.5px", width: '50px'}}>D-20</Badge>
+                                    <Badge className = "bg-secondary" style = {{marginLeft:"15px", marginTop:"12.5px", width: '50px'}}>D-20</Badge>
                                 </div>
                                 <Card.Body style = {{display: "grid", gridTemplateColumns: "1fr 1fr", gap:'10px'}}>
                                         <div className = 'infotype' style = {{fontSize: '13px'}}> 임대 시작일</div>
@@ -122,7 +122,7 @@ const Mypage = () => {
                             <Card style = {{marginTop:"10px", marginBottom:"30px", width: '300px'}}>
                                 <div style = {{display:'flex', alignItems: 'center'}}>
                                     <Card.Title className = 'infoTitle'>신촌 푸르지오 아파트</Card.Title>
-                                    <Badge className = "bg-danger" style = {{marginLeft:"15px", marginTop:"12.5px", width: '50px'}}>D-3</Badge>
+                                    <Badge className = "bg-primary" style = {{marginLeft:"15px", marginTop:"12.5px", width: '50px'}}>D-3</Badge>
                                 </div>
                                 <Card.Body style = {{display: "grid", gridTemplateColumns: "1fr 1fr", gap:'10px'}}>
                                         <div className = 'infotype' style = {{fontSize: '13px'}}>임차 시작일</div>
@@ -140,7 +140,7 @@ const Mypage = () => {
                             <Card style = {{marginTop:"10px", marginBottom:"30px", width: '300px'}}>
                                 <div style = {{display:'flex', alignItems: 'center'}}>
                                     <Card.Title className = 'infoTitle'>잠실 푸르지오 아파트</Card.Title>
-                                    <Badge className = "bg-warning" style = {{marginLeft:"15px", marginTop:"12.5px", width: '50px'}}>D-10</Badge>
+                                    <Badge className = "bg-secondary" style = {{marginLeft:"15px", marginTop:"12.5px", width: '50px'}}>D-10</Badge>
                                 </div>
                                 <Card.Body style = {{display: "grid", gridTemplateColumns: "1fr 1fr", gap:'10px'}}>
                                         <div className = 'infotype' style = {{fontSize: '13px'}}>임차 시작일</div>
