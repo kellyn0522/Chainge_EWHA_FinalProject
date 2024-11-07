@@ -63,15 +63,17 @@ const Mypage = () => {
                 <button className = "create" onClick = {onContractList}>+</button>
             </div>
     <div className = "intro" style = {{justifyContent: 'space-between'}}>
+    <div style = {{marginTop:"60px", marginBottom:"40px"}}/>
     */
     return (
         <div>
             <div className = "logo" ><Logo /></div>
             <div className = 'intro' style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px'}}>
-                <h4 className="gugi-regular" style={{marginBottom: '40px'}}>MY page</h4>
-                <div className = "noto-sans-kr">
-                <div className = "intro" style = {{justifyContent: 'space-between'}}> 
-                    <Card style = {{width: '400px'}}>
+                <div className = "noto-sans-kr" style = {{display:'grid', gridTemplateColumns: "1fr 1fr",gap:'30px'}}>
+                <div className = "intro" style = {{display:'flex', flexDirection:'column', alignItems: 'center'}}>
+                    <h4 className="gugi-regular" style={{marginTop:'15px', marginBottom: '25px', fontSize:'30px'}}>MY page</h4>
+                    <span className="material-symbols-outlined size-200" style={{textAlign: 'center', marginBottom: '10px'}}>account_circle</span>
+                    <Card style = {{width: '400px', marginBottom:'30px'}}>
                         <Card.Body className="noto-sans-kr">
                             <Card.Text>이름: {user.name}</Card.Text>
                             <Card.Text>닉네임: {user.nickName}</Card.Text>
@@ -85,9 +87,8 @@ const Mypage = () => {
                             <Unregister show={showModal} handleClose={handleClose} />
                         </div>
                     </Card>
-                    <span className="material-symbols-outlined size-200" style={{textAlign: 'center'}}>account_circle</span>
                 </div>
-                <div style = {{marginTop:"60px", marginBottom:"40px"}}/>
+                
                 <div>
                     <div >
                         <div style = {{display: "flex", alignItems: 'center', textAlign: 'center'}}>
