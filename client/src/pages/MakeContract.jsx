@@ -70,9 +70,9 @@ const MakeContract = () => {
                     margin:"10px"
                 }}>
                     <Col xs={10}>
-                        <h2 style={{marginBottom: '20px'}}>거래 시작</h2>
-                        <Card className = "information" style={{marginBottom:"30px"}}>
-                            <Card.Title className = "infoTitle">개인정보 확인</Card.Title>
+                        <h2 style={{marginBottom: '20px'}}>거래 하기</h2>
+                        <Card className = "information" style={{marginBottom:"20px"}}>
+                            <Card.Title className = "infoTitle">본인 정보 확인</Card.Title>
                             <Card.Body className = "info">
                                 <div className="infotype">이름</div>
                                 <div className = "infoName">{user.name}</div>
@@ -84,7 +84,20 @@ const MakeContract = () => {
                                 <div className = "infoName">{user.phoneNumber}</div>
                             </Card.Body>
                         </Card>
-                        <Card>
+                        <Card className = "information" style={{marginBottom:"20px"}}>
+                            <Card.Title className = "infoTitle">임차인 정보 확인</Card.Title>
+                            <Card.Body className = "info">
+                                <div className="infotype">이름</div>
+                                <div className = "infoName">황유저</div>
+                                <div className="infotype">우편번호</div>
+                                <div className = "infoName">55555</div>
+                                <div className ="infotype">주민등록번호</div>
+                                <div className = "infoName">222222-*******</div>
+                                <div className="infotype">전화번호</div>
+                                <div className = "infoName">01999999999</div>
+                            </Card.Body>
+                        </Card>
+                        <Card style={{marginBottom:"20px"}}>
                             <Card.Title className = "infoTitle">계약 상세</Card.Title>
                             <Card.Body className = "inputCard">
                                 <div className="infotype">계약 시작 날짜</div>
@@ -99,7 +112,7 @@ const MakeContract = () => {
                             <Card.Title className = "infoTitle">매물 정보 확인</Card.Title>
                             <Card.Body className = "info">
                                 <div className="infotype">소유주</div>
-                                <div className = "infoName">{item.ownerName}</div>
+                                <div className = "infoName">황유저</div>
                                 <div className = "infotype">월세</div> 
                                 <div className = "infoName">{item.housePrice}</div>
                                 <div className = "infotype">보증금</div> 
