@@ -108,7 +108,7 @@ const MakeContract = () => {
                                 <input placeholder=" 개월 수" className="set" />
                             </Card.Body>
                         </Card>
-                        <Card className = "information">
+                        <Card className = "information" style={{marginBottom:"10px"}}>
                             <Card.Title className = "infoTitle">매물 정보 확인</Card.Title>
                             <Card.Body className = "info">
                                 <div className="infotype">소유주</div>

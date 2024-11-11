@@ -1,6 +1,6 @@
+//const { default: Item } = require('../../client/src/pages/Item');
 const itemModel = require('../Models/itemModel');
 const jwt = require("jsonwebtoken");
-//const { default: Item } = require('../../client/src/pages/Item');
 
 const registerItem = async (req, res) => {
     const imageFile = req.file ? req.file.path : null;
@@ -8,7 +8,37 @@ const registerItem = async (req, res) => {
     console.log("Received file:", imageFile);
 
     try {
-       const{itemID, ownerName, zipCode, houseAddress, location, area, ownerId, housePrice, memo, type, isContract, bedSize, hasItems } = req.body;
+       const{
+        itemID, 
+        ownerName, 
+        zipCode, 
+        houseAddress, 
+        location, 
+        area, 
+        ownerId, 
+        housePrice, 
+        memo, 
+        type, 
+        isContract, 
+        bedSize, 
+        hasItems,
+        hasAgent,
+        buildingName,
+        floor,
+        duplexAvailability,
+        exclusiveArea,
+        contractArea,
+        room,
+        bathroom,
+        facing,
+        elevator,
+        petFriendly,
+        number_of_units_in_the_given_area,
+        total_number_of_units,
+        parkingSpace,
+        availableMoveInDate,
+        deposit
+        } = req.body;
 
         console.log("Received data:", {ownerName, location });
 
@@ -18,7 +48,36 @@ const registerItem = async (req, res) => {
       
 
         Item = new itemModel({ 
-            itemID, ownerName, zipCode, houseAddress, location, area, ownerId, housePrice, memo, type, isContract, bedSize, hasItems });
+            itemID, 
+            ownerName, 
+            zipCode, 
+            houseAddress, 
+            location, 
+            area, 
+            ownerId, 
+            housePrice, 
+            memo, 
+            type, 
+            isContract, 
+            bedSize, 
+            hasItems,
+            hasAgent,
+            buildingName,
+            floor,
+            duplexAvailability,
+            exclusiveArea,
+            contractArea,
+            room,
+            bathroom,
+            facing,
+            elevator,
+            petFriendly,
+            number_of_units_in_the_given_area,
+            total_number_of_units,
+            parkingSpace,
+            availableMoveInDate,
+            deposit
+        });
 
 
         await Item.save();
@@ -36,7 +95,23 @@ const registerItem = async (req, res) => {
             type: Item.type, 
             isContract: Item.isContract, 
             bedSize: Item.bedSize, 
-            hasItems: Item.hasItems
+            hasItems: Item.hasItems,
+            hasAgent: Item.hasAgent,
+            buildingName: Item.buildingName,
+            floor: Item.floor,
+            duplexAvailability: Item.duplexAvailability,
+            exclusiveArea: Item.exclusiveArea,
+            contractArea: Item.contractArea,
+            room: Item.room,
+            bathroom: Item.bathroom,
+            facing: Item.facing,
+            elevator: Item.elevator,
+            petFriendly: Item.petFriendly,
+            number_of_units_in_the_given_area: Item.number_of_units_in_the_given_area,
+            total_number_of_units: Item.total_number_of_units,
+            parkingSpace: Item.parkingSpace,
+            availableMoveInDate: Item.availableMoveInDate,
+            deposit: Item.deposit
         });
     } catch (error) {
         console.log(error); // 에러 로그

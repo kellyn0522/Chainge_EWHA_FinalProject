@@ -1,6 +1,6 @@
 //import { AuthItemContext } from "../context/AuthItemContext";
 import { useContext, useState, useEffect } from "react";
-import { Alert, Button, Form, Row, Col, Stack } from "react-bootstrap";
+import { Alert, Button, Form, Row, Col, Stack, Card } from "react-bootstrap";
 import { AuthItemContext } from "../context/AuthItemContext";
 import { AuthContext } from "../context/AuthContext";
 import Logo from "../component/Logo";
@@ -65,64 +65,331 @@ const CreateItemPage = () => {
                     <Col xs={6}>
                         <Stack gap={3}>
                         
-                        <h2 style={{marginBottom: '10px'}}>매물 등록</h2>
+                        <h2 style={{marginBottom: '15px'}}>매물 등록</h2>
                         <Form.Control
                                 type="file"
+                                style = {{marginBottom: '10px'}}
                                 onChange={(e) => updateCreateItemInfo({ ...createItemInfo, imageFile: e.target.files[0] })}
                         />
-
-                        <Form.Control 
-                        type="text" 
-                        placeholder={user.name}
-                        disabled/>
-
-                        <Form.Control 
-                        type="text" 
-                        placeholder="Location" 
-                        onChange={
-                            (e) => updateCreateItemInfo({ ...createItemInfo, location: e.target.value, ownerName: user.name, itemID: new Date().getTime(), ownerId: user.email })
-                        } />
-
-                        <Form.Control 
-                        type="text" 
-                        placeholder="Detail Location" 
-                        onChange={ 
-                            (e) => updateCreateItemInfo({ ...createItemInfo, houseAddress: e.target.value })
-                        } />
-
-                        <Form.Control
-                            type="text"
-                            placeholder="ZipCode"
-                            maxLength="5"
+                        <Form.Group className='formControl'>
+                            <Form.Label>소유주 이름</Form.Label>
+                            <Form.Control 
+                            type="text" 
+                            placeholder={user.name}
+                            disabled/>
+                        </Form.Group>
+                        <Form.Group className='formControl'>
+                            <Form.Label>매물 주소</Form.Label>
+                            <Form.Control 
+                            type="text" 
+                            placeholder="Location" 
+                            onChange={
+                                (e) => updateCreateItemInfo({ ...createItemInfo, location: e.target.value, ownerName: user.name, itemID: new Date().getTime(), ownerId: user.email })
+                            } />
+                        </Form.Group>
+                        <Form.Group className='formControl'>
+                            <Form.Label>상세 주소</Form.Label>
+                            <Form.Control 
+                            type="text" 
+                            placeholder="Detail Location" 
                             onChange={ 
-                                (e) => updateCreateItemInfo({ ...createItemInfo, zipCode: e.target.value })
-                            }
-                        />
-                        
-                        <Form.Control
-                            type="text"
-                            placeholder="월세 (단위:월)"
+                                (e) => updateCreateItemInfo({ ...createItemInfo, houseAddress: e.target.value })
+                            } />
+                        </Form.Group>
+                        <Form.Group className='formControl'>
+                            <Form.Label>건물 이름</Form.Label>
+                            <Form.Control 
+                            type="text" 
+                            placeholder="건물 이름"
                             onChange={ 
-                                (e) => updateCreateItemInfo({ ...createItemInfo, housePrice: e.target.value })
-                            }
-                        />
-                        <Form.Control
-                            type="text"
-                            placeholder="공급 면적"
+                                (e) => updateCreateItemInfo({ ...createItemInfo, buildingName: e.target.value })
+                            } />
+                        </Form.Group>
+                        <Form.Group className='formControl'>
+                            <Form.Label>우편번호</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="ZipCode"
+                                maxLength="5"
+                                onChange={ 
+                                    (e) => updateCreateItemInfo({ ...createItemInfo, zipCode: e.target.value })
+                                }
+                            />
+                        </Form.Group>
+                        <Form.Group className='formControl'>
+                            <Form.Label>월세</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="단위: 만원/월"
+                                onChange={ 
+                                    (e) => updateCreateItemInfo({ ...createItemInfo, housePrice: e.target.value })
+                                }
+                            />
+                        </Form.Group>
+                        <Form.Group className='formControl'>
+                            <Form.Label>보증금</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="단위: 만원"
+                                onChange={ 
+                                    (e) => updateCreateItemInfo({ ...createItemInfo, deposit: e.target.value })
+                                }
+                            />
+                        </Form.Group>
+                        <Form.Group className='formControl'>
+                            <Form.Label>층</Form.Label>
+                            <Form.Control 
+                            type="text" 
+                            placeholder="층"
                             onChange={ 
-                                (e) => updateCreateItemInfo({ ...createItemInfo, area: e.target.value })
-                            }
-                        />
-                        
-                        <Form.Control
-                            type="text"
-                            placeholder="Memo"
+                                (e) => updateCreateItemInfo({ ...createItemInfo, floor: e.target.value })
+                            } />
+                        </Form.Group>
+                        <Form.Group className='formControl'>
+                            <Form.Label>방 개수</Form.Label>
+                            <Form.Control 
+                            type="text" 
+                            placeholder="방 개수"
                             onChange={ 
-                                (e) => updateCreateItemInfo({ ...createItemInfo, memo: e.target.value })
-                            }
-                        />
-                        <div className = "type">  
-                            <select className = "typeSelect" onClick={
+                                (e) => updateCreateItemInfo({ ...createItemInfo, room: e.target.value })
+                            } />
+                        </Form.Group>
+                        <Form.Group className='formControl'>
+                            <Form.Label>화장실 개수</Form.Label>
+                            <Form.Control 
+                            type="text" 
+                            placeholder="화장실 개수"
+                            onChange={ 
+                                (e) => updateCreateItemInfo({ ...createItemInfo, bathroom: e.target.value })
+                            } />
+                        </Form.Group>
+                        <Form.Group className='formControl'>
+                            <Form.Label>총 주차대수</Form.Label>
+                            <Form.Control 
+                            type="text" 
+                            placeholder="총 주차대수"
+                            onChange={ 
+                                (e) => updateCreateItemInfo({ ...createItemInfo, parkingSpace: e.target.value })
+                            } />
+                        </Form.Group>
+                        <div className='checkContainer'>
+                        <div className='groupLeft'>
+                        <Card className = 'radioCheck'>
+                        <Form.Group className = 'formGroupRight'>
+                            <Form.Label>방향</Form.Label>
+                            <Form.Check 
+                            type="radio" 
+                            label = '남향'
+                            name = 'facing'
+                            value = 'south'
+                            checked = {createItemInfo.facing === 'south'}
+                            onChange={ 
+                                (e) => updateCreateItemInfo({ ...createItemInfo, facing: e.target.value })
+                            } />
+                            <Form.Check 
+                            type="radio" 
+                            label = '남동향'
+                            name = 'facing'
+                            value = 'southeast'
+                            checked = {createItemInfo.facing === 'southeast'}
+                            onChange={ 
+                                (e) => updateCreateItemInfo({ ...createItemInfo, facing: e.target.value })
+                            } />
+                            <Form.Check 
+                            type="radio" 
+                            label = '동향'
+                            name = 'facing'
+                            value = 'east'
+                            checked = {createItemInfo.facing === 'east'}
+                            onChange={ 
+                                (e) => updateCreateItemInfo({ ...createItemInfo, facing: e.target.value })
+                            } />
+                            <Form.Check 
+                            type="radio" 
+                            label = '북동향'
+                            name = 'facing'
+                            value = 'northeast'
+                            checked = {createItemInfo.facing === 'northeast'}
+                            onChange={ 
+                                (e) => updateCreateItemInfo({ ...createItemInfo, facing: e.target.value })
+                            } />
+                            <Form.Check 
+                            type="radio" 
+                            label = '북향'
+                            name = 'facing'
+                            value = 'north'
+                            checked = {createItemInfo.facing === 'north'}
+                            onChange={ 
+                                (e) => updateCreateItemInfo({ ...createItemInfo, facing: e.target.value })
+                            } />
+                            <Form.Check 
+                            type="radio" 
+                            label = '북서향'
+                            name = 'facing'
+                            value = 'northwest'
+                            checked = {createItemInfo.facing === 'northwest'}
+                            onChange={ 
+                                (e) => updateCreateItemInfo({ ...createItemInfo, facing: e.target.value })
+                            } />
+                            <Form.Check 
+                            type="radio" 
+                            label = '서향'
+                            name = 'facing'
+                            value = 'west'
+                            checked = {createItemInfo.facing === 'west'}
+                            onChange={ 
+                                (e) => updateCreateItemInfo({ ...createItemInfo, facing: e.target.value })
+                            } />
+                            <Form.Check 
+                            type="radio" 
+                            label = '남서향'
+                            name = 'facing'
+                            value = 'southwest'
+                            checked = {createItemInfo.facing === 'southwest'}
+                            onChange={ 
+                                (e) => updateCreateItemInfo({ ...createItemInfo, facing: e.target.value })
+                            } />
+                        </Form.Group>
+                        </Card>
+                        </div>
+                        <div className = 'groupRight'>
+                        <Card className = 'radioCheck'>
+                            <Form.Group>
+                                <Form.Label>엘리베이터 여부</Form.Label>
+                                <Form.Check 
+                                type="radio" 
+                                label = '엘리베이터 있음'
+                                name = 'elevater'
+                                value = 'true'
+                                checked = {createItemInfo.elevator === true}
+                                onChange={ 
+                                    (e) => updateCreateItemInfo({ ...createItemInfo, elevator: e.target.value === 'true' })
+                                } />
+                                <Form.Check 
+                                type="radio" 
+                                label = '엘리베이터 없음'
+                                name = 'elevater'
+                                value = 'false'
+                                checked = {createItemInfo.elevator === false}
+                                onChange={ 
+                                    (e) => updateCreateItemInfo({ ...createItemInfo, elevator: e.target.value === 'true' })
+                                } />
+                            </Form.Group>
+                        </Card>
+                        <Card className = 'radioCheck'>
+                            <Form.Group>
+                                <Form.Label>복층 여부</Form.Label>
+                                <Form.Check 
+                                type="radio" 
+                                label = '단층'
+                                name = 'story'
+                                value = 'false'
+                                checked = {createItemInfo.duplexAvailability === false}
+                                onChange={ 
+                                    (e) => updateCreateItemInfo({ ...createItemInfo, duplexAvailability: e.target.value === 'true' })
+                                } />
+                                <Form.Check 
+                                type="radio" 
+                                label = '복층'
+                                name = 'story'
+                                value = 'true'
+                                checked = {createItemInfo.duplexAvailability === true}
+                                onChange={ 
+                                    (e) => updateCreateItemInfo({ ...createItemInfo, duplexAvailability: e.target.value === 'true' })
+                                } />
+                            </Form.Group>
+                        </Card>
+                        <Card className = 'radioCheck'>
+                            <Form.Group>
+                                <Form.Label>반려 동물 가능 여부</Form.Label>
+                                <Form.Check 
+                                type="radio" 
+                                label = '가능'
+                                name = 'pet'
+                                value = 'true'
+                                checked = {createItemInfo.petFriendly === true}
+                                onChange={ 
+                                    (e) => updateCreateItemInfo({ ...createItemInfo, petFriendly: e.target.value === 'true' })
+                                } />
+                                <Form.Check 
+                                type="radio" 
+                                label = '불가능'
+                                name = 'pet'
+                                value = 'false'
+                                checked = {createItemInfo.petFriendly === false}
+                                onChange={ 
+                                    (e) => updateCreateItemInfo({ ...createItemInfo, petFriendly: e.target.value === 'true' })
+                                } />
+                            </Form.Group>
+                        </Card>
+                        </div>
+                        </div>
+
+                        <Form.Group className='formControl'>
+                            <Form.Label>공급 면적</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="평"
+                                onChange={ 
+                                    (e) => updateCreateItemInfo({ ...createItemInfo, area: e.target.value })
+                                }
+                            />
+                        </Form.Group>
+                        <Form.Group className='formControl'>
+                            <Form.Label>전용 면적</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="제곱미터"
+                                onChange={ 
+                                    (e) => updateCreateItemInfo({ ...createItemInfo, exclusiveArea: e.target.value })
+                                }
+                            />
+                        </Form.Group>
+                        <Form.Group className='formControl'>
+                            <Form.Label>계약 면적</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="제곱미터"
+                                onChange={ 
+                                    (e) => updateCreateItemInfo({ ...createItemInfo, contractArea: e.target.value })
+                                }
+                            />
+                        </Form.Group>
+                        <Form.Group className='formControl'>
+                            <Form.Label>총 세대수</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="세대"
+                                onChange={ 
+                                    (e) => updateCreateItemInfo({ ...createItemInfo, total_number_of_units: e.target.value })
+                                }
+                            />
+                        </Form.Group>
+                        <Form.Group className='formControl'>
+                            <Form.Label>해당 면적 세대수</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="세대"
+                                onChange={ 
+                                    (e) => updateCreateItemInfo({ ...createItemInfo, number_of_units_in_the_given_area: e.target.value })
+                                }
+                            />
+                        </Form.Group>
+                        <Form.Group className='formControl'>
+                            <Form.Label>입주 가능 날짜</Form.Label>
+                            <Form.Control
+                                type="date"
+                                onChange={ 
+                                    (e) => updateCreateItemInfo({ ...createItemInfo, availableMoveInDate: e.target.value })
+                                }
+                            />
+                        </Form.Group>
+                        <Form.Group className='formControl'>
+                            <Form.Label>매물 종류</Form.Label>
+                            <Form.Select 
+                                className = "typeSelect"
+                                value={createItemInfo.type}
+                                onChange={
                                     (e) => updateCreateItemInfo({ ...createItemInfo, type: e.target.value })
                                 } >
                                 <option value = "select">매물 종류</option>
@@ -130,8 +397,18 @@ const CreateItemPage = () => {
                                 <option value = "오피스텔">오피스텔</option>
                                 <option value = "단독주택">단독주택</option>
                                 <option value = "상가">상가</option>
-                            </select>
-                        </div>
+                            </Form.Select>
+                        </Form.Group>
+                        <Form.Group className='formControl'>
+                            <Form.Label>추가 상세 정보</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="Memo"
+                                onChange={ 
+                                    (e) => updateCreateItemInfo({ ...createItemInfo, memo: e.target.value })
+                                }
+                            />
+                        </Form.Group>
                         <div className = "creatPageHasItem" style={{marginTop: '10px'}}>
                             <div className="text" style = {{marginBottom: '15px'}}>옵션 여부 (옵션인 경우 체크해주세요.)</div>   
                             <div className = "creatPageItem"> 
@@ -168,7 +445,6 @@ const CreateItemPage = () => {
                                 <input type = "checkbox" name = "hasBlinds" checked = {hasItems.hasBlinds} onChange = {onChangeCheckbox} />
                             </div>
                         </div>
-
                         
                         <Button className = 'green' style = {{color: 'white', border: 'none', marginTop: '5px'}} type="submit" >
                             { isCreateItemLoading? "Creating your Item":"매물 등록"}

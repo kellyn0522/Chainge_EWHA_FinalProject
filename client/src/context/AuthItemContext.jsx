@@ -35,6 +35,21 @@ export const AuthItemContextProvider = ({ children }) => {
             hasBlinds : false
         },
         hasAgent:false,
+        buildingName: '',
+        floor: '',
+        duplexAvailability: '',
+        exclusiveArea: '',
+        contractArea: '',
+        room: '',
+        bathroom: '',
+        facing: '',
+        elevator: '',
+        petFriendly: '',
+        number_of_units_in_the_given_area: '',
+        total_number_of_units: '',
+        parkingSpace: '',
+        availableMoveInDate: '',
+        deposit: ''
     });
 
     console.log("createItemInfo", createItemInfo);
@@ -71,6 +86,22 @@ export const AuthItemContextProvider = ({ children }) => {
         formData.append("hasItems", JSON.stringify(createItemInfo.hasItems));
         formData.append("isContract", createItemInfo.isContract);
         formData.append("imageFile", createItemInfo.imageFile); // 이미지 파일
+        formData.append("hasAgent", createItemInfo.hasAgent);
+        formData.append("buildingName", createItemInfo.buildingName);
+        formData.append("floor", createItemInfo.floor);
+        formData.append("duplexAvailability", createItemInfo.duplexAvailability);
+        formData.append("exclusiveArea", createItemInfo.exclusiveArea);
+        formData.append("contractArea", createItemInfo.contractArea);
+        formData.append("room", createItemInfo.room);
+        formData.append("bathroom", createItemInfo.bathroom);
+        formData.append("facing", createItemInfo.facing);
+        formData.append("elevator", createItemInfo.elevator);
+        formData.append("total_number_of_units", createItemInfo.total_number_of_units);
+        formData.append("parkingSpace", createItemInfo.parkingSpace);
+        formData.append("availableMoveInDate", createItemInfo.availableMoveInDate);
+        formData.append("petFriendly", createItemInfo.petFriendly);
+        formData.append("number_of_units_in_the_given_area", createItemInfo.number_of_units_in_the_given_area);
+        formData.append("deposit", createItemInfo.deposit);
 
         try{
             const response = await axios.post("http://localhost:5000/api/items/createItem", formData, {
@@ -139,6 +170,7 @@ export const AuthItemContextProvider = ({ children }) => {
             return response;
         } catch (error){
             setFindItemError(error.message)
+            console.log(error.message)
         }
     }, []);
 

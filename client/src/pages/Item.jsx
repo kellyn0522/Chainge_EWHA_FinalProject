@@ -37,7 +37,8 @@ const Item = () => {
         isFindItemLoading,
     } = useContext(AuthItemContext);
     const [item, setItem] = useState(null)
-
+    const availableMoveInDate = item&&item.availableMoveInDate? item.availableMoveInDate:null;
+    const formattedDate = availableMoveInDate instanceof Date? availableMoveInDate.toISOString().split('T')[0]:'';
     useEffect(() => {
         const fetchItem = async () => {
             if (!findItemError && !isFindItemLoading){
@@ -67,7 +68,7 @@ const Item = () => {
         }
     }
     //<img src = {item.imageFile} style = {{width: '300px', height: 'auto', border: '2px solid #ccc', display: ' block', margin: '0 auto'}} />
-                    
+
     return (<>
         <Container>
             <div className = "logo"><Logo /></div>
@@ -160,33 +161,35 @@ const Item = () => {
                                 <Card.Title className = "infoTitle">상세 정보</Card.Title>
                                 <Card.Body className = "info">
                                     <div className = "infotype">건물 이름</div> 
-                                    <div className = "infoName">{item.houseAddress}</div>
+                                    <div className = "infoName">{item.buildingName}</div>
                                     <div className = "infotype">방 종류</div> 
                                     <div className = "infoName">{item.type}</div>
                                     <div className = "infotype">해당층/건물층</div>
-                                    <div className = "infoName">25층/50층</div>
+                                    <div className = "infoName">{item.floor}층/50층</div>
                                     <div className = "infotype">복층 여부</div>
-                                    <div className = "infoName">단층</div>  
+                                    <div className = "infoName">{item.duplexAvailability? '복층':'단층'}</div>  
                                     <div className = "infotype">전용/계약면적</div>
-                                    <div className = "infoName">전용/계약면적</div>
+                                    <div className = "infoName">
+                                        {item.exclusiveArea}<span>m<sup>2</sup></span>/ {item.contractArea}<span>m<sup>2</sup></span>
+                                    </div>
                                     <div className = "infotype">방 수/욕실 수</div>
-                                    <div className = "infoName">2/1</div>
+                                    <div className = "infoName">{item.room}/{item.bathroom}</div>
                                     <div className = "infotype">방향</div>
-                                    <div className = "infoName">남서향</div>
+                                    <div className = "infoName">{item.facing}</div>
                                     <div className = "infotype">엘리베이터</div>
-                                    <div className = "infoName">없음</div>
+                                    <div className = "infoName">{item.elevator? '있음':'없음'}</div>
                                     <div className = "infotype">반려동물 가능 여부</div>
-                                    <div className = "infoName">가능</div>
+                                    <div className = "infoName">{item.petFriendly? '가능':'불가능'}</div>
                                     <div className = "infotype">해당 면적 세대수</div>
-                                    <div className = "infoName">50세대</div>
+                                    <div className = "infoName">{item.number_of_units_in_the_given_area}세대</div>
                                     <div className = "infotype">총 세대수</div>
-                                    <div className = "infoName">50세대</div>
+                                    <div className = "infoName">{item.total_number_of_units}세대</div>
                                     <div className = "infotype">총 주차대수</div>
-                                    <div className = "infoName">30대</div>
+                                    <div className = "infoName">{item.parkingSpace}대</div>
                                     <div className = "infotype">현관유형</div>
                                     <div className = "infoName">복도식</div>
                                     <div className = "infotype">입주 가능일</div>
-                                    <div className = "infoName">2025.03.01</div>
+                                    <div className = "infoName">{formattedDate}</div>
                                     <div className = "infotype">건축물 용도</div>
                                     <div className = "infoName">상가</div>
                                 </Card.Body>
