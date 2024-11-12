@@ -31,8 +31,9 @@ export const useFetchRecipientUser =(chat, user) =>{
             
             if(response.error){
                 
-                //console.log('Error fetching recipient user:', response.error);
-                return setError(response);
+                setRecipientUser(null);
+                setError(response);
+                return;
             }
             setRecipientUser(response); 
 

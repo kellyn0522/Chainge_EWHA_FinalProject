@@ -5,6 +5,7 @@ import { AuthContext } from "../context/AuthContext";
 import ChatNotification from "./chat/ChatNotification";
 import { useNavigate } from "react-router-dom";
 import chat from '../icons/chat.svg';
+import Notification from "./chat/Notification";
 
 const NavBar = () => {
     const { user, logoutUser } = useContext(AuthContext);
@@ -43,6 +44,7 @@ const NavBar = () => {
                             </>)
                         }
                         {!user && (<>
+                        <Notification/>
                             <Link to="/login" className="gugi-regular text-decoration-none" style = {{color : 'grey'}}>
                                 Login
                             </Link>
