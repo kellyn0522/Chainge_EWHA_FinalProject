@@ -39,7 +39,6 @@ const NavBar = () => {
                                     Logout
                                 </Link>
                                 <img src={chat} alt='chat' width = '30px' height = '30px' style = {{cursor: "pointer"}} onClick = {onClickChat} />
-                                { user && ( <span className="noto-sans-kr">{user?.nickName}</span> )}
                                 <span className="material-symbols-outlined size-40" style = {{cursor: "pointer"}} onClick={onClickMypage}>account_circle</span>
                             </>)
                         }

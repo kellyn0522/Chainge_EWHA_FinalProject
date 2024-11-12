@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Logo from "../component/Logo";
 import { useState, useContext, useEffect } from "react";
 import { AuthItemContext } from "../context/AuthItemContext";
+import { AuthContext } from "../context/AuthContext";
 import { Button, Card, Row, Col, Container } from "react-bootstrap";
 import ac from '../icons/ac_unit.svg';
 import bed from '../icons/bed.svg';
@@ -23,6 +24,9 @@ const Item = () => {
     const navigate = useNavigate();
     const {id} = useParams();
     const [liked, setLiked] = useState(false);
+    const { 
+        user
+    } = useContext(AuthContext);
 
     //const onHistory = () => {
     //    navigate("/userHistory");
@@ -33,7 +37,8 @@ const Item = () => {
         isFindItemLoading,
     } = useContext(AuthItemContext);
     const [item, setItem] = useState(null)
-
+    const availableMoveInDate = item&&item.availableMoveInDate? item.availableMoveInDate:null;
+    const formattedDate = availableMoveInDate instanceof Date? availableMoveInDate.toISOString().split('T')[0]:'';
     useEffect(() => {
         const fetchItem = async () => {
             if (!findItemError && !isFindItemLoading){
@@ -58,10 +63,12 @@ const Item = () => {
         navigate("/chat");
     }
     const makeContract = () => {
-        navigate("/");
+        if(!isFindItemLoading && !findItemError && item){
+            navigate(`/makeContract/${item.itemID}`);
+        }
     }
     //<img src = {item.imageFile} style = {{width: '300px', height: 'auto', border: '2px solid #ccc', display: ' block', margin: '0 auto'}} />
-                    
+
     return (<>
         <Container>
             <div className = "logo"><Logo /></div>
@@ -71,15 +78,39 @@ const Item = () => {
                             <img src={house} alt='house_pic' width = '300px' height = 'auto' style = {{border: '2px solid #ccc', display: ' block', margin: '0 auto'}}/>
                             <div>
                                 <div className = 'introInfo' style = {{marginBottom : '10px'}}>  
-                                    <h3>월세 1억5000/{item.housePrice}</h3>
+                                <h3>
+                                    {item.deposit && (
+                                        <>
+                                            {Math.floor(item.deposit / 10000) > 0 && (
+                                                <>{Math.floor(item.deposit / 10000)}억 </>
+                                            )}
+                                            {item.deposit % 10000 > 0 && (
+                                                <>{item.deposit % 10000}만원/ </>
+                                            )}
+                                        </>
+                                    )}
+                                    {item.housePrice}만원</h3>
                                     <div>{item.location} {item.houseAddress}</div>
                                     <div>{item.type} / {item.area}평</div> 
                                 </div>
-                                <div style = {{display : 'flex', alignItems: 'center', gap: '20px', marginBottom : '10px'}}>
-                                    <span className={`material-symbols-outlined ${liked? 'liked':'dontlike'}`} style={{cursor: "pointer"}} onClick = {handleLike}>favorite</span>
-                                    <img src={chat} alt='chat' width = '30px' height = '30px' style = {{cursor: "pointer"}} onClick = {onClickChat} />
-                                    <Button className="noto-sans-kr green" style = {{color: 'white', border: 'none'}} onClick = {makeContract}>거래하기</Button>
-                                </div>
+                                {user? (
+                                    user._id !== item.ownerId?(
+                                        <>
+                                            <div style = {{display : 'flex', alignItems: 'center', gap: '20px', marginBottom : '10px'}}>
+                                                <span className={`material-symbols-outlined ${liked? 'liked':'dontlike'}`} style={{cursor: "pointer"}} onClick = {handleLike}>favorite</span>
+                                                <img src={chat} alt='chat' width = '30px' height = '30px' style = {{cursor: "pointer"}} onClick = {onClickChat} />
+                                                <Button className="noto-sans-kr green" style = {{color: 'white', border: 'none'}} onClick = {makeContract}>거래하기</Button>
+                                            </div>
+                                        </>
+                                    ):(
+                                        <>
+                                            <div style = {{display : 'flex', alignItems: 'center', gap: '10px', marginBottom : '12px'}}>
+                                                <Button className="noto-sans-kr green" style = {{color: 'white', border: 'none'}}>수정</Button>
+                                                <Button className="noto-sans-kr green" style = {{color: 'white', border: 'none'}}>삭제</Button>
+                                            </div>
+                                        </>
+                                    )
+                                ): null}
                                 <Card className = "information" style={{marginBottom:"10px"}}>
                                     <Card.Title className = "infoTitle">상세 설명</Card.Title>
                                     <Card.Body>
@@ -93,7 +124,19 @@ const Item = () => {
                             <Card>
                                 <Card.Title className = "infoTitle" >가격 정보</Card.Title>
                                 <Card.Body>
-                                    <div className="infoText">월세 1억 5000/{item.housePrice}</div>
+                                    <div className="infoText">
+                                        {item.deposit && (
+                                            <>
+                                                {Math.floor(item.deposit / 10000) > 0 && (
+                                                    <>{Math.floor(item.deposit / 10000)}억 </>
+                                                )}
+                                                {item.deposit % 10000 > 0 && (
+                                                    <>{item.deposit % 10000}만원/ </>
+                                                )}
+                                            </>
+                                        )}
+                                        {item.housePrice}만원
+                                    </div>
                                     <div className="infoText">관리비 없음</div>
                                     <div className="infoText">주차 가능</div>
                                 </Card.Body>
@@ -152,33 +195,35 @@ const Item = () => {
                                 <Card.Title className = "infoTitle">상세 정보</Card.Title>
                                 <Card.Body className = "info">
                                     <div className = "infotype">건물 이름</div> 
-                                    <div className = "infoName">{item.houseAddress}</div>
+                                    <div className = "infoName">{item.buildingName}</div>
                                     <div className = "infotype">방 종류</div> 
                                     <div className = "infoName">{item.type}</div>
                                     <div className = "infotype">해당층/건물층</div>
-                                    <div className = "infoName">25층/50층</div>
+                                    <div className = "infoName">{item.floor}층/50층</div>
                                     <div className = "infotype">복층 여부</div>
-                                    <div className = "infoName">단층</div>  
+                                    <div className = "infoName">{item.duplexAvailability? '복층':'단층'}</div>  
                                     <div className = "infotype">전용/계약면적</div>
-                                    <div className = "infoName">전용/계약면적</div>
+                                    <div className = "infoName">
+                                        {item.exclusiveArea}<span>m<sup>2</sup></span>/ {item.contractArea}<span>m<sup>2</sup></span>
+                                    </div>
                                     <div className = "infotype">방 수/욕실 수</div>
-                                    <div className = "infoName">2/1</div>
+                                    <div className = "infoName">{item.room}/{item.bathroom}</div>
                                     <div className = "infotype">방향</div>
-                                    <div className = "infoName">남서향</div>
+                                    <div className = "infoName">{item.facing}</div>
                                     <div className = "infotype">엘리베이터</div>
-                                    <div className = "infoName">없음</div>
+                                    <div className = "infoName">{item.elevator? '있음':'없음'}</div>
                                     <div className = "infotype">반려동물 가능 여부</div>
-                                    <div className = "infoName">가능</div>
+                                    <div className = "infoName">{item.petFriendly? '가능':'불가능'}</div>
                                     <div className = "infotype">해당 면적 세대수</div>
-                                    <div className = "infoName">50세대</div>
+                                    <div className = "infoName">{item.number_of_units_in_the_given_area}세대</div>
                                     <div className = "infotype">총 세대수</div>
-                                    <div className = "infoName">50세대</div>
+                                    <div className = "infoName">{item.total_number_of_units}세대</div>
                                     <div className = "infotype">총 주차대수</div>
-                                    <div className = "infoName">30대</div>
+                                    <div className = "infoName">{item.parkingSpace}대</div>
                                     <div className = "infotype">현관유형</div>
                                     <div className = "infoName">복도식</div>
                                     <div className = "infotype">입주 가능일</div>
-                                    <div className = "infoName">2025.03.01</div>
+                                    <div className = "infoName">{formattedDate}</div>
                                     <div className = "infotype">건축물 용도</div>
                                     <div className = "infoName">상가</div>
                                 </Card.Body>

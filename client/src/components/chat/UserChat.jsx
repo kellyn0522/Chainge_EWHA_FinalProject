@@ -20,16 +20,7 @@ const UserChat = ({ chat, user }) => {
         n => n.senderId == recipientUser?._id
     )
     const isOnline = onlineUsers?.some((user) => user?.userId === recipientUser?._id);
-    const lastMessageTime = chat.lastMessageTime ? moment(chat.lastMessageTime).calendar() : "N/A";
-    const truncateText =(text) => {
-        let shortText = text.substring(0,20);
-        
-        if(text.length > 20){
-            shortText = shortText + "..."
-        }
-        return shortText;
-
-    };
+    //const lastMessageTime = chat.lastMessageTime ? moment(chat.lastMessageTime).calendar() : "N/A";
 
     return (<>
         <Stack direction="horizontal" gap={3} className="user-card align-items-center p-2 justify-content-between"
@@ -62,7 +53,7 @@ const UserChat = ({ chat, user }) => {
             </div>
             <div className="d-flex flex-column align-items-end">
                 <div className="date">
-                {moment(latestMessage?.createdAt).calendar()}
+                12/12/2022
                 </div>
                 <div className={
                     thisUserNotifications?.length > 0 ? "this-user-notifications": ""

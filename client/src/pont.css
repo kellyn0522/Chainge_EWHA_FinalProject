@@ -29,6 +29,13 @@
   margin-right: 10px;
 }
 
+.inputCard{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  font-size: 14px;
+}
+
 .intro{
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -103,4 +110,52 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 20px;
+}
+
+.contractButton{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+}
+
+.checkContainer{
+  display:flex;
+  gap: 20px;
+  align-items: stretch;
+}
+
+.groupLeft, .groupRight{
+  display:flex;
+  flex-direction:column;
+}
+.formGroupRight{
+  display:flex;
+  flex-direction: column;
+  gap:10px;
+}
+
+.groupLeft{
+  flex: 1;
+  float: left;
+}
+
+.groupRight{
+  flex: 1;
+  float: left;
+  gap: 10px;
+}
+
+.radioCheck{
+  gap: 10px;
+  padding: 15px;
+  padding-left: 20px;
+  flex: 1;
+}
+
+.formControl{
+  margin-bottom: 10px;
+  display: grid;
+  grid-template-columns: 1fr 2.5fr;
+  align-items: center;
 }
