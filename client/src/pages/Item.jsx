@@ -78,17 +78,39 @@ const Item = () => {
                             <img src={house} alt='house_pic' width = '300px' height = 'auto' style = {{border: '2px solid #ccc', display: ' block', margin: '0 auto'}}/>
                             <div>
                                 <div className = 'introInfo' style = {{marginBottom : '10px'}}>  
-                                    <h3>월세 1억5000/{item.housePrice}</h3>
+                                <h3>
+                                    {item.deposit && (
+                                        <>
+                                            {Math.floor(item.deposit / 10000) > 0 && (
+                                                <>{Math.floor(item.deposit / 10000)}억 </>
+                                            )}
+                                            {item.deposit % 10000 > 0 && (
+                                                <>{item.deposit % 10000}만원/ </>
+                                            )}
+                                        </>
+                                    )}
+                                    {item.housePrice}만원</h3>
                                     <div>{item.location} {item.houseAddress}</div>
                                     <div>{item.type} / {item.area}평</div> 
                                 </div>
-                                {user && (<>
-                                    <div style = {{display : 'flex', alignItems: 'center', gap: '20px', marginBottom : '10px'}}>
-                                        <span className={`material-symbols-outlined ${liked? 'liked':'dontlike'}`} style={{cursor: "pointer"}} onClick = {handleLike}>favorite</span>
-                                        <img src={chat} alt='chat' width = '30px' height = '30px' style = {{cursor: "pointer"}} onClick = {onClickChat} />
-                                        <Button className="noto-sans-kr green" style = {{color: 'white', border: 'none'}} onClick = {makeContract}>거래하기</Button>
-                                    </div>
-                                </>)}
+                                {user? (
+                                    user._id !== item.ownerId?(
+                                        <>
+                                            <div style = {{display : 'flex', alignItems: 'center', gap: '20px', marginBottom : '10px'}}>
+                                                <span className={`material-symbols-outlined ${liked? 'liked':'dontlike'}`} style={{cursor: "pointer"}} onClick = {handleLike}>favorite</span>
+                                                <img src={chat} alt='chat' width = '30px' height = '30px' style = {{cursor: "pointer"}} onClick = {onClickChat} />
+                                                <Button className="noto-sans-kr green" style = {{color: 'white', border: 'none'}} onClick = {makeContract}>거래하기</Button>
+                                            </div>
+                                        </>
+                                    ):(
+                                        <>
+                                            <div style = {{display : 'flex', alignItems: 'center', gap: '10px', marginBottom : '12px'}}>
+                                                <Button className="noto-sans-kr green" style = {{color: 'white', border: 'none'}}>수정</Button>
+                                                <Button className="noto-sans-kr green" style = {{color: 'white', border: 'none'}}>삭제</Button>
+                                            </div>
+                                        </>
+                                    )
+                                ): null}
                                 <Card className = "information" style={{marginBottom:"10px"}}>
                                     <Card.Title className = "infoTitle">상세 설명</Card.Title>
                                     <Card.Body>
@@ -102,7 +124,19 @@ const Item = () => {
                             <Card>
                                 <Card.Title className = "infoTitle" >가격 정보</Card.Title>
                                 <Card.Body>
-                                    <div className="infoText">월세 1억 5000/{item.housePrice}</div>
+                                    <div className="infoText">
+                                        {item.deposit && (
+                                            <>
+                                                {Math.floor(item.deposit / 10000) > 0 && (
+                                                    <>{Math.floor(item.deposit / 10000)}억 </>
+                                                )}
+                                                {item.deposit % 10000 > 0 && (
+                                                    <>{item.deposit % 10000}만원/ </>
+                                                )}
+                                            </>
+                                        )}
+                                        {item.housePrice}만원
+                                    </div>
                                     <div className="infoText">관리비 없음</div>
                                     <div className="infoText">주차 가능</div>
                                 </Card.Body>

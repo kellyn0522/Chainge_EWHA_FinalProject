@@ -59,11 +59,23 @@ const HouseItem = ({itemId}) => {
                 <Card.Text>위치: {item.location}</Card.Text>
                 <Card.Text>{item.houseAddress}</Card.Text>
 
-                <Card.Text>월세: {item.housePrice}만원</Card.Text>
+                <Card.Text>
+                    {item.deposit && (
+                        <>
+                            {Math.floor(item.deposit / 10000) > 0 && (
+                                <>{Math.floor(item.deposit / 10000)}억 </>
+                            )}
+                            {item.deposit % 10000 > 0 && (
+                                <>{item.deposit % 10000}만원/ </>
+                            )}
+                        </>
+                    )}
+                    {item.housePrice}만원
+                </Card.Text>
                 <Card.Text>건물 종류: {item.type}</Card.Text>
                 <Card.Text>크기: {item.area}평</Card.Text>
 
-                {user && (<>
+                {user && user._id !== item.ownerId && (<>
                 <span className={`material-symbols-outlined ${liked? 'liked':'dontlike'}`} style={{cursor: "pointer"}} onClick = {handleLike}>favorite</span>
                 </>)}
             </Card.Body>

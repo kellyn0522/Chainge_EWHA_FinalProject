@@ -84,7 +84,7 @@ const CreateItemPage = () => {
                             type="text" 
                             placeholder="Location" 
                             onChange={
-                                (e) => updateCreateItemInfo({ ...createItemInfo, location: e.target.value, ownerName: user.name, itemID: new Date().getTime(), ownerId: user.email })
+                                (e) => updateCreateItemInfo({ ...createItemInfo, location: e.target.value, ownerName: user.name, itemID: new Date().getTime(), ownerId: user._id })
                             } />
                         </Form.Group>
                         <Form.Group className='formControl'>
@@ -181,8 +181,8 @@ const CreateItemPage = () => {
                             type="radio" 
                             label = '남향'
                             name = 'facing'
-                            value = 'south'
-                            checked = {createItemInfo.facing === 'south'}
+                            value = '남향'
+                            checked = {createItemInfo.facing === '남향'}
                             onChange={ 
                                 (e) => updateCreateItemInfo({ ...createItemInfo, facing: e.target.value })
                             } />
@@ -190,8 +190,8 @@ const CreateItemPage = () => {
                             type="radio" 
                             label = '남동향'
                             name = 'facing'
-                            value = 'southeast'
-                            checked = {createItemInfo.facing === 'southeast'}
+                            value = '남동향'
+                            checked = {createItemInfo.facing === '남동향'}
                             onChange={ 
                                 (e) => updateCreateItemInfo({ ...createItemInfo, facing: e.target.value })
                             } />
@@ -199,8 +199,8 @@ const CreateItemPage = () => {
                             type="radio" 
                             label = '동향'
                             name = 'facing'
-                            value = 'east'
-                            checked = {createItemInfo.facing === 'east'}
+                            value = '동향'
+                            checked = {createItemInfo.facing === '동향'}
                             onChange={ 
                                 (e) => updateCreateItemInfo({ ...createItemInfo, facing: e.target.value })
                             } />
@@ -208,8 +208,8 @@ const CreateItemPage = () => {
                             type="radio" 
                             label = '북동향'
                             name = 'facing'
-                            value = 'northeast'
-                            checked = {createItemInfo.facing === 'northeast'}
+                            value = '북동향'
+                            checked = {createItemInfo.facing === '북동향'}
                             onChange={ 
                                 (e) => updateCreateItemInfo({ ...createItemInfo, facing: e.target.value })
                             } />
@@ -217,8 +217,8 @@ const CreateItemPage = () => {
                             type="radio" 
                             label = '북향'
                             name = 'facing'
-                            value = 'north'
-                            checked = {createItemInfo.facing === 'north'}
+                            value = '북향'
+                            checked = {createItemInfo.facing === '북향'}
                             onChange={ 
                                 (e) => updateCreateItemInfo({ ...createItemInfo, facing: e.target.value })
                             } />
@@ -226,8 +226,8 @@ const CreateItemPage = () => {
                             type="radio" 
                             label = '북서향'
                             name = 'facing'
-                            value = 'northwest'
-                            checked = {createItemInfo.facing === 'northwest'}
+                            value = '북서향'
+                            checked = {createItemInfo.facing === '북서향'}
                             onChange={ 
                                 (e) => updateCreateItemInfo({ ...createItemInfo, facing: e.target.value })
                             } />
@@ -235,8 +235,8 @@ const CreateItemPage = () => {
                             type="radio" 
                             label = '서향'
                             name = 'facing'
-                            value = 'west'
-                            checked = {createItemInfo.facing === 'west'}
+                            value = '서향'
+                            checked = {createItemInfo.facing === '서향'}
                             onChange={ 
                                 (e) => updateCreateItemInfo({ ...createItemInfo, facing: e.target.value })
                             } />
@@ -244,8 +244,8 @@ const CreateItemPage = () => {
                             type="radio" 
                             label = '남서향'
                             name = 'facing'
-                            value = 'southwest'
-                            checked = {createItemInfo.facing === 'southwest'}
+                            value = '남서향'
+                            checked = {createItemInfo.facing === '남서향'}
                             onChange={ 
                                 (e) => updateCreateItemInfo({ ...createItemInfo, facing: e.target.value })
                             } />

@@ -68,7 +68,7 @@ const Home = () => {
     return (
         <Container>
             <Row>
-                <Col>
+                <Col style = {{marginBottom: '35px'}}>
                     <div className = "header"><NavBar /></div>
                     <div className = 'noto-sans-kr secondHeader'>
                     <Form className = 'd-flex'>
