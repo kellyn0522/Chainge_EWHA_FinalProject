@@ -119,8 +119,93 @@ const registerItem = async (req, res) => {
     }
 };
 
+const updateItem = async (req, res) => {
+    try {
+        const itemID = req.params.itemID;
+        const { 
+            ownerName, 
+            ownerId, 
+            housePrice, 
+            memo, 
+            type,
+            bedSize, 
+            hasItems,
+            hasAgent,
+            buildingName,
+            floor,
+            duplexAvailability,
+            exclusiveArea,
+            contractArea,
+            room,
+            bathroom,
+            facing,
+            elevator,
+            petFriendly,
+            number_of_units_in_the_given_area,
+            total_number_of_units,
+            parkingSpace,
+            availableMoveInDate,
+            deposit
+         } = req.body;
 
+        const item = await itemModel.findOne( {itemID} );
+        if (!item) return res.status(400).json("Item Not Found");
 
+        result = await itemModel.updateOne({itemID : item.itemID}, {$set : {
+            ownerName, 
+            ownerId, 
+            housePrice, 
+            memo, 
+            type,
+            bedSize, 
+            hasItems,
+            hasAgent,
+            buildingName,
+            floor,
+            duplexAvailability,
+            exclusiveArea,
+            contractArea,
+            room,
+            bathroom,
+            facing,
+            elevator,
+            petFriendly,
+            number_of_units_in_the_given_area,
+            total_number_of_units,
+            parkingSpace,
+            availableMoveInDate,
+            deposit
+        } });
+        if (result.modifiedCount > 0){
+            const update = await itemModel.findOne({itemID : item.itemID});
+            console.log(update);
+        } else{
+            return res.status(400).json({error : "매물을 찾을 수 없습니다."});
+        }
+
+    } catch (error) {
+        console.log(error); // 에러 로그
+        res.status(500).json(error);
+    }
+};
+
+const deleteItem = async(req, res) =>{
+    const itemID = req.params.itemID;
+    console.log("Item Delete Called");
+    try {
+        const item = await itemModel.findOne( {itemID} );
+
+        if (!item){
+            return res.status(404).json({messege:"Item not found"});
+        }
+        await itemModel.deleteOne({itemID:itemID});
+        res.status(200).json("Delete success"); 
+        console.log("Delete success");
+    }catch(error){
+        console.log(error); 
+        res.status(500).json(error);
+    }
+};
 
 const findItem = async(req, res) =>{
     try{
@@ -137,8 +222,6 @@ const findItem = async(req, res) =>{
     }
 };
 
-
-
 const getItems = async(req, res) =>{
     try{
         const items = await itemModel.find();
@@ -150,4 +233,4 @@ const getItems = async(req, res) =>{
     }
 };
 
-module.exports = { registerItem, findItem, getItems };
+module.exports = { registerItem, updateItem, deleteItem, findItem, getItems };

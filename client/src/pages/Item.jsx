@@ -6,6 +6,7 @@ import { useState, useContext, useEffect } from "react";
 import { AuthItemContext } from "../context/AuthItemContext";
 import { AuthContext } from "../context/AuthContext";
 import { Button, Card, Row, Col, Container } from "react-bootstrap";
+import DeleteItemData from "./DeleteItemData";
 import ac from '../icons/ac_unit.svg';
 import bed from '../icons/bed.svg';
 import blind from '../icons/blinds.svg';
@@ -21,6 +22,9 @@ import weekend from '../icons/weekend_24.svg';
 import house from '../icons/house.svg';
 
 const Item = () => {
+    const [showModalItem, setShowModalItem] = useState(false);
+    const handleShowItem = () => setShowModalItem(true);
+    const handleCloseItem = () => setShowModalItem(false);
     const navigate = useNavigate();
     const {id} = useParams();
     const [liked, setLiked] = useState(false);
@@ -61,6 +65,10 @@ const Item = () => {
     };
     const onClickChat = () => {
         navigate("/chat");
+    }
+
+    const onClickUpdate = () => {
+        navigate(`/changingItem/${id}`);
     }
     const makeContract = () => {
         if(!isFindItemLoading && !findItemError && item){
@@ -105,8 +113,9 @@ const Item = () => {
                                     ):(
                                         <>
                                             <div style = {{display : 'flex', alignItems: 'center', gap: '10px', marginBottom : '12px'}}>
-                                                <Button className="noto-sans-kr green" style = {{color: 'white', border: 'none'}}>수정</Button>
-                                                <Button className="noto-sans-kr green" style = {{color: 'white', border: 'none'}}>삭제</Button>
+                                                <Button className="noto-sans-kr green" style = {{color: 'white', border: 'none'}} onClick = {onClickUpdate}>수정</Button>
+                                                <Button className="noto-sans-kr green" onClick = {handleShowItem} style = {{color: 'white', border: 'none'}}>삭제</Button>
+                                                <DeleteItemData show={showModalItem} handleClose={handleCloseItem} itemID = {item.itemID} />
                                             </div>
                                         </>
                                     )

@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const {registerItem, findItem, getItems } = require("../Controllers/itemController");
+const {registerItem, updateItem, deleteItem, findItem, getItems } = require("../Controllers/itemController");
 const multer = require('multer');
 const path = require('path');
 const upload = multer({ dest: 'uploads/' });
@@ -32,6 +32,8 @@ router.post("/createItem", upload.single('imageFile'),(req,res) => {
 
 
 router.post("/createItem", registerItem);
+router.post("/updateItem/:itemID", updateItem);
+router.delete("/deleteItem/:itemID", deleteItem);
 router.get("/find/:itemID", findItem);
 router.get("/", getItems);
 

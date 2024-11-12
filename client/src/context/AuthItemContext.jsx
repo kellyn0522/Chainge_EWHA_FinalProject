@@ -1,5 +1,5 @@
 import { createContext, useCallback, useEffect, useState } from "react";
-import { baseUrl, postRequest, getRequest } from "../utils/services";
+import { baseUrl, postRequest, getRequest, deleteRequest } from "../utils/services";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
 
@@ -129,6 +129,110 @@ export const AuthItemContextProvider = ({ children }) => {
         }
     }, [createItemInfo]);
 
+    const [updateItemError, setUpdateItemError] = useState(null);
+    const [isUpdateItemLoading, setIsUpdateItemLoading] = useState(false);
+
+    const [updaterItemInfo, setUpdaterItemInfo] = useState({
+        itemID: '', 
+        ownerName: '', 
+        ownerId: '', 
+        housePrice: '', 
+        memo: '', 
+        type: '',
+        bedSize: '', 
+        hasItems: '',
+        hasAgent: false,
+        buildingName: '',
+        floor: '',
+        duplexAvailability: '',
+        exclusiveArea: '',
+        contractArea: '',
+        room: '',
+        bathroom: '',
+        facing: '',
+        elevator: '',
+        petFriendly: '',
+        number_of_units_in_the_given_area: '',
+        total_number_of_units: '',
+        parkingSpace: '',
+        availableMoveInDate: '',
+        deposit: ''
+    });
+
+    const updateItemUpdaterInfo = useCallback((info) => {
+        setUpdaterItemInfo((prevInfo) => ({ ...prevInfo, ...info }));
+    }, []);
+
+    const updaterItem = useCallback(async(e, itemID) => { 
+        e.preventDefault()
+        console.log("Update called");
+        setIsUpdateItemLoading(true);
+        setUpdateItemError(null);
+        
+        try{
+            if(!itemID){
+                setUpdateItemError("Invalid item ID");
+                setIsUpdateItemLoading(false);
+                throw new Error("Invalid item ID");
+            }
+
+            const response = await postRequest(
+                `${baseUrl}/items/updateItem/${itemID}`,
+                JSON.stringify(updaterItemInfo));
+
+            console.log("updater response ", response);
+            setIsUpdateItemLoading(false);
+        
+            if (response.error) {
+                console.log("error in updateItem");
+                return setUpdateItemError(response);
+            }
+            console.log(response);
+            navigate("/");
+
+        } catch (error){
+            setUpdateItemError(error.message)
+            console.log(error.message)
+        } finally{
+            setIsUpdateItemLoading(false);
+        }
+    }, [updaterItemInfo, navigate]);
+
+    const [deleteItemError, setDeleteItemError] = useState(null);
+    const [isDeleteItemLoading, setIsDeleteItemLoading] = useState(false);
+    const deleteItem = useCallback(async(e, itemID) => { 
+        console.log("delete called");
+        e.preventDefault()
+        setIsDeleteItemLoading(true);
+        setDeleteItemError(null);
+        try{
+            if(!itemID){
+                setDeleteItemError("Invalid item ID");
+                setIsDeleteItemLoading(false);
+                throw new Error("Invalid item ID");
+            }
+
+            const response = await deleteRequest(
+                `${baseUrl}/items/deleteItem/${itemID}`
+            );
+
+            console.log("deleter response ", response);
+
+            navigate("/");
+            setIsDeleteItemLoading(false);
+        
+            if (response.error) {
+                return setDeleteItemError(response);
+            }
+
+        }catch(error){
+            console.error("Falied to delete:", error);
+            setDeleteItemError({message: "Falied to delete item"});
+            setIsDeleteItemLoading(false);
+        }
+    }, []);
+
+
     const getItem = useCallback(async(e) => {
         if(e) e.preventDefault();
         setGetItemError(null);
@@ -189,6 +293,16 @@ export const AuthItemContextProvider = ({ children }) => {
             findItem,
             findItemError,
             isFindItemLoading,
+
+            updaterItem,
+            updaterItemInfo,
+            updateItemUpdaterInfo,
+            isUpdateItemLoading,
+            updateItemError,
+
+            deleteItem,
+            deleteItemError,
+            isDeleteItemLoading
         }}
         >
             {children}
