@@ -17,7 +17,7 @@ const ChatBox = () => {
 
     console.log("text", textMessage);
     useEffect(() => {
-        scroll.current?.scrollIntroView({behavior :"smooth"});
+        scroll.current?.scrollIntoView({behavior :"smooth"});
 
     },[messages]);
 
