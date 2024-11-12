@@ -13,7 +13,7 @@ const ChatBox = () => {
     const { currentChat, messages, isMessagesLoading ,sendTextMessage} = useContext(ChatContext);
     const { recipientUser } = useFetchRecipientUser(currentChat, user);
     const [textMessage, setTextMessage] = useState("");
-    const Scroll = useRef();
+    const scroll = useRef();
 
     console.log("text", textMessage);
     useEffect(() => {

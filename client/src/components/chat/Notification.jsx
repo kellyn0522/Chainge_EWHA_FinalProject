@@ -54,6 +54,7 @@ const Notification = () => {
                     return <div key = {index} className = {n.isRead ? 'notification': 'notification not-read'}
                     onClick = {() => {
                         markAllNotificationsAsRead(n,userChats, user, notifications);
+                        setIsOpen(false);
                     }}
                     >
                         <span>{`${n.senderName} sent you a new message`}</span>

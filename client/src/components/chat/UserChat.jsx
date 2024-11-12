@@ -21,6 +21,13 @@ const UserChat = ({ chat, user }) => {
     )
     const isOnline = onlineUsers?.some((user) => user?.userId === recipientUser?._id);
     //const lastMessageTime = chat.lastMessageTime ? moment(chat.lastMessageTime).calendar() : "N/A";
+    const truncateText = (text) => {
+        let shortText = text.substring(0,20);
+        if(text.length > 20){
+            shortText = shortText +"...";
+        }
+        return shortText;
+    };
 
     return (<>
         <Stack direction="horizontal" gap={3} className="user-card align-items-center p-2 justify-content-between"
