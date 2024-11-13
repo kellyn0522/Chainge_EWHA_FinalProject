@@ -11,16 +11,15 @@ const DeleteItemData = ({show ,handleClose, itemID}) => {
     } = useContext(AuthItemContext);
 
     return (<>
-        <Modal show = {show} onHide={handleClose}>
+        <Modal show = {show} onHide={handleClose} className = 'modalSize'>
             <Modal.Header closeButton className = "noto-sans-kr">
                 <div>매물 삭제</div>
             </Modal.Header>
             <Modal.Body className = "noto-sans-kr">
                 <Form onSubmit ={(e) => deleteItem(e, itemID)}>
                     <Row style={{
-                        height: "500px",
                         justifyContent: "Center",
-                        paddingTop: "10%"
+                        paddingTop:'40px'
                     }}>
                         <Col xs={9} style = {{height: "400px"}}>
                             <Stack gap={3}>

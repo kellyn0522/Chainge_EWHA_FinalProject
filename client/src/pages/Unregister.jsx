@@ -14,16 +14,15 @@ const Unregister = ({show,handleClose}) => {
 
 
     return (<>
-        <Modal show = {show} onHide={handleClose} className = 'unregisterModel'>
+        <Modal show = {show} onHide={handleClose} className = 'modalSize'>
             <Modal.Header closeButton className = "noto-sans-kr">
                 <div>회원탈퇴</div>
             </Modal.Header>
             <Modal.Body className = "noto-sans-kr">
                 <Form onSubmit ={unregisterUser}>
                     <Row style={{
-                        height: "500px",
                         justifyContent: "Center",
-                        paddingTop: "10%"
+                        paddingTop:'50px'
                     }}>
                         <Col xs={6} style = {{height: "400px"}}>
                             <Stack gap={3}>

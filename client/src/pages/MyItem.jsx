@@ -29,17 +29,13 @@ const MyItem = ({show ,handleClose}) => {
     }, [getItem]);
 
     return (<>
-        <Modal show = {show} onHide={handleClose}>
+        <Modal show = {show} onHide={handleClose} className='modalSize'>
             <Modal.Header closeButton>
                 <div className = "noto-sans-kr">내 매물 목록</div>
             </Modal.Header>
             <Modal.Body className = "noto-sans-kr">
                 <Form>
-                    <Row style={{
-                        height: "500px",
-                        justifyContent: "Center",
-                        paddingTop: "10%"
-                    }}>
+                    <Row>
                         <Col xs={9} style = {{height: "400px"}}>
                             <Stack gap={3}>
                                 <div className= "list_wrapper">
