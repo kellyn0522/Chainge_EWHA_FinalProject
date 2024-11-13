@@ -43,7 +43,6 @@ const NavBar = () => {
                             </>)
                         }
                         {!user && (<>
-                        <Notification/>
                             <Link to="/login" className="gugi-regular text-decoration-none" style = {{color : 'grey'}}>
                                 Login
                             </Link>

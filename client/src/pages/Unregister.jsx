@@ -27,9 +27,9 @@ const Unregister = ({show,handleClose}) => {
                         <Col xs={6} style = {{height: "400px"}}>
                             <Stack gap={3}>
                                 <h4 style={{marginBottom: "30px"}}>탈퇴하시겠습니까?</h4>
-                                <div style = {{ display:'flex', justifyContent:'center', gap: '100px'}}>
-                                    <Button  className = 'green' style = {{color: 'white', border: 'none'}} type="submit">{isDeleteLoading? "Deleting you in ... " : "탈퇴"}</Button>
-                                    <Button className = "no green" style = {{color: 'white', border: 'none'}} onClick={handleClose}>취소</Button>
+                                <div style = {{ display:'flex', justifyContent:'center', gap: '70px'}}>
+                                    <Button  className = 'green' style = {{width:'100px', color: 'white', border: 'none'}} type="submit">{isDeleteLoading? "Deleting you in ... " : "탈퇴"}</Button>
+                                    <Button className = "no green" style = {{width:'100px', color: 'white', border: 'none'}} onClick={handleClose}>취소</Button>
                                 </div>
                                 {deleteError?.error && 
                                 <Alert variant="danger">

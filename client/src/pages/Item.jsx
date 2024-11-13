@@ -27,10 +27,11 @@ const Item = () => {
     const handleCloseItem = () => setShowModalItem(false);
     const navigate = useNavigate();
     const {id} = useParams();
-    const [liked, setLiked] = useState(false);
     const { 
-        user
+        user,
+        updaterLike,
     } = useContext(AuthContext);
+    const [liked, setLiked] = useState(false);
 
     //const onHistory = () => {
     //    navigate("/userHistory");
@@ -41,6 +42,22 @@ const Item = () => {
         isFindItemLoading,
     } = useContext(AuthItemContext);
     const [item, setItem] = useState(null)
+
+    const handleLike = (event) => {
+        event.stopPropagation();
+        if (user){
+            const newLikedState = !liked;
+            setLiked(newLikedState);
+            updaterLike(id, newLikedState);
+        }
+    };
+
+    useEffect(() => {
+        if (user && item ){
+            setLiked(user.likedItemId.includes(id));
+        }
+    }, [user, item, id]);
+
     const availableMoveInDate = item&&item.availableMoveInDate? item.availableMoveInDate:null;
     const formattedDate = availableMoveInDate
         ?(availableMoveInDate instanceof Date
@@ -66,9 +83,6 @@ const Item = () => {
         return <div>Error: {findItemError?.message || 'Page not found'}</div>
     }
 
-    const handleLike = () => {
-        setLiked(prevLiked => !prevLiked);
-    };
     const onClickChat = () => {
         navigate("/chat");
     }

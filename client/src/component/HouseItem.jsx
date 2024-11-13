@@ -15,9 +15,10 @@ const HouseItem = ({itemId}) => {
         isFindItemLoading,
     } = useContext(AuthItemContext);
     const { 
-        user
+        user,
+        updaterLike,
     } = useContext(AuthContext);
-    const [item, setItem] = useState(null)
+    const [item, setItem] = useState(null);
     const [liked, setLiked] = useState(false);
     const [showModalItem, setShowModalItem] = useState(false);
     const handleShowItem = (event) => {
@@ -28,11 +29,20 @@ const HouseItem = ({itemId}) => {
         event.stopPropagation();
         setShowModalItem(false);
     }
-    //const [userLike, setUserLike] = useState(user.likedItemId)
     const handleLike = (event) => {
         event.stopPropagation();
-        setLiked(prevLiked => !prevLiked);
+        if (user){
+            const newLikedState = !liked;
+            setLiked(newLikedState);
+            updaterLike(itemId, newLikedState);
+        }
     };
+
+    useEffect(() => {
+        if (user && item ){
+            setLiked(user.likedItemId.includes(itemId));
+        }
+    }, [user, item, itemId]);
 
     useEffect(() => {
         const fetchItem = async () => {
@@ -57,9 +67,7 @@ const HouseItem = ({itemId}) => {
     if (findItemError || !item){
         return <div>Error: {findItemError?.message || 'Item not found'}</div>
     }
-    //<Badge bg = { liked ? 'success' : 'secondary' } onClick = {handleLike}>
-    //                { liked ? 'LIKED' : 'LIKE' }
-    //            </Badge>
+
     const onClickUpdate = (event) => {
         event.stopPropagation();
         navigate(`/changingItem/${item.itemID}`);

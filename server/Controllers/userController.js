@@ -34,7 +34,7 @@ const registerUser = async (req, res) => {
 
         if (!validator.isStrongPassword(password)) return res.status(400).json("Password must be a strong password");
 
-        user = new userModel({ name, nickName, email, phoneNumber, password });
+        user = new userModel({ name, nickName, email, phoneNumber, password, likedItemId:[] });
 
         const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(user.password, salt); // 비밀번호 해싱
@@ -42,7 +42,7 @@ const registerUser = async (req, res) => {
 
         const token = createToken(user._id); // id 받아서 토큰 생성
 
-        res.status(200).json({ _id: user._id, name: user.name, nickName: user.nickName, email: user.email, phoneNumber: user.phoneNumber, token });
+        res.status(200).json({ _id: user._id, name: user.name, nickName: user.nickName, email: user.email, phoneNumber: user.phoneNumber, token, likedItemId: user.likedItemId });
 
     } catch (error) {
         console.log(error); // 에러 로그
@@ -82,6 +82,30 @@ const updateUser = async (req, res) => {
             return res.status(400).json({error : "사용자를 찾을 수 없습니다."});
         }
 
+    } catch (error) {
+        console.log(error); // 에러 로그
+        res.status(500).json(error);
+    }
+};
+
+const updateLike = async (req, res) => {
+    try {
+        const { userId, itemId, liked } = req.body;
+        const user = await userModel.findById( userId );
+        if (!user) return res.status(400).json("User Not Found");
+        let result;
+        if (!liked){
+            result = await userModel.updateOne({_id : user._id}, {$pull : {likedItemId: itemId}});
+        } else {
+            result = await userModel.updateOne({_id : user._id}, {$addToSet : {likedItemId: itemId}});
+        }
+        if (result.modifiedCount > 0){
+            const update = await userModel.findById(user._id);
+            console.log(update.likedItemId);
+            res.status(200).json({ _id: update._id, name: update.name, nickName: update.nickName, email: update.email, phoneNumber: update.phoneNumber, birth : update.birth, identityNum : update.identityNum, zipCode : update.zipCode, houseAddress : update.houseAddress, likedItemId: update.likedItemId });
+        } else{
+            return res.status(400).json({error : "사용자를 찾을 수 없습니다."});
+        }
     } catch (error) {
         console.log(error); // 에러 로그
         res.status(500).json(error);
@@ -148,4 +172,4 @@ const getUsers = async(req, res) =>{
     }
 };
 
-module.exports = { registerUser, updateUser, loginUser, findUser, getUsers, deleteUser };
+module.exports = { registerUser, updateUser, loginUser, findUser, getUsers, deleteUser, updateLike };

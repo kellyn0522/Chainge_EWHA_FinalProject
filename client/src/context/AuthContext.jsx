@@ -63,7 +63,34 @@ export const AuthContextProvider = ({ children }) => {
         setUser(response);
         navigate("/mypage");
     }, [updaterInfo]);
-//여기까지
+
+    const updaterLike = useCallback(async(itemID, newLikedState) => {
+        setIsUpdateLoading(true);
+        setUpdateError(null);
+
+        try{
+        const response = await postRequest(
+            `${baseUrl}/users/updateLike`,
+            JSON.stringify({userId: user._id, itemId: itemID, liked: newLikedState,}));
+
+        setIsUpdateLoading(false);
+
+        console.log("updater response ", response);
+        
+
+        if (response.error) {
+            return setUpdateError(response);
+        }
+
+        localStorage.setItem("user", JSON.stringify(response));
+        setUser(response);
+        }catch(error){
+            setIsUpdateLoading(false);
+            setUpdateError(error);
+            console.log('Error updating like: ', error);
+        }
+    }, [user]);
+
     const [loginError, setLoginError] = useState(null);
     const [isLoginLoading, setIsLoginLoading] = useState(false);
 
@@ -222,6 +249,8 @@ export const AuthContextProvider = ({ children }) => {
             unregisterUser,
             deleteError,
             isDeleteLoading,
+
+            updaterLike,
         }}
     >
         {children}
