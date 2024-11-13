@@ -134,16 +134,12 @@ export const AuthItemContextProvider = ({ children }) => {
 
     const [updaterItemInfo, setUpdaterItemInfo] = useState({
         itemID: '', 
-        ownerName: '', 
-        ownerId: '', 
         housePrice: '', 
         memo: '', 
-        type: '',
         bedSize: '', 
         hasItems: '',
         hasAgent: false,
         buildingName: '',
-        floor: '',
         duplexAvailability: '',
         exclusiveArea: '',
         contractArea: '',

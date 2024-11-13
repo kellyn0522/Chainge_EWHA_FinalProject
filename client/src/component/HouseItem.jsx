@@ -66,11 +66,11 @@ const HouseItem = ({itemId}) => {
                                 <>{Math.floor(item.deposit / 10000)}억 </>
                             )}
                             {item.deposit % 10000 > 0 && (
-                                <>{item.deposit % 10000}만원/ </>
+                                <>{item.deposit % 10000}만원 </>
                             )}
                         </>
                     )}
-                    {item.housePrice}만원
+                    / {item.housePrice}만원
                 </Card.Text>
                 <Card.Text>건물 종류: {item.type}</Card.Text>
                 <Card.Text>크기: {item.area}평</Card.Text>

@@ -17,6 +17,9 @@
 .green:hover{
   background-color: #002D72;
 }
+.blueFont{
+  color:#002D72
+}
 
 .creatPageItem{
   display: flex;

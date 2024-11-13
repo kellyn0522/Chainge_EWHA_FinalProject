@@ -105,21 +105,27 @@ const ChangingItemData = () => {
                         </Form.Group>
                         <Form.Group className='formControl'>
                             <Form.Label>매물 주소</Form.Label>
-                            <Form.Control 
-                            type="text" 
-                            placeholder="Location" 
-                            onChange={
-                                (e) => updateItemUpdaterInfo({ location: e.target.value, ownerName: user.name, itemID: new Date().getTime(), ownerId: user._id })
-                            } />
+                            <Form.Label className='blueFont'>{item.location}</Form.Label>
                         </Form.Group>
                         <Form.Group className='formControl'>
                             <Form.Label>상세 주소</Form.Label>
-                            <Form.Control 
-                            type="text" 
-                            placeholder="Detail Location" 
-                            onChange={ 
-                                (e) => updateItemUpdaterInfo({ houseAddress: e.target.value })
-                            } />
+                            <Form.Label className='blueFont'>{item.houseAddress}</Form.Label>
+                        </Form.Group>
+                        <Form.Group className='formControl'>
+                            <Form.Label>우편번호</Form.Label>
+                            <Form.Label className='blueFont'>{item.zipCode}</Form.Label>
+                        </Form.Group>
+                        <Form.Group className='formControl'>
+                            <Form.Label>매물 종류</Form.Label>
+                            <Form.Label className='blueFont'>{item.type}</Form.Label>
+                        </Form.Group>
+                        <Form.Group className='formControl'>
+                            <Form.Label>공급 면적</Form.Label>
+                            <Form.Label className='blueFont'>{item.area}평</Form.Label>
+                        </Form.Group>
+                        <Form.Group className='formControl'>
+                            <Form.Label>층</Form.Label>
+                            <Form.Label className='blueFont'>{item.floor}층</Form.Label>
                         </Form.Group>
                         <Form.Group className='formControl'>
                             <Form.Label>건물 이름</Form.Label>
@@ -129,17 +135,6 @@ const ChangingItemData = () => {
                             onChange={ 
                                 (e) => updateItemUpdaterInfo({ buildingName: e.target.value })
                             } />
-                        </Form.Group>
-                        <Form.Group className='formControl'>
-                            <Form.Label>우편번호</Form.Label>
-                            <Form.Control
-                                type="text"
-                                placeholder="ZipCode"
-                                maxLength="5"
-                                onChange={ 
-                                    (e) => updateItemUpdaterInfo({ zipCode: e.target.value })
-                                }
-                            />
                         </Form.Group>
                         <Form.Group className='formControl'>
                             <Form.Label>월세</Form.Label>
@@ -160,15 +155,6 @@ const ChangingItemData = () => {
                                     (e) => updateItemUpdaterInfo({ deposit: e.target.value })
                                 }
                             />
-                        </Form.Group>
-                        <Form.Group className='formControl'>
-                            <Form.Label>층</Form.Label>
-                            <Form.Control 
-                            type="text" 
-                            placeholder="층"
-                            onChange={ 
-                                (e) => updateItemUpdaterInfo({ floor: e.target.value })
-                            } />
                         </Form.Group>
                         <Form.Group className='formControl'>
                             <Form.Label>방 개수</Form.Label>
@@ -349,17 +335,6 @@ const ChangingItemData = () => {
                         </Card>
                         </div>
                         </div>
-
-                        <Form.Group className='formControl'>
-                            <Form.Label>공급 면적</Form.Label>
-                            <Form.Control
-                                type="text"
-                                placeholder="평"
-                                onChange={ 
-                                    (e) => updateItemUpdaterInfo({area: e.target.value })
-                                }
-                            />
-                        </Form.Group>
                         <Form.Group className='formControl'>
                             <Form.Label>전용 면적</Form.Label>
                             <Form.Control
@@ -408,21 +383,6 @@ const ChangingItemData = () => {
                                     (e) => updateItemUpdaterInfo({ availableMoveInDate: e.target.value })
                                 }
                             />
-                        </Form.Group>
-                        <Form.Group className='formControl'>
-                            <Form.Label>매물 종류</Form.Label>
-                            <Form.Select 
-                                className = "typeSelect"
-                                value={updaterItemInfo.type}
-                                onChange={
-                                    (e) => updateItemUpdaterInfo({ type: e.target.value })
-                                } >
-                                <option value = "select">매물 종류</option>
-                                <option value = "아파트">아파트</option>
-                                <option value = "오피스텔">오피스텔</option>
-                                <option value = "단독주택">단독주택</option>
-                                <option value = "상가">상가</option>
-                            </Form.Select>
                         </Form.Group>
                         <Form.Group className='formControl'>
                             <Form.Label>추가 상세 정보</Form.Label>

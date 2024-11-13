@@ -42,7 +42,13 @@ const Item = () => {
     } = useContext(AuthItemContext);
     const [item, setItem] = useState(null)
     const availableMoveInDate = item&&item.availableMoveInDate? item.availableMoveInDate:null;
-    const formattedDate = availableMoveInDate instanceof Date? availableMoveInDate.toISOString().split('T')[0]:'';
+    const formattedDate = availableMoveInDate
+        ?(availableMoveInDate instanceof Date
+            ? availableMoveInDate.toISOString().split('T')[0]
+            : (typeof availableMoveInDate === 'string' && !isNaN(new Date(availableMoveInDate)))
+            ? new Date(availableMoveInDate).toISOString().split('T')[0]
+            : '')
+        : '';
     useEffect(() => {
         const fetchItem = async () => {
             if (!findItemError && !isFindItemLoading){
@@ -93,11 +99,11 @@ const Item = () => {
                                                 <>{Math.floor(item.deposit / 10000)}억 </>
                                             )}
                                             {item.deposit % 10000 > 0 && (
-                                                <>{item.deposit % 10000}만원/ </>
+                                                <>{item.deposit % 10000}만원</>
                                             )}
                                         </>
                                     )}
-                                    {item.housePrice}만원</h3>
+                                    / {item.housePrice}만원</h3>
                                     <div>{item.location} {item.houseAddress}</div>
                                     <div>{item.type} / {item.area}평</div> 
                                 </div>
@@ -140,11 +146,11 @@ const Item = () => {
                                                     <>{Math.floor(item.deposit / 10000)}억 </>
                                                 )}
                                                 {item.deposit % 10000 > 0 && (
-                                                    <>{item.deposit % 10000}만원/ </>
+                                                    <>{item.deposit % 10000}만원 </>
                                                 )}
                                             </>
                                         )}
-                                        {item.housePrice}만원
+                                        / {item.housePrice}만원
                                     </div>
                                     <div className="infoText">관리비 없음</div>
                                     <div className="infoText">주차 가능</div>

@@ -122,17 +122,13 @@ const registerItem = async (req, res) => {
 const updateItem = async (req, res) => {
     try {
         const itemID = req.params.itemID;
-        const { 
-            ownerName, 
-            ownerId, 
+        const {  
             housePrice, 
-            memo, 
-            type,
+            memo,
             bedSize, 
             hasItems,
             hasAgent,
             buildingName,
-            floor,
             duplexAvailability,
             exclusiveArea,
             contractArea,
@@ -152,16 +148,12 @@ const updateItem = async (req, res) => {
         if (!item) return res.status(400).json("Item Not Found");
 
         result = await itemModel.updateOne({itemID : item.itemID}, {$set : {
-            ownerName, 
-            ownerId, 
             housePrice, 
-            memo, 
-            type,
+            memo,
             bedSize, 
             hasItems,
             hasAgent,
             buildingName,
-            floor,
             duplexAvailability,
             exclusiveArea,
             contractArea,
@@ -179,6 +171,7 @@ const updateItem = async (req, res) => {
         if (result.modifiedCount > 0){
             const update = await itemModel.findOne({itemID : item.itemID});
             console.log(update);
+            res.status(200).json('update success');
         } else{
             return res.status(400).json({error : "매물을 찾을 수 없습니다."});
         }

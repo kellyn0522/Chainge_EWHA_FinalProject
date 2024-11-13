@@ -93,7 +93,7 @@ const Mypage = () => {
                     <div >
                         <div style = {{display: "flex", alignItems: 'center', textAlign: 'center'}}>
                             <img src={house} alt='house_pic' width = '30px' height = 'auto'/>
-                            <h7 style={{marginLeft:"10px", marginRight:'15px'}}>임대 중</h7>
+                            <div style={{marginLeft:"10px", marginRight:'15px'}}>임대 중</div>
                         </div>
                         <div>
                             <Card style = {{marginTop:"10px", marginBottom:"30px", width: '300px'}}>
@@ -117,7 +117,7 @@ const Mypage = () => {
                         </div>
                         <div style = {{display: "flex", alignItems: 'center', textAlign: 'center'}}>
                             <img src={house} alt='house_pic' width = '30px' height = 'auto'/>
-                            <h7 style={{marginLeft:"10px", marginRight:'15px'}}>임차 중</h7>
+                            <div style={{marginLeft:"10px", marginRight:'15px'}}>임차 중</div>
                         </div>
                         <div style = {{display:'flex', gap: '17px'}}>
                             <Card style = {{marginTop:"10px", marginBottom:"30px", width: '300px'}}>
