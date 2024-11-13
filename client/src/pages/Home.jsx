@@ -16,7 +16,7 @@ const Home = () => {
     const { 
         user
     } = useContext(AuthContext);
-    //,account_circle,bookmark,chat,chat_bubble,bed,ac_unit,kitchen,tv_gen,single_bed,dresser,blinds,king_bed,heat,dishwasher_gen
+    const userID = user? (user._id? user._id : null) : null
 
     useEffect(() => {
         const fetchItems = async () => {
@@ -90,7 +90,9 @@ const Home = () => {
                     <div className= "list_wrapper">
                         {getItemError && <p>Error: {getItemError}</p>}
                         {getSearchResult().map(it => (
-                            <HouseItem itemId={it.itemID} />
+                            userID !== it.ownerId?(
+                                <HouseItem itemId={it.itemID} />
+                            ): null
                         ))}
                     </div>
                 </Col>

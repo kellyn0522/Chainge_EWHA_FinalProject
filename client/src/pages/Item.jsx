@@ -209,38 +209,78 @@ const Item = () => {
                             <Card className = "information" style={{marginBottom:"30px"}}>
                                 <Card.Title className = "infoTitle">상세 정보</Card.Title>
                                 <Card.Body className = "info">
-                                    <div className = "infotype">건물 이름</div> 
-                                    <div className = "infoName">{item.buildingName}</div>
-                                    <div className = "infotype">방 종류</div> 
-                                    <div className = "infoName">{item.type}</div>
-                                    <div className = "infotype">해당층/건물층</div>
-                                    <div className = "infoName">{item.floor}층/50층</div>
-                                    <div className = "infotype">복층 여부</div>
-                                    <div className = "infoName">{item.duplexAvailability? '복층':'단층'}</div>  
+                                    {item.buildingName? (
+                                        <>
+                                            <div className = "infotype">건물 이름</div> 
+                                            <div className = "infoName">{item.buildingName}</div>
+                                        </>
+                                    ):null}
+                                    {item.type? (
+                                        <>
+                                            <div className = "infotype">방 종류(건축물 용도)</div> 
+                                            <div className = "infoName">{item.type}</div>
+                                        </>
+                                    ):null}
+                                    {item.floor? (
+                                        <>
+                                            <div className = "infotype">해당층/건물층</div>
+                                            <div className = "infoName">{item.floor}층/50층</div>
+                                        </>
+                                    ):null}
+                                    {item.duplexAvailability !== '' && item.duplexAvailability !== null && item.duplexAvailability !== undefined ?(
+                                        <>
+                                            <div className = "infotype">복층 여부</div>
+                                            <div className = "infoName">{item.duplexAvailability? '복층':'단층'}</div>  
+                                        </>
+                                    ):null}
                                     <div className = "infotype">전용/계약면적</div>
                                     <div className = "infoName">
                                         {item.exclusiveArea}<span>m<sup>2</sup></span>/ {item.contractArea}<span>m<sup>2</sup></span>
                                     </div>
                                     <div className = "infotype">방 수/욕실 수</div>
                                     <div className = "infoName">{item.room}/{item.bathroom}</div>
-                                    <div className = "infotype">방향</div>
-                                    <div className = "infoName">{item.facing}</div>
-                                    <div className = "infotype">엘리베이터</div>
-                                    <div className = "infoName">{item.elevator? '있음':'없음'}</div>
-                                    <div className = "infotype">반려동물 가능 여부</div>
-                                    <div className = "infoName">{item.petFriendly? '가능':'불가능'}</div>
-                                    <div className = "infotype">해당 면적 세대수</div>
-                                    <div className = "infoName">{item.number_of_units_in_the_given_area}세대</div>
-                                    <div className = "infotype">총 세대수</div>
-                                    <div className = "infoName">{item.total_number_of_units}세대</div>
-                                    <div className = "infotype">총 주차대수</div>
-                                    <div className = "infoName">{item.parkingSpace}대</div>
-                                    <div className = "infotype">현관유형</div>
-                                    <div className = "infoName">복도식</div>
-                                    <div className = "infotype">입주 가능일</div>
-                                    <div className = "infoName">{formattedDate}</div>
-                                    <div className = "infotype">건축물 용도</div>
-                                    <div className = "infoName">상가</div>
+                                    {item.facing? (
+                                        <>
+                                            <div className = "infotype">방향</div>
+                                            <div className = "infoName">{item.facing}</div>
+                                        </>
+                                    ):null}
+                                    {item.elevator !== '' && item.elevator !== null && item.elevator !== undefined ? (
+                                        <>
+                                            <div className = "infotype">엘리베이터</div>
+                                            <div className = "infoName">{item.elevator? '있음':'없음'}</div>
+                                        </>
+                                    ):null}
+                                    {item.petFriendly !== '' && item.petFriendly !== null && item.petFriendly !== undefined ? (
+                                        <>
+                                            <div className = "infotype">반려동물 가능 여부</div>
+                                            <div className = "infoName">{item.petFriendly? '가능':'불가능'}</div>
+                                        </>
+                                    ):null}
+                                    {item.number_of_units_in_the_given_area? (
+                                        <>
+                                            <div className = "infotype">해당 면적 세대수</div>
+                                            <div className = "infoName">{item.number_of_units_in_the_given_area}세대</div>
+                                        </>
+                                    ):null}
+                                    {item.total_number_of_units? (
+                                        <>
+                                            <div className = "infotype">총 세대수</div>
+                                            <div className = "infoName">{item.total_number_of_units}세대</div>
+                                        </>
+                                    ):null}
+                                    {item.parkingSpace? (
+                                        <>
+                                            <div className = "infotype">총 주차대수</div>
+                                            <div className = "infoName">{item.parkingSpace}대</div>
+                                        </>
+                                    ):null}
+                                    {formattedDate? (
+                                        <>
+                                            <div className = "infotype">입주 가능일</div>
+                                            <div className = "infoName">{formattedDate}</div>
+                                        </>
+                                    ):null}
                                 </Card.Body>
                             </Card>
                         </div>

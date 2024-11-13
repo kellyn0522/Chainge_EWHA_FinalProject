@@ -4,8 +4,9 @@ import HouseItem from "../component/HouseItem";
 import { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { AuthItemContext } from "../context/AuthItemContext";
-import { Card, Button,Badge } from "react-bootstrap";
+import { Card, Button,Badge} from "react-bootstrap";
 import Unregister from "./Unregister";
+import MyItem from "./MyItem";
 import chat from '../icons/chat.svg';
 import account from '../icons/account.svg';
 import house from '../icons/house.svg';
@@ -17,6 +18,10 @@ const Mypage = () => {
     const [showModal, setShowModal] = useState(false);
     const handleShow = () => setShowModal(true);
     const handleClose = () => setShowModal(false);
+
+    const [showMyItemModal, setShowMyItemModal] = useState(false);
+    const handleShowMyItem = () => setShowMyItemModal(true);
+    const handleCloseMyItem = () => setShowMyItemModal(false);
 
     const onChangeData = () => {
         navigate("/changingUserData");
@@ -73,7 +78,8 @@ const Mypage = () => {
                 <div className = "intro" style = {{display:'flex', flexDirection:'column', alignItems: 'center'}}>
                     <h4 className="gugi-regular" style={{marginTop:'15px', marginBottom: '25px', fontSize:'30px'}}>MY page</h4>
                     <span className="material-symbols-outlined size-200" style={{textAlign: 'center', marginBottom: '10px'}}>account_circle</span>
-                    <Card style = {{width: '400px', marginBottom:'30px'}}>
+                    <div style ={{display:'flex', flexDirection: ' column', alignItems:'flex-start', width: '400px'}}>
+                    <Card style = {{width: '400px', marginBottom:'45px'}}>
                         <Card.Body className="noto-sans-kr">
                             <Card.Text>이름: {user.name}</Card.Text>
                             <Card.Text>닉네임: {user.nickName}</Card.Text>
@@ -81,12 +87,15 @@ const Mypage = () => {
                             <Card.Text>Email: {user.email}</Card.Text>
                         </Card.Body>
                         <div style = {{display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', alignItems:'center'}}>
-                            <Button className = 'green' style = {{color: 'white', border: 'none', margin: '10px'}} onClick = {onClickChat}>채팅</Button>
+                            <Button className = 'green' style = {{color: 'white', border: 'none', margin: '10px'}} onClick = {onClickChat}>채팅 목록</Button>
                             <Button className = 'green' style = {{color: 'white', border: 'none', margin: '10px'}} onClick = {onChangeData}>정보 변경</Button>
-                            <Button className = 'green' style = {{color: 'white', border: 'none', margin: '10px'}} onClick = {handleShow} >회원 탈퇴</Button>
-                            <Unregister show={showModal} handleClose={handleClose} />
+                            <Button className = 'green' style = {{color: 'white', border: 'none', margin: '10px'}} onClick = {handleShowMyItem}>내 매물</Button>
+                            <MyItem show={showMyItemModal} handleClose={handleCloseMyItem} />
                         </div>
                     </Card>
+                    <div style = {{color: 'gray', border: 'none', margin: '10px', cursor: "pointer"}} onClick = {handleShow} >회원 탈퇴</div>
+                    <Unregister show={showModal} handleClose={handleClose} />
+                    </div>
                 </div>
                 
                 <div>

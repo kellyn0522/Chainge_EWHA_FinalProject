@@ -20,6 +20,7 @@ import { AuthItemContext } from "./context/AuthItemContext";
 import { ChatContextProvider } from "./context/ChatContext";
 import DeleteItemData from "./pages/DeleteItemData";
 import ChangingItemData from "./pages/ChangingItemData";
+import MyItem from "./pages/MyItem";
 import "./pont.css";
 import "./icons.css";
 
