@@ -4,6 +4,7 @@ import { AuthItemContext } from "../context/AuthItemContext";
 import { AuthContext } from "../context/AuthContext";
 import { Card,Badge } from "react-bootstrap";
 import DeleteItemData from "../pages/DeleteItemData";
+import house from '../icons/house.svg';
 //import "./HouseItem.css";
 
 
@@ -72,14 +73,31 @@ const HouseItem = ({itemId}) => {
         event.stopPropagation();
         navigate(`/changingItem/${item.itemID}`);
     }
-
+                          
     return (
         <Card className = 'houseItem' style = {{ width : '200px' }} onClick = {goToItem}>
-            <Card.Img variant = 'top' src = {item.imageFile} />
+            <div style = {{position: 'relative', display: 'inline-block'}}>
+                <img src={house} alt='house_pic' width = '200px' height = '150px' style = {{border: '2px solid #ccc', display: ' block', alignItems:'flex-start'}}/>
+                <div style = {{ position: 'absolute', top: '10px', left:'160px'}}>
+                    {user? (
+                        user._id !== item.ownerId?(
+                        <>
+                            <span className={`material-symbols-outlined ${liked? 'liked':'dontlike'}`} style={{cursor: "pointer"}} onClick = {handleLike}>favorite</span>
+                        
+                        </>
+                        ):(
+                        <>
+                            <div style = {{display : 'flex', displayDirection: 'column', alignItems: 'center', gap: '10px', marginBottom : '12px'}}>
+                                <Badge className="noto-sans-kr bg-primary" style={{cursor: "pointer"}} onClick = {onClickUpdate}>수정</Badge>
+                                <Badge className="noto-sans-kr bg-secondary" style={{cursor: "pointer"}} onClick = {handleShowItem}>삭제</Badge>
+                                <DeleteItemData show={showModalItem} handleClose={handleCloseItem} itemID = {item.itemID} />
+                            </div>
+                        </>
+                        )
+                    ): null}
+                </div>
+            </div>
             <Card.Body className = "noto-sans-kr">
-                <Card.Text>위치: {item.location}</Card.Text>
-                <Card.Text>{item.houseAddress}</Card.Text>
-
                 <Card.Text>
                     {item.deposit && (
                         <>
@@ -93,24 +111,8 @@ const HouseItem = ({itemId}) => {
                     )}
                     / {item.housePrice}만원
                 </Card.Text>
-                <Card.Text>건물 종류: {item.type}</Card.Text>
-                <Card.Text>크기: {item.area}평</Card.Text>
-                {user? (
-                    user._id !== item.ownerId?(
-                        <>
-                            <span className={`material-symbols-outlined ${liked? 'liked':'dontlike'}`} style={{cursor: "pointer"}} onClick = {handleLike}>favorite</span>
-                        
-                        </>
-                    ):(
-                        <>
-                            <div style = {{display : 'flex', alignItems: 'center', gap: '10px', marginBottom : '12px'}}>
-                                <Badge className="noto-sans-kr bg-primary" style={{cursor: "pointer"}} onClick = {onClickUpdate}>수정</Badge>
-                                <Badge className="noto-sans-kr bg-secondary" style={{cursor: "pointer"}} onClick = {handleShowItem}>삭제</Badge>
-                                <DeleteItemData show={showModalItem} handleClose={handleCloseItem} itemID = {item.itemID} />
-                            </div>
-                        </>
-                    )
-                ): null}
+                <Card.Text>{item.location} {item.houseAddress}</Card.Text>
+                <Card.Text>{item.area}평 {item.type}</Card.Text>
             </Card.Body>
         </Card>
     )
