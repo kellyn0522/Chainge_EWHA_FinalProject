@@ -1,11 +1,12 @@
 import NavBar from "../components/NavBar";
 import HouseItem from "../component/HouseItem";
-import { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect ,useRef} from "react";
 import { AuthItemContext } from "../context/AuthItemContext";
 import { AuthContext } from "../context/AuthContext";
 import "../component/HouseItem.css";
 import { Button, Form, Row, Col, Container } from "react-bootstrap";
 import {useNavigate} from "react-router-dom";
+import MapComponent from "../component/MapComponent";
 
 const Home = () => {
     const [search, setSearch] = useState("");
@@ -87,6 +88,7 @@ const Home = () => {
                         <Button className="noto-sans-kr green" style = {{color: 'white', border: 'none'}} onClick = {onCreateItem}>매물 등록</Button>
                     </>)}
                     </div>
+                    <MapComponent />
                     <div className= "list_wrapper">
                         {getItemError && <p>Error: {getItemError}</p>}
                         {getSearchResult().map(it => (
