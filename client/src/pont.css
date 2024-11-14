@@ -115,6 +115,30 @@
   gap: 20px;
 }
 
+.list_column{
+  display: flex;
+  overflow-y:auto;
+  gap: 20px;
+  max-height: 300px;
+  padding: 10px;
+}
+
+.list_column > .houseItem{
+  flex-shrink: 0;
+}
+
+.longModalSize .modal-body{
+  max-height: 300px;
+}
+.longModalSize .modal-content{
+  min-width: 800px;
+}
+.longModalSize .modal-dialog{
+  position:absolute;
+  top: 20%;
+  left: 25%;
+}
+
 .contractButton{
   display: flex;
   justify-content: space-between;

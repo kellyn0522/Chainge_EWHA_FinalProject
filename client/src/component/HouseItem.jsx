@@ -74,7 +74,7 @@ const HouseItem = ({itemId}) => {
     }
 
     return (
-        <Card style = {{ width : '200px' }} onClick = {goToItem}>
+        <Card className = 'houseItem' style = {{ width : '200px' }} onClick = {goToItem}>
             <Card.Img variant = 'top' src = {item.imageFile} />
             <Card.Body className = "noto-sans-kr">
                 <Card.Text>위치: {item.location}</Card.Text>

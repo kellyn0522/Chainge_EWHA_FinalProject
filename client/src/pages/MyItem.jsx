@@ -28,6 +28,10 @@ const MyItem = ({show ,handleClose}) => {
         fetchItems();
     }, [getItem]);
 
+    const onCreateItem = () => {
+        navigate("/createItemPage");
+    }
+
     return (<>
         <Modal show = {show} onHide={handleClose} className='modalSize'>
             <Modal.Header closeButton>
@@ -46,6 +50,7 @@ const MyItem = ({show ,handleClose}) => {
                                         ):null
                                     ))}
                                 </div>
+                                <Button className="noto-sans-kr green" style = {{color: 'white', border: 'none', width:'40px', height:'40px', marginTop:'100px'}} onClick = {onCreateItem}>+</Button>
                             </Stack>
                         </Col>
                     </Row>

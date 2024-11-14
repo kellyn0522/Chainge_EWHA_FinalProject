@@ -21,6 +21,7 @@ import { ChatContextProvider } from "./context/ChatContext";
 import DeleteItemData from "./pages/DeleteItemData";
 import ChangingItemData from "./pages/ChangingItemData";
 import MyItem from "./pages/MyItem";
+import LikedItem from "./pages/LikedItem";
 import "./pont.css";
 import "./icons.css";
 
