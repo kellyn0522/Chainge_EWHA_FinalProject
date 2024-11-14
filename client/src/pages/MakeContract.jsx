@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { AuthItemContext } from "../context/AuthItemContext";
 import { AuthContext } from "../context/AuthContext";
 import { Button, Card, Row, Col, Container, Stack } from "react-bootstrap";
+import {ContractContext} from '../App';
 
 
 const MakeContract = () => {
@@ -16,6 +17,24 @@ const MakeContract = () => {
         isFindItemLoading,
     } = useContext(AuthItemContext);
     const [item, setItem] = useState(null)
+    const {setContract} = useContext(ContractContext);
+    const [info, setInfo] = useState(
+        {
+            itemID:'',
+            landlordID: '',
+            landlordphoneNum: '',
+            landlordBirth: '',
+            tenantID: '',
+            tenantphoneNum: '',
+            tenantBirth:'',
+            tenantidentityNum: '',
+            start:'',
+            end:'',
+            period:'',
+            price: '',
+            deposit: ''
+        }
+    )
 
     useEffect(() => {
         const fetchItem = async () => {
@@ -39,24 +58,37 @@ const MakeContract = () => {
             navigate(`/item/${item.itemID}`);
         }
     }
-   
-    /*
-    const onMakeContract = () => {
-        if (!cost) {costRef.current.focus(); return;
-        } else if (!deposit) {depositRef.current.focus(); return;
-        } else if (!startDate) {startDateRef.current.focus(); return;
-        } else if (!period) {periodRef.current.focus(); return;
-        } else if (!endDate) {endDateRef.current.focus(); return;
-        } else {
-            navigate("/");
-            return [
-                {userName, zipCode, birth, identityNum, telNum},
-                {location, detailAdd, ownerID, area, type, memo},// bedSize, hasItems},
-                {cost, deposit, startDate, period, endDate}
-            ];
-        };
-    };
-    */
+    
+    if(!user || !item){
+        return null;
+    }
+
+    const handleStart = (e) =>{
+        setInfo((prev) => ({...prev, start:e.target.value}));
+    }
+    const handleEnd = (e) =>{
+        setInfo((prev) => ({...prev, end:e.target.value}));
+    }
+    const handlePeriod = (e) =>{
+        setInfo((prev) => ({...prev, period:e.target.value}));
+    }
+
+
+    const onContract=(e)=>{
+        const newContract = {
+            ...info,
+            itemID: item.itemID,
+            tenantID: user._id,
+            tenantphoneNum: user.phoneNumber,
+            tenantBirth:user.birth,
+            tenantidentityNum: user.identityNum,
+            price: item.housePrice,
+            deposit: item.deposit
+
+        }
+        setContract((prev) => [...prev, newContract])
+        navigate('/');
+    }
 
     return (
         <Container>
@@ -101,11 +133,11 @@ const MakeContract = () => {
                             <Card.Title className = "infoTitle">계약 상세</Card.Title>
                             <Card.Body className = "inputCard">
                                 <div className="infotype">계약 시작 날짜</div>
-                                <input type = "date" className="set" />
+                                <input type = "date" className="set" onChange={handleStart} />
                                 <div className="infotype">계약 종료 날짜</div>
-                                <input type = "date" className="set" />
+                                <input type = "date" className="set" onChange={handleEnd} />
                                 <div className="infotype">계약 기간</div>
-                                <input placeholder=" 개월 수" className="set" />
+                                <input placeholder=" 개월 수" className="set" onChange={handlePeriod} />
                             </Card.Body>
                         </Card>
                         <Card className = "information" style={{marginBottom:"10px"}}>
@@ -181,7 +213,7 @@ const MakeContract = () => {
                         </Card>
                         <div className='contractButton'>
                             <Button style = {{backgroundColor: '#5B6A82', color: 'white', border: 'none', marginTop: '5px'}} onClick = {goToItem}>뒤로가기</Button>
-                            <Button className="green" style = {{color: 'white', border: 'none', marginTop: '5px'}}>거래 시작</Button>
+                            <Button className="green" style = {{color: 'white', border: 'none', marginTop: '5px'}} onClick = {onContract}>거래 시작</Button>
                         </div>
                     </Col>
             </Row>

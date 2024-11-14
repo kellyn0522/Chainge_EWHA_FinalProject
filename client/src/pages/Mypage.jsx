@@ -12,6 +12,7 @@ import chat from '../icons/chat.svg';
 import account from '../icons/account.svg';
 import house from '../icons/house.svg';
 import ContractCard from "../component/ContractCard";
+import {ContractContext} from '../App';
 
 const Mypage = () => {
     const navigate = useNavigate();
@@ -28,6 +29,9 @@ const Mypage = () => {
     const handleShowLikedItem = () => setShowLikeItemModal(true);
     const handleCloseLikedItem = () => setShowLikeItemModal(false);
 
+    
+    const {contract} = useContext(ContractContext);
+
     const onChangeData = () => {
         navigate("/changingUserData");
     }
@@ -38,6 +42,10 @@ const Mypage = () => {
 
     const onContractList = () => {
         navigate("/contractList");
+    }
+
+    if (!user){
+        return <div>Error: User not found'</div>
     }
 
     return (
@@ -71,7 +79,6 @@ const Mypage = () => {
                                         <div className = 'blueFont' style = {{border: 'none',cursor: "pointer"}} onClick = {onChangeData}>정보 변경</div>
                                         <div style = {{color: '#d3d3d3', border: 'none', cursor: "pointer"}} onClick = {handleShow} >회원 탈퇴</div>
                                     </div>
-                                    <div style = {{color: 'gray', border: 'none', margin: '10px', cursor: "pointer"}} onClick = {handleShow} >회원 탈퇴</div>
                                     <Unregister show={showModal} handleClose={handleClose} />
                                 </div>
                             </div>     
@@ -82,15 +89,26 @@ const Mypage = () => {
                                         <div style={{marginLeft:"10px", marginRight:'15px'}}>임대 중</div>
                                     </div>
                                     <div>
-                                        <ContractCard/>
+                                        {contract && Array.isArray(contract)?(
+                                            contract.map((it) => (
+                                                user && it.landlordID && user._id === it.landlordID?(
+                                                    <ContractCard id = {it.itemID} info = {it}/>
+                                                ):null))
+                                            ):null
+                                        }
                                     </div>
                                     <div style = {{display: "flex", alignItems: 'center', textAlign: 'center'}}>
                                         <img src={house} alt='house_pic' width = '30px' height = 'auto'/>
                                         <div style={{marginLeft:"10px", marginRight:'15px'}}>임차 중</div>
                                     </div>
                                     <div style = {{display:'flex', gap: '17px'}}>
-                                        <ContractCard/>
-                                        <ContractCard/>
+                                        {contract && Array.isArray(contract)?(
+                                            contract.map((it) => (
+                                                user && it.tenantID && user._id === it.tenantID?(
+                                                    <ContractCard id = {it.itemID} info = {it}/>
+                                                ):null))
+                                            ):null
+                                        }
                                     </div>
                                 </div>
                             </div>

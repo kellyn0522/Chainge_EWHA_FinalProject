@@ -1,4 +1,4 @@
-import React, {useState, useReducer, useEffect, useRef} from "react";
+import React, {useState, createContext} from "react";
 import Home from "./pages/Home";  // import pages
 import Mypage from "./pages/Mypage";
 import Item from "./pages/Item";
@@ -25,10 +25,14 @@ import LikedItem from "./pages/LikedItem";
 import "./pont.css";
 import "./icons.css";
 
+export const ContractContext = createContext();
+
 function App() {
   const {user} = useContext(AuthContext);
+  const [contract, setContract] = useState([]);
 
   return (
+  <ContractContext.Provider value = {{contract, setContract}}>
    <ChatContextProvider user = {user}>
     <Container> 
                      <div className="App">
@@ -48,10 +52,10 @@ function App() {
                          <Route path="/userHistory" element={<UserHistory />} />
                           <Route path="*" element ={<Navigate to ="/"/>} />
                          </Routes>
-                      </div>
-                   
+                      </div>             
     </Container>
    </ChatContextProvider>
+   </ContractContext.Provider>
   );
 }
 

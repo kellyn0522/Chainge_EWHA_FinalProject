@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const itemSchema = new mongoose.Schema({
     itemID: {type: String, required: true},
-    ownerName: { type: String, required: true, maxlength: 30 },
+    ownerName: { type: String, required: true, maxlength: 30 },// 삭제하기
     zipCode:{ type: String, required: true, match: /^[0-9]{5}$/  },
     houseAddress:{ type: String, required: true, maxlength: 30 },
     location :{ type: String, required: true, maxlength: 30 },
