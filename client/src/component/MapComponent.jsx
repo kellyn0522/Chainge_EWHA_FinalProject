@@ -1,6 +1,6 @@
 import React, { useRef, useEffect,useState } from "react";
 
-const MapComponent = () => {
+const MapComponent = (items) => {
   const mapContainer = useRef(null);
   const [keyword, setKeyword] = useState(""); // 검색어 상태
   const [places, setPlaces] = useState([]); // 검색 결과 장소 상태
@@ -24,56 +24,34 @@ const MapComponent = () => {
           const map = new window.kakao.maps.Map(mapContainer.current, mapOption);
           const ps = new window.kakako.maps.Places(); // 장소 검색 객체 생성
           const infowindow = new window.kakao.maps.InfoWindow({ zIndex: 1 });
-          
-          const searchPlaces = () => {
-            if (!keyword.trim()) {
-              alert("키워드를 입력해주세요!");
-              return;
-            }
-            ps.keywordSearch(keyword, (data, status) => {
-              if (status === window.kakao.maps.services.Status.OK) {
-                setPlaces(data); // 검색 결과를 상태에 저장
-                displayPlaces(data, map, infowindow); // 검색 결과와 마커를 지도에 표시
-              } else if (status === window.kakao.maps.services.Status.ZERO_RESULT) {
-                alert("검색 결과가 없습니다.");
-              } else {
-                alert("오류가 발생했습니다.");
-              }
-            });
-          };
-          
-          const displayPlaces = (places, map, infowindow) => {
-            removeMarkers(); // 기존 마커 제거
+          const displayMarkers = () => {
+            markers.current.forEach((marker) => marker.setMap(null));
+            markers.current = [];
+
             const bounds = new window.kakao.maps.LatLngBounds();
 
-            places.forEach((place, index) => {
-              const position = new window.kakao.maps.LatLng(place.y, place.x);
-              const marker = new window.kakao.maps.Marker({
-                position,
-                map,
-              });
+            items.forEach((item) => {
+              const position = new window.kakao.maps.LatLng(item.latitude, item.longitude); // 아이템의 위치 사용
+              const marker = new window.kakao.maps.Marker({ position, map });
 
-              // 마커 클릭 이벤트 추가
               window.kakao.maps.event.addListener(marker, "click", () => {
-                infowindow.setContent(`<div style="padding:5px;">${place.place_name}</div>`);
+                infowindow.setContent(`<div style="padding:5px;">${item.name}</div>`);
                 infowindow.open(map, marker);
               });
 
-              markers.current.push(marker); // 생성한 마커를 배열에 추가
-              bounds.extend(position); // 경계에 위치 추가
+              markers.current.push(marker);
+              bounds.extend(position);
             });
 
-            map.setBounds(bounds); // 모든 위치를 포함하도록 지도 범위 설정
+            map.setBounds(bounds);
           };
-          
-          const removeMarkers = () => {
-            markers.current.forEach((marker) => marker.setMap(null));
-            markers.current = [];
-          }
-          document.getElementById("search-btn").onclick = searchPlaces;
+
+          displayMarkers();
         }
       });
     };
+
+          
 
     document.head.appendChild(script);
 
@@ -81,7 +59,7 @@ const MapComponent = () => {
       // 클린업: 스크립트 제거
       document.head.removeChild(script);
     };
-  }, [keyword]);
+  }, [items]);
 
   
 
