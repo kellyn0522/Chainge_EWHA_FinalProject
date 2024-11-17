@@ -88,7 +88,7 @@ const Home = () => {
                         <Button className="noto-sans-kr green" style = {{color: 'white', border: 'none'}} onClick = {onCreateItem}>매물 등록</Button>
                     </>)}
                     </div>
-                    <MapComponent />
+                    <MapComponent items = {getSearchResult()}/>
                     <div className= "list_wrapper">
                         {getItemError && <p>Error: {getItemError}</p>}
                         {getSearchResult().map(it => (
