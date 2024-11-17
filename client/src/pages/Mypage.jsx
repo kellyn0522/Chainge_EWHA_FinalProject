@@ -47,6 +47,7 @@ const Mypage = () => {
     if (!user){
         return <div>Error: User not found'</div>
     }
+    console.log('userrrrr: ',{user})
 
     return (
         <Container>
@@ -62,7 +63,10 @@ const Mypage = () => {
                                     <div style ={{display:'flex', flexDirection: ' column', alignItems:'flex-start', width: '400px'}}>
                                     <Card style = {{width: '400px', marginBottom:'5px'}}>
                                         <Card.Body className="noto-sans-kr">
-                                            <Card.Text>이름: {user.name}</Card.Text>
+                                            <div style = {{display : 'flex', alignItems: 'center'}}>
+                                                <Card.Text>이름: {user.name}</Card.Text>
+                                                {user?.realEstateAgent && <Badge style = {{marginLeft: '7px', marginBottom : '0.9rem', alignItems:'center'}}>중개사</Badge>}
+                                            </div>
                                             <Card.Text>닉네임: {user.nickName}</Card.Text>
                                             <Card.Text>전화번호: {user.phoneNumber}</Card.Text>
                                             <Card.Text>Email: {user.email}</Card.Text>

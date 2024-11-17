@@ -41,7 +41,8 @@ const HouseItem = ({itemId}) => {
 
     useEffect(() => {
         if (user && item ){
-            setLiked(user.likedItemId.includes(itemId));
+            const likedItems = user.likedItemId || [];
+            setLiked(likedItems.includes(itemId));
         }
     }, [user, item, itemId]);
 

@@ -15,9 +15,9 @@ const createToken = (_id) => {
 const registerUser = async (req, res) => {
 
     try {
-        const { name, nickName, email, phoneNumber,password } = req.body;
+        const { name, nickName, email, phoneNumber,password, realEstateAgent } = req.body;
 
-        console.log("Received data:", { name, nickName, email, phoneNumber, password });
+        console.log("Received data:", { name, nickName, email, phoneNumber, password, realEstateAgent });
 
         let emailExists = await userModel.findOne({ email });
         let nickNameExists = await userModel.findOne({ nickName });
@@ -34,7 +34,7 @@ const registerUser = async (req, res) => {
 
         if (!validator.isStrongPassword(password)) return res.status(400).json("Password must be a strong password");
 
-        user = new userModel({ name, nickName, email, phoneNumber, password, likedItemId:[] });
+        user = new userModel({ name, nickName, email, phoneNumber, password, likedItemId:[], realEstateAgent });
 
         const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(user.password, salt); // 비밀번호 해싱
@@ -42,7 +42,7 @@ const registerUser = async (req, res) => {
 
         const token = createToken(user._id); // id 받아서 토큰 생성
 
-        res.status(200).json({ _id: user._id, name: user.name, nickName: user.nickName, email: user.email, phoneNumber: user.phoneNumber, token, likedItemId: user.likedItemId });
+        res.status(200).json({ _id: user._id, name: user.name, nickName: user.nickName, email: user.email, phoneNumber: user.phoneNumber, token, likedItemId: user.likedItemId, realEstateAgent:user.realEstateAgent });
 
     } catch (error) {
         console.log(error); // 에러 로그
@@ -77,7 +77,7 @@ const updateUser = async (req, res) => {
         if (result.modifiedCount > 0){
             const update = await userModel.findById(user._id);
             console.log(update);
-            res.status(200).json({ _id: update._id, name: update.name, nickName: update.nickName, email: update.email, phoneNumber: update.phoneNumber, birth : update.birth, identityNum : update.identityNum, zipCode : update.zipCode, houseAddress : update.houseAddress });
+            res.status(200).json({ _id: update._id, name: update.name, nickName: update.nickName, email: update.email, phoneNumber: update.phoneNumber, birth : update.birth, identityNum : update.identityNum, zipCode : update.zipCode, houseAddress : update.houseAddress, likedItemId: update.likedItemId, realEstateAgent:update.realEstateAgent });
         } else{
             return res.status(400).json({error : "사용자를 찾을 수 없습니다."});
         }
@@ -102,7 +102,7 @@ const updateLike = async (req, res) => {
         if (result.modifiedCount > 0){
             const update = await userModel.findById(user._id);
             console.log(update.likedItemId);
-            res.status(200).json({ _id: update._id, name: update.name, nickName: update.nickName, email: update.email, phoneNumber: update.phoneNumber, birth : update.birth, identityNum : update.identityNum, zipCode : update.zipCode, houseAddress : update.houseAddress, likedItemId: update.likedItemId });
+            res.status(200).json({ _id: update._id, name: update.name, nickName: update.nickName, email: update.email, phoneNumber: update.phoneNumber, birth : update.birth, identityNum : update.identityNum, zipCode : update.zipCode, houseAddress : update.houseAddress, likedItemId: update.likedItemId, realEstateAgent:update.realEstateAgent });
         } else{
             return res.status(400).json({error : "사용자를 찾을 수 없습니다."});
         }
@@ -124,7 +124,7 @@ const loginUser = async (req, res) => {
         if (!isValidPassword) return res.status(400).json("Invalid email or password.. ");
         const token = createToken(user._id); 
 
-        res.status(200).json({ _id: user._id, name: user.name , email, token });
+        res.status(200).json({ _id: user._id, name: user.name , email, token, nickName: user.nickName, phoneNumber: user.phoneNumber, likedItemId: user.likedItemId, realEstateAgent:user.realEstateAgent });
 
     } catch (error) {
         console.log(error); 

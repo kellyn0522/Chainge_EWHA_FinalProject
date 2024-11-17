@@ -13,6 +13,11 @@
 
 .green{
   background-color: #002D72;
+  border: none;
+}
+.disable{
+  background-color: #d3d3d3;
+  border: none;
 }
 .green:hover{
   background-color: #002D72;

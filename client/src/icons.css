@@ -14,12 +14,12 @@ span.size-40{
 }
 
 span.liked{
-    color: red;
+    color: #6495ED;
     font-variation-settings: 'FILL' 1;
 }
 
 span.dontlike{
-    color: red;
+    color: #6495ED;
     font-variation-settings: 'FILL' 0;
 }
 
