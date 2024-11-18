@@ -28,7 +28,13 @@ const CreateItemPage = () => {
         hasTV : false, 
         hasAirConditioner : false, 
         hasHeater : false, 
-        hasBlinds : false});
+        hasBlinds : false,
+        hasDresser: false,
+        hasMcrowave: false,
+        hasFridge: false,
+        hasSofa: false,            
+        hasChair: false,
+    });
 
     const onChangebedExist = (e) => {
         const checked = e.target.checked
@@ -463,8 +469,27 @@ const CreateItemPage = () => {
                                 <div className="creatPageText">블라인드</div>
                                 <input type = "checkbox" name = "hasBlinds" checked = {hasItems.hasBlinds} onChange = {onChangeCheckbox} />
                             </div>
+                            <div className="creatPageItem">
+                                <div className="creatPageText">옷장</div>
+                                <input type = "checkbox" name = "hasDresser" checked = {hasItems.hasDresser} onChange = {onChangeCheckbox} />
+                            </div>
+                            <div className="creatPageItem">
+                                <div className="creatPageText">전자레인지</div>
+                                <input type = "checkbox" name = "hasMcrowave" checked = {hasItems.hasMcrowave} onChange = {onChangeCheckbox} />
+                            </div>
+                            <div className="creatPageItem">
+                                <div className="creatPageText">냉장고</div>
+                                <input type = "checkbox" name = "hasFridge" checked = {hasItems.hasFridge} onChange = {onChangeCheckbox} />
+                            </div>
+                            <div className="creatPageItem">
+                                <div className="creatPageText">소파</div>
+                                <input type = "checkbox" name = "hasSofa" checked = {hasItems.hasSofa} onChange = {onChangeCheckbox} />
+                            </div>
+                            <div className="creatPageItem">
+                                <div className="creatPageText">의자</div>
+                                <input type = "checkbox" name = "hasChair" checked = {hasItems.hasChair} onChange = {onChangeCheckbox} />
+                            </div>
                         </div>
-                        
                         <Button className = 'green' style = {{color: 'white', border: 'none', marginTop: '5px'}} type="submit" >
                             { isCreateItemLoading? "Creating your Item":"매물 등록"}
                         </Button>

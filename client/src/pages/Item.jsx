@@ -174,42 +174,64 @@ const Item = () => {
                                 <Card.Title className = 'infoTitle'>옵션</Card.Title>
                                 <Card.Body>
                                     <div className = 'combine-container'>
-                                    <div className = 'combine'>
-                                        <img className = 'infoIcon' src={ac} alt='ac' width = '30px' height = '30px' />
-                                        <div>에어컨</div>
-                                    </div>
-                                    <div className = 'combine'>
-                                        <img className = 'infoIcon' src={dresser} alt='dresser' width = '30px' height = '30px' />
-                                        <div>옷장</div>
-                                    </div>
-                                    <div className = 'combine'>
-                                        <img className = 'infoIcon' src={tv} alt='tv' width = '30px' height = '30px' />
-                                        <div>TV</div>
-                                    </div>
-                                    <div className = 'combine'>
-                                        <img className = 'infoIcon' src={micro} alt='microwave' width = '30px' height = '30px' />
-                                        <div>전자레인지</div>
-                                    </div>
-                                    <div className = 'combine'>
-                                        <img className = 'infoIcon' src={refridge} alt='refridgerator' width = '30px' height = '30px' />
-                                        <div>냉장고</div>
-                                    </div>
-                                    <div className = 'combine'>
-                                        <img className = 'infoIcon' src={king_bed} alt='king_bed' width = '30px' height = '30px' />
-                                        <div>침대(킹)</div>
-                                    </div>
-                                    <div className = 'combine'>
-                                        <img className = 'infoIcon' src={weekend} alt='sofa' width = '30px' height = '30px' />
-                                        <div>소파</div>
-                                    </div>
-                                    <div className = 'combine'>
-                                        <img className = 'infoIcon' src={blind} alt='blind' width = '30px' height = '30px' />
-                                        <div>블라인드</div>
-                                    </div>
-                                    <div className = 'combine'>
-                                        <img className = 'infoIcon' src={chair} alt='chair' width = '30px' height = '30px' />
-                                        <div>의자</div>
-                                    </div>
+                                    {item.hasItems && (
+                                        <>
+                                            {item.hasItems.hasAirConditioner &&(
+                                                <div className = 'combine'>
+                                                    <img className = 'infoIcon' src={ac} alt='ac' width = '30px' height = '30px' />
+                                                    <div>에어컨</div>
+                                                </div>
+                                            )}
+                                            {item.hasItems.hasDresser &&(
+                                                <div className = 'combine'>
+                                                    <img className = 'infoIcon' src={dresser} alt='dresser' width = '30px' height = '30px' />
+                                                    <div>옷장</div>
+                                                </div>
+                                            )}
+                                            {item.hasItems.hasTV &&(
+                                                <div className = 'combine'>
+                                                    <img className = 'infoIcon' src={tv} alt='tv' width = '30px' height = '30px' />
+                                                    <div>TV</div>
+                                                </div>
+                                            )}
+                                            {item.hasItems.hasMcrowave &&(
+                                                <div className = 'combine'>
+                                                    <img className = 'infoIcon' src={micro} alt='microwave' width = '30px' height = '30px' />
+                                                    <div>전자레인지</div>
+                                                </div>
+                                            )}
+                                            {item.hasItems.hasFridge &&(
+                                                <div className = 'combine'>
+                                                    <img className = 'infoIcon' src={refridge} alt='refridgerator' width = '30px' height = '30px' />
+                                                    <div>냉장고</div>
+                                                </div>
+                                            )}
+                                            {item.hasItems.hasSofa &&(
+                                                <div className = 'combine'>
+                                                    <img className = 'infoIcon' src={weekend} alt='sofa' width = '30px' height = '30px' />
+                                                    <div>소파</div>
+                                                </div>
+                                            )}
+                                            {item.hasItems.hasBlinds &&(
+                                                <div className = 'combine'>
+                                                    <img className = 'infoIcon' src={blind} alt='blind' width = '30px' height = '30px' />
+                                                    <div>블라인드</div>
+                                                </div>
+                                            )}
+                                            {item.hasItems.hasChair &&(
+                                                <div className = 'combine'>
+                                                    <img className = 'infoIcon' src={chair} alt='chair' width = '30px' height = '30px' />
+                                                    <div>의자</div>
+                                                </div>
+                                            )}
+                                        </>
+                                    )}
+                                    {item.hasItems.hasAirConditioner &&(
+                                                <div className = 'combine'>
+                                                    <img className = 'infoIcon' src={king_bed} alt='king_bed' width = '30px' height = '30px' />
+                                                    <div>침대(킹)</div>
+                                                </div>
+                                            )}
                                     </div>
                                 </Card.Body>
                             </Card> 
