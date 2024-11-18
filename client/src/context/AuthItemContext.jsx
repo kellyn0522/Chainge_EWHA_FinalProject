@@ -15,7 +15,6 @@ export const AuthItemContextProvider = ({ children }) => {
 
     const [createItemInfo, setCreateItemInfo] = useState({
         itemID:"",
-        ownerName:"", 
         zipCode:"", 
         houseAddress:"", 
         location:"", 
@@ -74,7 +73,6 @@ export const AuthItemContextProvider = ({ children }) => {
         const formData = new FormData();
         formData.append("itemID", createItemInfo.itemID);
         formData.append("ownerId", createItemInfo.ownerId);
-        formData.append("ownerName", createItemInfo.ownerName);
         formData.append("zipCode", createItemInfo.zipCode);
         formData.append("houseAddress", createItemInfo.houseAddress);
         formData.append("location", createItemInfo.location);

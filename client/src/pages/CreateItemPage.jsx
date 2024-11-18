@@ -66,6 +66,7 @@ const CreateItemPage = () => {
                         <Stack gap={3}>
                         
                         <h2 style={{marginBottom: '15px'}}>매물 등록</h2>
+                        <div style={{color: '#6495ED', fontSize: '12px', marginBottom:'10px'}}>* : 필수 작성 항목</div>
                         <Form.Control
                                 type="file"
                                 style = {{marginBottom: '10px'}}
@@ -79,12 +80,15 @@ const CreateItemPage = () => {
                             disabled/>
                         </Form.Group>
                         <Form.Group className='formControl'>
-                            <Form.Label>매물 주소</Form.Label>
+                            <div style = {{display: 'flex', gap: '5px'}}>
+                                <Form.Label>매물 주소</Form.Label>
+                                <Form.Label style={{color: '#6495ED'}}> *</Form.Label>
+                            </div>
                             <Form.Control 
                             type="text" 
                             placeholder="Location" 
                             onChange={
-                                (e) => updateCreateItemInfo({ ...createItemInfo, location: e.target.value, ownerName: user.name, itemID: new Date().getTime(), ownerId: user._id })
+                                (e) => updateCreateItemInfo({ ...createItemInfo, location: e.target.value, itemID: new Date().getTime(), ownerId: user._id })
                             } />
                         </Form.Group>
                         <Form.Group className='formControl'>
@@ -106,7 +110,10 @@ const CreateItemPage = () => {
                             } />
                         </Form.Group>
                         <Form.Group className='formControl'>
-                            <Form.Label>우편번호</Form.Label>
+                            <div style = {{display: 'flex', gap: '5px'}}>
+                                <Form.Label>우편번호</Form.Label>
+                                <Form.Label style={{color: '#6495ED'}}> *</Form.Label>
+                            </div>
                             <Form.Control
                                 type="text"
                                 placeholder="ZipCode"
@@ -117,7 +124,10 @@ const CreateItemPage = () => {
                             />
                         </Form.Group>
                         <Form.Group className='formControl'>
-                            <Form.Label>월세</Form.Label>
+                            <div style = {{display: 'flex', gap: '5px'}}>
+                                <Form.Label>월세</Form.Label>
+                                <Form.Label style={{color: '#6495ED'}}> *</Form.Label>
+                            </div>
                             <Form.Control
                                 type="text"
                                 placeholder="단위: 만원/월"
@@ -127,7 +137,10 @@ const CreateItemPage = () => {
                             />
                         </Form.Group>
                         <Form.Group className='formControl'>
-                            <Form.Label>보증금</Form.Label>
+                            <div style = {{display: 'flex', gap: '5px'}}>
+                                <Form.Label>보증금</Form.Label>
+                                <Form.Label style={{color: '#6495ED'}}> *</Form.Label>
+                            </div>
                             <Form.Control
                                 type="text"
                                 placeholder="단위: 만원"
@@ -146,7 +159,10 @@ const CreateItemPage = () => {
                             } />
                         </Form.Group>
                         <Form.Group className='formControl'>
-                            <Form.Label>방 개수</Form.Label>
+                            <div style = {{display: 'flex', gap: '5px'}}>
+                                <Form.Label>방 개수</Form.Label>
+                                <Form.Label style={{color: '#6495ED'}}> *</Form.Label>
+                            </div>
                             <Form.Control 
                             type="text" 
                             placeholder="방 개수"
@@ -155,7 +171,10 @@ const CreateItemPage = () => {
                             } />
                         </Form.Group>
                         <Form.Group className='formControl'>
-                            <Form.Label>화장실 개수</Form.Label>
+                            <div style = {{display: 'flex', gap: '5px'}}>
+                                <Form.Label>화장실 개수</Form.Label>
+                                <Form.Label style={{color: '#6495ED'}}> *</Form.Label>
+                            </div>
                             <Form.Control 
                             type="text" 
                             placeholder="화장실 개수"

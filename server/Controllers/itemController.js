@@ -10,7 +10,6 @@ const registerItem = async (req, res) => {
     try {
        const{
         itemID, 
-        ownerName, 
         zipCode, 
         houseAddress, 
         location, 
@@ -40,16 +39,13 @@ const registerItem = async (req, res) => {
         deposit
         } = req.body;
 
-        console.log("Received data:", {ownerName, location });
-
         let itemExists = await itemModel.findOne({ itemID });
 
         if (itemExists) return res.status(400).json("item already exists... ");
       
 
         Item = new itemModel({ 
-            itemID, 
-            ownerName, 
+            itemID,
             zipCode, 
             houseAddress, 
             location, 
@@ -83,8 +79,7 @@ const registerItem = async (req, res) => {
         await Item.save();
 
         res.status(200).json({ 
-            itemID: Item.itemID,  
-            ownerName: Item.ownerName, 
+            itemID: Item.itemID,
             zipCode: Item.zipCode, 
             houseAddress: Item.houseAddress, 
             location: Item.location, 

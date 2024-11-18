@@ -97,13 +97,6 @@ const ChangingItemData = () => {
                                 onChange={(e) => updateItemUpdaterInfo({ imageFile: e.target.files[0] })}
                         />
                         <Form.Group className='formControl'>
-                            <Form.Label>소유주 이름</Form.Label>
-                            <Form.Control 
-                            type="text" 
-                            placeholder= {item.ownerName}
-                            disabled/>
-                        </Form.Group>
-                        <Form.Group className='formControl'>
                             <Form.Label>매물 주소</Form.Label>
                             <Form.Label className='blueFont'>{item.location}</Form.Label>
                         </Form.Group>
