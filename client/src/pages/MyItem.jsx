@@ -6,6 +6,7 @@ import { AuthItemContext } from "../context/AuthItemContext";
 import { AuthContext } from "../context/AuthContext";
 import "../component/HouseItem.css";
 import {useNavigate} from "react-router-dom";
+import add_circle from '../icons/add_circle.svg';
 
 const MyItem = ({show ,handleClose}) => {
     const [items, setItems] = useState([]);
@@ -33,7 +34,7 @@ const MyItem = ({show ,handleClose}) => {
     }
 
     return (<>
-        <Modal show = {show} onHide={handleClose} className='modalSize'>
+        <Modal show = {show} onHide={handleClose} className='longModalSize'>
             <Modal.Header closeButton>
                 <div className = "noto-sans-kr">내 매물 목록</div>
             </Modal.Header>
@@ -42,6 +43,7 @@ const MyItem = ({show ,handleClose}) => {
                     <Row>
                         <Col xs={9} style = {{height: "400px"}}>
                             <Stack gap={3}>
+                                <div style = {{display: 'flex'}}>
                                 <div className= "list_wrapper">
                                     {getItemError && <p>Error: {getItemError}</p>}
                                     {items.map(it => (
@@ -50,7 +52,8 @@ const MyItem = ({show ,handleClose}) => {
                                         ):null
                                     ))}
                                 </div>
-                                <Button className="noto-sans-kr green" style = {{color: 'white', border: 'none', width:'40px', height:'40px', marginTop:'100px'}} onClick = {onCreateItem}>+</Button>
+                                <img src={add_circle} alt='add_circle' width = '50px' height = '50px' style = {{cursor: "pointer", margin:'120px 20px 0px 20px'}} onClick = {onCreateItem} />
+                                </div>
                             </Stack>
                         </Col>
                     </Row>

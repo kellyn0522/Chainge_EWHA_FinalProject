@@ -19,6 +19,9 @@
   background-color: #d3d3d3;
   border: none;
 }
+.skyblue{
+  background-color: #6495ED !important;
+}
 .green:hover{
   background-color: #002D72;
 }
