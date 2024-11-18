@@ -30,7 +30,7 @@ const CreateItemPage = () => {
         hasHeater : false, 
         hasBlinds : false,
         hasDresser: false,
-        hasMcrowave: false,
+        hasMicrowave: false,
         hasFridge: false,
         hasSofa: false,            
         hasChair: false,
@@ -475,7 +475,7 @@ const CreateItemPage = () => {
                             </div>
                             <div className="creatPageItem">
                                 <div className="creatPageText">전자레인지</div>
-                                <input type = "checkbox" name = "hasMcrowave" checked = {hasItems.hasMcrowave} onChange = {onChangeCheckbox} />
+                                <input type = "checkbox" name = "hasMicrowave" checked = {hasItems.hasMicrowave} onChange = {onChangeCheckbox} />
                             </div>
                             <div className="creatPageItem">
                                 <div className="creatPageText">냉장고</div>

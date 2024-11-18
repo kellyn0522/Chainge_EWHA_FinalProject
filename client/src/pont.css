@@ -127,7 +127,7 @@
   display: flex;
   overflow-y:auto;
   gap: 20px;
-  max-height: 350px;
+  max-height: 60vh;
   padding: 10px;
 }
 
@@ -136,15 +136,20 @@
 }
 
 .longModalSize .modal-body{
-  max-height: 350px;
+  max-height: 60vh;
+  overflow-y:auto;
 }
 .longModalSize .modal-content{
-  min-width: 800px;
+  width: 100%;
+  min-width: 300px;
+  max-width: 800px;
+  margin: auto;
 }
+
 .longModalSize .modal-dialog{
-  position:absolute;
-  top: 20%;
-  left: 25%;
+  width: 100%;
+  max-width: 800px;
+  margin: auto;
 }
 
 .contractButton{

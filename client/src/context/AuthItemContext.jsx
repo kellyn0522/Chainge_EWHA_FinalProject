@@ -33,7 +33,7 @@ export const AuthItemContextProvider = ({ children }) => {
             hasHeater : false, 
             hasBlinds : false,
             hasDresser: false,
-            hasMcrowave: false,
+            hasMicrowave: false,
             hasFridge: false,
             hasSofa: false,
             hasChair: false,

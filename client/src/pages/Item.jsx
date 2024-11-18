@@ -42,6 +42,7 @@ const Item = () => {
         isFindItemLoading,
     } = useContext(AuthItemContext);
     const [item, setItem] = useState(null)
+    const itemHasItems = item?.hasItems? (typeof item.hasItems === 'string'? JSON.parse(item.hasItems): item.hasItems) :null;
 
     const handleLike = (event) => {
         event.stopPropagation();
@@ -174,51 +175,51 @@ const Item = () => {
                                 <Card.Title className = 'infoTitle'>옵션</Card.Title>
                                 <Card.Body>
                                     <div className = 'combine-container'>
-                                    {item.hasItems && (
+                                    {itemHasItems && (
                                         <>
-                                            {item.hasItems.hasAirConditioner &&(
+                                            {itemHasItems.hasAirConditioner &&(
                                                 <div className = 'combine'>
                                                     <img className = 'infoIcon' src={ac} alt='ac' width = '30px' height = '30px' />
                                                     <div>에어컨</div>
                                                 </div>
                                             )}
-                                            {item.hasItems.hasDresser &&(
+                                            {itemHasItems.hasDresser &&(
                                                 <div className = 'combine'>
                                                     <img className = 'infoIcon' src={dresser} alt='dresser' width = '30px' height = '30px' />
                                                     <div>옷장</div>
                                                 </div>
                                             )}
-                                            {item.hasItems.hasTV &&(
+                                            {itemHasItems.hasTV &&(
                                                 <div className = 'combine'>
                                                     <img className = 'infoIcon' src={tv} alt='tv' width = '30px' height = '30px' />
                                                     <div>TV</div>
                                                 </div>
                                             )}
-                                            {item.hasItems.hasMcrowave &&(
+                                            {itemHasItems.hasMicrowave &&(
                                                 <div className = 'combine'>
                                                     <img className = 'infoIcon' src={micro} alt='microwave' width = '30px' height = '30px' />
                                                     <div>전자레인지</div>
                                                 </div>
                                             )}
-                                            {item.hasItems.hasFridge &&(
+                                            {itemHasItems.hasFridge &&(
                                                 <div className = 'combine'>
                                                     <img className = 'infoIcon' src={refridge} alt='refridgerator' width = '30px' height = '30px' />
                                                     <div>냉장고</div>
                                                 </div>
                                             )}
-                                            {item.hasItems.hasSofa &&(
+                                            {itemHasItems.hasSofa &&(
                                                 <div className = 'combine'>
                                                     <img className = 'infoIcon' src={weekend} alt='sofa' width = '30px' height = '30px' />
                                                     <div>소파</div>
                                                 </div>
                                             )}
-                                            {item.hasItems.hasBlinds &&(
+                                            {itemHasItems.hasBlinds &&(
                                                 <div className = 'combine'>
                                                     <img className = 'infoIcon' src={blind} alt='blind' width = '30px' height = '30px' />
                                                     <div>블라인드</div>
                                                 </div>
                                             )}
-                                            {item.hasItems.hasChair &&(
+                                            {itemHasItems.hasChair &&(
                                                 <div className = 'combine'>
                                                     <img className = 'infoIcon' src={chair} alt='chair' width = '30px' height = '30px' />
                                                     <div>의자</div>
@@ -226,12 +227,13 @@ const Item = () => {
                                             )}
                                         </>
                                     )}
-                                    {item.hasItems.hasAirConditioner &&(
-                                                <div className = 'combine'>
-                                                    <img className = 'infoIcon' src={king_bed} alt='king_bed' width = '30px' height = '30px' />
-                                                    <div>침대(킹)</div>
-                                                </div>
-                                            )}
+                                    {item?.bedSize &&(
+                                        <div className = 'combine'>
+                                            <img className = 'infoIcon' src={king_bed} alt='king_bed' width = '30px' height = '30px' />
+                                            <div>침대({item.bedSize})</div>
+                                        </div>
+                                    )}
+                                    {item.hasItems? console.log(item.hasItems.hasChair):null}
                                     </div>
                                 </Card.Body>
                             </Card> 

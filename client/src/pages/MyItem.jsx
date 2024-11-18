@@ -35,28 +35,25 @@ const MyItem = ({show ,handleClose}) => {
 
     return (<>
         <Modal show = {show} onHide={handleClose} className='longModalSize'>
-            <Modal.Header closeButton>
-                <div className = "noto-sans-kr">내 매물 목록</div>
+            <Modal.Header closeButton style = {{display : 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                <div className = "noto-sans-kr" style = {{flex : 1}}>내 매물 목록</div>
+                {user && (<>
+                        <Button className="noto-sans-kr green" style = {{color: 'white', border: 'none', width: '80px', height: '30px', fontSize: '12px', alignItems: 'center', marginRight: '20px'}} onClick = {onCreateItem}>매물 등록</Button>
+                    </>)}
             </Modal.Header>
             <Modal.Body className = "noto-sans-kr">
                 <Form>
-                    <Row>
-                        <Col xs={9} style = {{height: "400px"}}>
-                            <Stack gap={3}>
-                                <div style = {{display: 'flex'}}>
-                                <div className= "list_wrapper">
+                                <div className= "list_column" style = {{display: 'flex'}}>
                                     {getItemError && <p>Error: {getItemError}</p>}
                                     {items.map(it => (
                                         userID === it.ownerId?(
                                             <HouseItem itemId={it.itemID} />
                                         ):null
                                     ))}
+                                    <img src={add_circle} alt='add_circle' width = '50px' height = '50px' style = {{cursor: "pointer", margin:'120px 20px 0px 0px'}} onClick = {onCreateItem} />
+                                
                                 </div>
-                                <img src={add_circle} alt='add_circle' width = '50px' height = '50px' style = {{cursor: "pointer", margin:'120px 20px 0px 20px'}} onClick = {onCreateItem} />
-                                </div>
-                            </Stack>
-                        </Col>
-                    </Row>
+                                
                 </Form>
             </Modal.Body>
         </Modal>
