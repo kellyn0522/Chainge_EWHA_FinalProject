@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: MIT  
 pragma solidity ^0.8.0;
 
 contract SmartContract {
@@ -84,8 +84,8 @@ contract SmartContract {
     constructor(
         Person memory _lessor,
         Person memory _tenant,
-        // BankDetails memory _lessorBankDetails,
-        // BankDetails memory _tenantBankDetails,
+        BankDetails memory _lessorBankDetails,
+        BankDetails memory _tenantBankDetails,
         RentalDetails memory _rentalDetails,
         Signature memory _signature
     ) {
@@ -100,11 +100,11 @@ contract SmartContract {
             period : 365 days,
             endDate : block.timestamp + 365 days,
             status : ContractStatus.Pending
-        }); 
+        }); */
 
         
         lessorBankDetails = _lessorBankDetails;
-        tenantBankDetails = _tenantBankDetails; */
+        tenantBankDetails = _tenantBankDetails; 
 
         rentalDetails = _rentalDetails;
         // rentalDetails.endDate = _rentalDetails.startDate + (_rentalDetails.period * 1 days);
