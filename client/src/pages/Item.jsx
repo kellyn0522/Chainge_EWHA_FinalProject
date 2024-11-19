@@ -91,11 +91,19 @@ const Item = () => {
     const onClickUpdate = () => {
         navigate(`/changingItem/${id}`);
     }
+
+    const makeContract = () => {
+        if(!isFindItemLoading && !findItemError && item){
+            navigate(`/checkIdentity/${id}`);
+        }
+    }
+    /*
     const makeContract = () => {
         if(!isFindItemLoading && !findItemError && item){
             navigate(`/makeContract/${item.itemID}`);
         }
-    }
+    }*/
+
     //<img src = {item.imageFile} style = {{width: '300px', height: 'auto', border: '2px solid #ccc', display: ' block', margin: '0 auto'}} />
 
     return (<>
