@@ -81,7 +81,7 @@ const CheckIdentity = () => {
                             </div>
                             <div className='contractButton' style={{marginTop: '70px'}}>
                                 <Button style = {{backgroundColor: '#5B6A82', color: 'white', border: 'none', marginTop: '5px', width: '110px'}} onClick = {goToItem}>뒤로가기</Button>
-                                <Button style = {{color: 'white', border: 'none', backgroundColor: checked?'#002D72':'#5B6A82', width: '110px'}} disabled = {!checked} onClick = {makeContract}>다음</Button>
+                                <Button style = {{color: 'white', border: 'none', backgroundColor: '#002D72', width: '110px', opacity: checked? 1: 0.6}} disabled = {!checked} onClick = {makeContract}>다음</Button>
                             </div>
                         </Stack>
                     </Col>
