@@ -7,7 +7,7 @@ import { AuthItemContext } from "../context/AuthItemContext";
 import { AuthContext } from "../context/AuthContext";
 import { Button, Card, Row, Col, Container } from "react-bootstrap";
 import DeleteItemData from "./DeleteItemData";
-import  UserChat  from "../components/chat/UserChat";
+import  ChatEach  from "../components/chat/ChatEach";
 import ac from '../icons/ac_unit.svg';
 import bed from '../icons/bed.svg';
 import blind from '../icons/blinds.svg';
@@ -24,6 +24,8 @@ import house from '../icons/house.svg';
 import { ChatContext } from "../context/ChatContext";
 
 const Item = () => {
+    const [showModal, setShowModal] = useState(false);
+    const handleClose = () => setShowModal(false);
     const [showModalItem, setShowModalItem] = useState(false);
     const handleShowItem = () => setShowModalItem(true);
     const handleCloseItem = () => setShowModalItem(false);
@@ -100,15 +102,16 @@ const Item = () => {
             navigate(`/checkIdentity/${id}`);
         }
     }
-    const onClickChatInd = (id) => {
-        const existingChat = userChats.find(chat => chat.members.includes(id));
+    const onClickChatInd = () => {
+        const id = item.ownerId;
+        const existingChat = userChats.find(c => c.members.includes(id));
         if (existingChat){
             updateCurrentChat(existingChat);
         }else{
             const newChat = createChat(user._id, id);
-            updateCurrentChat(newChat);
+            updateCurrentChat(newChat);            
         }
-        return <ChatBox/>
+        setShowModal(true);
     }
     console.log('!!!!!!!!!!!!!!!!', potentialChats, '!!!!!!!!!!!!!!!!', userChats);
 
@@ -143,7 +146,8 @@ const Item = () => {
                                         <>
                                             <div style = {{display : 'flex', alignItems: 'center', gap: '20px', marginBottom : '10px'}}>
                                                 <span className={`material-symbols-outlined ${liked? 'liked':'dontlike'}`} style={{cursor: "pointer"}} onClick = {handleLike}>favorite</span>
-                                                <img src={chat} alt='chat' width = '30px' height = '30px' style = {{cursor: "pointer"}} onClick = {onClickChat} />
+                                                <img src={chat} alt='chat' width = '30px' height = '30px' style = {{cursor: "pointer"}} onClick = {onClickChatInd} />
+                                                {showModal && <ChatEach show = {showModal} handleClose = {handleClose} />}
                                                 <Button className="noto-sans-kr green" style = {{color: 'white', border: 'none'}} onClick = {makeContract}>거래하기</Button>
                                             </div>
                                         </>
@@ -165,20 +169,6 @@ const Item = () => {
                                 </Card>
                             </div> 
                         </div>
-                        <div className="all-users">
-                            {userChats?.map((chat) => {
-                                console.log(chat, chat._id, item.ownerId);
-                                if (chat._id === item.ownerId){
-                                    <img src={chat} alt='chat' width = '30px' height = '30px' style = {{cursor: "pointer"}} onClick = {() => onClickChatInd(item.ownerId)} />
-                        
-                            }})}
-                            {potentialChats?.map((u) => {
-                                console.log(u, u._id, item.ownerId);
-                                if (u._id === item.ownerId){
-                                    <img src={chat} alt='chat' width = '30px' height = '30px' style = {{cursor: "pointer"}} onClick = {() => onClickChatInd(item.ownerId)} />
-                                }})
-                            }
-                        </div>                        
                         <div style = {{marginTop:'20px'}}>
                             <div className = "optionCard">
                             <Card>
