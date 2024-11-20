@@ -39,14 +39,7 @@ const registerItem = async (req, res) => {
         deposit
         } = req.body;
 
-<<<<<<< HEAD
-        console.log("Received data:", {ownerName, location });
-        console.log("Received data:", req.body);
-        console.log("Latitude:", req.body.latitude);
-        console.log("Longitude:", req.body.longitude);
-        
-=======
->>>>>>> badd544a42bc67598fbe4dd009ea0c37a55f9b1f
+
         let itemExists = await itemModel.findOne({ itemID });
 
         if (itemExists) return res.status(400).json("item already exists... ");
