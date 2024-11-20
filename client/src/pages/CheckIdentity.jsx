@@ -13,6 +13,14 @@ const CheckIdentity = () => {
     } = useContext(AuthContext);
     const [checked, setChecked] = useState(false);
     const [account, setAccount] = useState(false);
+
+    const [userInfo, setUserInfo] = useState({
+        tenantID: user._id,
+        tenantphoneNum: user.phoneNumber || '',
+        tenantBirth:user.birth || '',
+        tenantidentityNum: user.identityNum || '',
+        metamaskAdd: '',
+    });
     
     if (!user){
         return <div>잘못된 접근입니다.</div>
@@ -27,7 +35,7 @@ const CheckIdentity = () => {
     }
 
     const makeContract = () => {
-        navigate(`/makeContract/${id}`);
+        navigate(`/makeContract/${id}`, {state: {userInfo}});
     }
 
     const goToItem = () => {
@@ -58,22 +66,21 @@ const CheckIdentity = () => {
                                 placeholder={user.email} 
                                 disabled 
                             />
-                            <Form.Control
-                                type="tel"
-                                placeholder="Phone Number"
-                                maxLength="13"
-                            />
                             <div style = {{display:'flex', gap:'10px'}}>
                                 <Form.Control 
                                     type="text" 
                                     placeholder="생년월일" 
                                     maxLength="6"
+                                    onChange={(e) => setUserInfo
+                                        ({ ...userInfo, tenantBirth: e.target.value })}
                                 />
                                 <div>-</div>
                                 <Form.Control 
                                     type="password" 
                                     placeholder="주민등록번호" 
                                     maxLength="7"
+                                    onChange={(e) => setUserInfo
+                                        ({ ...userInfo, tenantidentityNum: e.target.value })}
                                 />
                             </div>
                             <div style = {{display:'flex', gap:'10px'}}>
@@ -81,6 +88,8 @@ const CheckIdentity = () => {
                                 type="tel"
                                 placeholder="Phone Number"
                                 maxLength="13"
+                                onChange={(e) => setUserInfo
+                                    ({ ...userInfo, tenantphoneNum: e.target.value })}
                                 />
                                 <Button className = 'lightBlue' style = {{color: 'white', border: 'none', width : '140px'}} onClick = {updateCheck}>{!checked?'인증':'인증 완료'}</Button>
                             </div>
@@ -88,6 +97,13 @@ const CheckIdentity = () => {
                                 <Button className = 'lightBlue' style = {{color: 'white', border: 'none', width : '140px'}} onClick = {updateAccount}>계좌 연결</Button>
                                 {!account? (<div>계좌 연결이 필요합니다. </div>): <div>계좌 연결이 완료되었습니다. </div>}
                             </div>
+                            <Form.Control 
+                                    type="text" 
+                                    placeholder="메타마스크 주소" 
+                                    maxLength="42"
+                                    onChange={(e) => setUserInfo
+                                        ({ ...userInfo, metamaskAdd: e.target.value })}
+                            />
                             <div className='contractButton' style={{marginTop: '70px'}}>
                                 <Button style = {{backgroundColor: '#5B6A82', color: 'white', border: 'none', marginTop: '5px', width: '110px'}} onClick = {goToItem}>뒤로가기</Button>
                                 <Button style = {{color: 'white', border: 'none', backgroundColor: '#002D72', width: '110px', opacity: checked&&account? 1: 0.6}} disabled = {!checked||!account} onClick = {makeContract}>다음</Button>

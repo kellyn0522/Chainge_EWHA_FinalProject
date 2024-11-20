@@ -8,7 +8,6 @@ import { useNavigate } from "react-router-dom";
 
 
 const CreateItemPage = () => {
-
     const { user } = useContext(AuthContext); 
     const navigate = useNavigate();
     
@@ -32,23 +31,34 @@ const CreateItemPage = () => {
         hasTV : false, 
         hasAirConditioner : false, 
         hasHeater : false, 
-        hasBlinds : false});
+        hasBlinds : false,
+        hasDresser: false,
+        hasMicrowave: false,
+        hasFridge: false,
+        hasSofa: false,
+        hasChair: false,});
     const [addressData, setAddressData] = useState({
         location: "",
         zipCode: "",
         latitude: null,
         longitude: null,
     });
+
     const handlePostcodeSearch = () => {
-        new window.daum.Postcode({
+        if(window.daum && window.daum.maps){
+            window.daum.maps.load(()=>{
+            
+            const {daum} = window;
+            
+            new daum.Postcode({
             oncomplete: function (data) {
                 const roadAddress = data.roadAddress;
                 const zonecode = data.zonecode;
 
                 // 좌표 변환 API 호출 (Kakao REST API 사용)
-                const geocoder = new window.daum.maps.services.Geocoder();
+                const geocoder = new daum.maps.services.Geocoder();
                 geocoder.addressSearch(roadAddress, (result, status) => {
-                    if (status === window.daum.maps.services.Status.OK) {
+                    if (status === kakao.maps.services.Status.OK) {
                         const { x, y } = result[0]; // 경도 (x), 위도 (y)
                         setAddressData({
                             location: roadAddress,
@@ -63,11 +73,35 @@ const CreateItemPage = () => {
                             latitude: y,
                             longitude: x,
                         });
+                    }else{
+                        console.error("주소 변환 실패")
                     }
                 });
             },
         }).open();
+    });
+    }else{
+        console.error("Kakao Map API is not loaded properly");
+    }
     };
+
+    useEffect(() => {
+        // 스크립트 추가
+        const script = document.createElement("script");
+        script.src = "https://dapi.kakao.com/v2/maps/sdk.js?appkey=774e3b62181c99d1ba97f5efdc1eab76&autoload=true";
+        script.async = true;
+        
+        script.onload = () =>{
+            console.log("Kakao Maps script loaded");
+        }
+
+        document.body.appendChild(script);
+
+        // 클린업
+        return () => {
+            document.body.removeChild(script);
+        };
+    }, []);
 
 
     const onChangebedExist = (e) => {
@@ -83,18 +117,6 @@ const CreateItemPage = () => {
             return newState;
         });
     };
-useEffect(() => {
-    // 스크립트 추가
-    const script = document.createElement("script");
-    script.src = "//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js";
-    script.async = true;
-    document.body.appendChild(script);
-
-    // 클린업
-    return () => {
-        document.body.removeChild(script);
-    };
-}, []);
 
     useEffect(() => {
         updateCreateItemInfo({ ...createItemInfo, hasItems});
@@ -104,15 +126,6 @@ useEffect(() => {
         updateCreateItemInfo({ ...createItemInfo, bedSize: bedExist? createItemInfo.bedSize: "" })
     }, [bedExist])
    // console.log("User in CreateItemPage:", user);
-   useEffect(() => {
-    if (user) {
-        updateCreateItemInfo({
-            ItemId: new Date().getTime(),
-            ownerId: user._id,
-            ownerName: user.name,
-        });
-    }
-}, [user]);
 
     return (<>
         <div>

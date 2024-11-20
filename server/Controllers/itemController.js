@@ -9,19 +9,23 @@ const registerItem = async (req, res) => {
 
     try {
        const{
-        itemID, 
-        zipCode, 
-        houseAddress, 
-        location, 
-        area, 
-        ownerId, 
-        housePrice, 
-        memo, 
-        type, 
-        isContract, 
-        bedSize, 
+        itemID,
+        zipCode,
+        houseAddress,
+        location,
+        latitude, // 위도
+        longitude, // 경도
+        area,
+        ownerId,
+        housePrice,
+        deposit,
+        memo,
+        type,
+        isContract,
+        bedSize,
         hasItems,
         hasAgent,
+        imageFile,
         buildingName,
         floor,
         duplexAvailability,
@@ -35,8 +39,7 @@ const registerItem = async (req, res) => {
         number_of_units_in_the_given_area,
         total_number_of_units,
         parkingSpace,
-        availableMoveInDate,
-        deposit
+        availableMoveInDate
         } = req.body;
 
 
@@ -47,20 +50,22 @@ const registerItem = async (req, res) => {
 
         Item = new itemModel({ 
             itemID,
-            zipCode, 
-            houseAddress, 
-            location, // 도로명 주소
+            zipCode,
+            houseAddress,
+            location,
             latitude, // 위도
             longitude, // 경도
-            area, 
-            ownerId, 
-            housePrice, 
-            memo, 
-            type, 
-            isContract, 
-            bedSize, 
+            area,
+            ownerId,
+            housePrice,
+            deposit,
+            memo,
+            type,
+            isContract,
+            bedSize,
             hasItems,
             hasAgent,
+            imageFile,
             buildingName,
             floor,
             duplexAvailability,
@@ -74,8 +79,7 @@ const registerItem = async (req, res) => {
             number_of_units_in_the_given_area,
             total_number_of_units,
             parkingSpace,
-            availableMoveInDate,
-            deposit
+            availableMoveInDate
         });
 
 
@@ -97,7 +101,6 @@ const registerItem = async (req, res) => {
             bedSize: Item.bedSize, 
             hasItems: Item.hasItems,
             hasAgent: Item.hasAgent,
-            buildingName: Item.buildingName,
             floor: Item.floor,
             duplexAvailability: Item.duplexAvailability,
             exclusiveArea: Item.exclusiveArea,
@@ -128,8 +131,6 @@ const updateItem = async (req, res) => {
             bedSize, 
             hasItems,
             hasAgent,
-            longitude,
-            latitude,
             duplexAvailability,
             exclusiveArea,
             contractArea,

@@ -88,8 +88,8 @@ const Home = () => {
                         <Button className="noto-sans-kr green" style = {{color: 'white', border: 'none'}} onClick = {onCreateItem}>매물 등록</Button>
                     </>)}
                     </div>
-                    <Map/>
-                    <div className= "list_wrapper">
+                    <Map />
+                    <div className= "list_wrapper" style = {{marginTop : '20px'}}>
                         {getItemError && <p>Error: {getItemError}</p>}
                         {getSearchResult().map(it => (
                             userID !== it.ownerId?(

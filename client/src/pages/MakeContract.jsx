@@ -1,6 +1,6 @@
 import {useEffect, useState, useContext} from "react";
 import Logo from "../component/Logo";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { AuthItemContext } from "../context/AuthItemContext";
 import { AuthContext } from "../context/AuthContext";
 import { Button, Card, Row, Col, Container, Stack } from "react-bootstrap";
@@ -9,6 +9,7 @@ import {ContractContext} from '../App';
 
 const MakeContract = () => {
     const navigate = useNavigate();
+    const {userInfo} = location.state || {};
     const {id} = useParams();
     const { user } = useContext(AuthContext);
     const {
@@ -20,19 +21,22 @@ const MakeContract = () => {
     const {setContract} = useContext(ContractContext);
     const [info, setInfo] = useState(
         {
-            itemID:'',
+            itemID: item?.itemID,
+            tenantID: userInfo?.tenantID || user?._id,
+            tenantphoneNum: userInfo?.tenantphoneNum || user?.phoneNumber,
+            tenantBirth:userInfo?.tenantBirth || user?.birth,
+            tenantidentityNum: userInfo?.tenantidentityNum || user?.identityNum,
+            metamaskAdd: userInfo?.metamaskAdd,
+            price: item?.housePrice,
+            deposit: item?.deposit,
+
             landlordID: '',
             landlordphoneNum: '',
             landlordBirth: '',
-            tenantID: '',
-            tenantphoneNum: '',
-            tenantBirth:'',
-            tenantidentityNum: '',
+
             start:'',
             end:'',
             period:'',
-            price: '',
-            deposit: ''
         }
     )
 
@@ -77,14 +81,14 @@ const MakeContract = () => {
     const onContract=(e)=>{
         const newContract = {
             ...info,
-            itemID: item.itemID,
-            tenantID: user._id,
-            tenantphoneNum: user.phoneNumber,
-            tenantBirth:user.birth,
-            tenantidentityNum: user.identityNum,
-            price: item.housePrice,
-            deposit: item.deposit
-
+            itemID: item?.itemID,
+            tenantID: userInfo?.tenantID || user?._id,
+            tenantphoneNum: userInfo?.tenantphoneNum || user?.phoneNumber,
+            tenantBirth:userInfo?.tenantBirth || user?.birth,
+            tenantidentityNum: userInfo?.tenantidentityNum || user?.identityNum,
+            metamaskAdd: userInfo?.metamaskAdd,
+            price: item?.housePrice,
+            deposit: item?.deposit
         }
         setContract((prev) => [...prev, newContract])
         navigate('/');
@@ -111,10 +115,12 @@ const MakeContract = () => {
                                 <div className="infotype">우편번호</div>
                                 <div className = "infoName">{user.zipCode}</div>
                                 <div className ="infotype">주민등록번호</div>
-                                <div className = "infoName">{user.birth}-{user.identityNum}</div>
+                                <div className = "infoName">{info.tenantBirth}-{info.tenantidentityNum}</div>
                                 <div className="infotype">전화번호</div>
-                                <div className = "infoName">{user.phoneNumber.replace(/(\d{3})(\d{3})(\d{4})/,'$1-$2-$3')}</div>
+                                <div className = "infoName">{info.tenantphoneNum.replace(/(\d{3})(\d{3})(\d{4})/,'$1-$2-$3')}</div>
                             </Card.Body>
+                            <div className ="infotype">메타마스크 주소</div>
+                            <div className = "infoName">{info.metamaskAdd}</div>
                         </Card>
                         <Card style={{marginBottom:"20px"}}>
                             <Card.Title className = "infoTitle">계약 상세</Card.Title>

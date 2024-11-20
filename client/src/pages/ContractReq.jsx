@@ -1,10 +1,7 @@
-import { useContext, useState } from "react";
-import { ChatContext } from "../../context/ChatContext";
-import { AuthContext } from "../../context/AuthContext";
-import { unreadNotificationsFunc } from "../../utils/unreadNotifications"; // (경로는 상황에 맞게 수정)
-import moment from "moment";
+import { Modal, Card } from "react-bootstrap";
 
-const ContractReq = () => {/*
+
+const ContractReq = ({show ,handleClose}) => {/*
     const markAllNotificationAsRead = useCallback(() => {
         const mNotifications = notifications.map(n => ({...n, isRead: true}));
         setNotifications(mNotifications);
@@ -17,15 +14,33 @@ const ContractReq = () => {/*
         setNotifications(mNotifications);
     }, [notifications]);
     */
+    const notifications = [{
+        id:'ㅇㅇㅇㅇㅇ',
+        senderId:'ㅇㅇㅇㅇ',
+        message:'ㅇㅇㅇㅇㅇ',
+        isRead: true
+    }, {
+        id:'ㅁㅁㅁㅁㅁ',
+        senderId:'ㅁㅁㅁㅁㅁㅁ',
+        message:'ㅁㅁㅁㅁㅁ',
+        isRead: true
+    }]
     return( 
-        <div>
-            {notifications.map((notification) => (
-                <div key = {notification.id} style = {{backgroundColor: notification.isRead? 'lightgray': 'lightyellow'}}>
-                    <strong>{notification.senderId}</strong>
-                    <p>{notification.message}</p>
+        <Modal show = {show} onHide={handleClose} style = {{minHeight: '50vh', overflowY: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0.75rem'}}>
+            <Modal.Header closeButton>
+                <div className = "noto-sans-kr"> 받은 거래 요청</div>
+            </Modal.Header>
+            <Modal.Body className = "noto-sans-kr">
+                <div>
+                {notifications.map((notification) => (
+                    <Card key = {notification.id} style = {{display: 'flex', justifyContent: 'center', padding: '1rem', gap: '7px'}}>
+                        <strong>ID: {notification.senderId} 님이 거래 요청을 보냈습니다.</strong>
+                        <p style={{marginBottom: '0'}}>거래 요청 한 매물: {notification.message}</p>
+                    </Card>
+                ))}
                 </div>
-            ))}
-        </div>
+            </Modal.Body>
+        </Modal>
     );
 };
 

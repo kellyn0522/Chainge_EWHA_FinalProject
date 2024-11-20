@@ -17,7 +17,6 @@ const itemSchema = new mongoose.Schema({
     hasItems: {type : Object,required: true, maxlength: 30 },
     hasAgent: {type : Boolean,required: false, maxlength: 3 },
     imageFile: {type: String, required: false},
-    buildingName:{type: String, required: false},
     floor: {type: Number, required: false},
     duplexAvailability: {type: Boolean, required: false},
     exclusiveArea: {type: Number, required: false},

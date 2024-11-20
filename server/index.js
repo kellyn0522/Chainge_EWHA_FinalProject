@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const itemRoute = require("./Routes/itemRoute");
 const userRoute = require("./Routes/userRoute");
 const chatRoute = require("./Routes/chatRoute");
+const reqRoute = require("./Routes/reqRoute");
 
 const messageRoute = require("./Routes/messageRoute");
 
@@ -16,6 +17,7 @@ app.use(express.urlencoded({extended: false}));
 app.use("/api/items", itemRoute);
 app.use("/api/users", userRoute);
 app.use("/api/chats" , chatRoute);
+app.use("/api/itemReq" , reqRoute);
 app.use("/api/messages" , messageRoute);
 app.use("/uploads", express.static('uploads'));
 

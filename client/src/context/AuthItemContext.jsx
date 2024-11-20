@@ -13,17 +13,35 @@ export const AuthItemContextProvider = ({ children }) => {
     const [isFindItemLoading, setIsFindItemLoading] = useState(false);
 
     const [createItemInfo, setCreateItemInfo] = useState({
-        itemID: "",
-        ownerName: "",
-        zipCode: "",
-        houseAddress: "",
-        location: "",
-        latitude: "",
-        longitude: "",
-        area: "",
-        housePrice: "",
-        memo: "",
-        type: "",
+        itemID: '',
+        zipCode: '',
+        houseAddress: '',
+        location: '',
+        latitude: '', // 위도
+        longitude: '', // 경도
+        area: '',
+        ownerId: '',
+        housePrice: '',
+        deposit: '',
+        memo: '',
+        type: '',
+        isContract: false,
+        bedSize: '',
+        hasItems: '',
+        hasAgent: false,
+        floor: '',
+        duplexAvailability: '',
+        exclusiveArea: '',
+        contractArea: '',
+        room: '',
+        bathroom: '',
+        facing: '',
+        elevator: '',
+        petFriendly: '',
+        number_of_units_in_the_given_area: '',
+        total_number_of_units: '',
+        parkingSpace: '',
+        availableMoveInDate: '',
     });
 
     const [createItemError, setCreateItemError] = useState(null);
@@ -40,9 +58,9 @@ export const AuthItemContextProvider = ({ children }) => {
 
         try {
             // 필수 필드 검증
-            if (!createItemInfo.itemID || !createItemInfo.ownerName || !createItemInfo.location) {
-                throw new Error("필수 입력값이 누락되었습니다.");
-            }
+            //if (!createItemInfo.itemID || !createItemInfo.ownerName || !createItemInfo.location) {
+            //    throw new Error("필수 입력값이 누락되었습니다.");
+            //}
 
             const formData = new FormData();
             Object.keys(createItemInfo).forEach((key) => {
@@ -84,7 +102,19 @@ export const AuthItemContextProvider = ({ children }) => {
         housePrice: '', 
         memo: '', 
         bedSize: '', 
-        hasItems: '',
+        hasItems: {
+            hasWasher : false,
+            hasDryer : false, 
+            hasTV : false, 
+            hasAirConditioner : false, 
+            hasHeater : false, 
+            hasBlinds : false,
+            hasDresser: false,
+            hasMicrowave: false,
+            hasFridge: false,
+            hasSofa: false,
+            hasChair: false,
+        },
         hasAgent: false,
         buildingName: '',
         duplexAvailability: '',
@@ -129,9 +159,9 @@ export const AuthItemContextProvider = ({ children }) => {
             if (response.error) {
                 console.log("error in updateItem");
                 return setUpdateItemError(response);
+            }
             console.log(response);
             navigate("/");
-            }
 
         } catch (error){
             setUpdateItemError(error.message)

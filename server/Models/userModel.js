@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema({
     likedItemId : { type: [String], required: false },
     contracts : { type: [String], required: false, minlength: 3, maxlength: 30 },
     houseAddress : { type: String, required: false, minlength: 3, maxlength: 30 },
-    realEstateAgent : {type:Boolean, required: false}
+    realEstateAgent : {type:Boolean, required: false},
 }, {
     timestamps: true,
 }
