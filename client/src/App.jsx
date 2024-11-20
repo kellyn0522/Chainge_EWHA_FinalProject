@@ -25,6 +25,7 @@ import LikedItem from "./pages/LikedItem";
 import CheckIdentity from "./pages/CheckIdentity";
 import "./pont.css";
 import "./icons.css";
+import SearchMap from "./component/SearchMap";
 
 export const ContractContext = createContext();
 
@@ -52,6 +53,7 @@ function App() {
                          <Route path="/changingUserData" element={<ChangingUserData />} />
                          <Route path="/userHistory" element={<UserHistory />} />
                          <Route path="/checkIdentity/:id" element={<CheckIdentity />} />
+                         <Route path="/searchMap" element={<SearchMap />} /> {/* Add SearchMap Route */}
                           <Route path="*" element ={<Navigate to ="/"/>} />
                          </Routes>
                       </div>             

@@ -39,37 +39,61 @@ const CreateItemPage = () => {
         latitude: null,
         longitude: null,
     });
+
+    const loadKakaoMapsAPI = () => {
+        return new Promise((resolve, reject) => {
+            if (window.kakao && window.kakao.maps) {
+                window.kakao.maps.load(() => {
+                    console.log("Kakao Maps API 로드 완료");
+                    resolve();
+                });
+            } else {
+                reject("Kakao Maps API가 로드되지 않았습니다.");
+            }
+        });
+    };
     const handlePostcodeSearch = () => {
+        if (!window.daum || !window.daum.Postcode) {
+            console.error("Daum Postcode API가 로드되지 않았습니다.");
+            return;
+        }
+    
         new window.daum.Postcode({
-            oncomplete: function (data) {
+            oncomplete: async function (data) {
                 const roadAddress = data.roadAddress;
                 const zonecode = data.zonecode;
-
-                // 좌표 변환 API 호출 (Kakao REST API 사용)
-                const geocoder = new window.daum.maps.services.Geocoder();
-                geocoder.addressSearch(roadAddress, (result, status) => {
-                    if (status === window.daum.maps.services.Status.OK) {
-                        const { x, y } = result[0]; // 경도 (x), 위도 (y)
-                        setAddressData({
-                            location: roadAddress,
-                            zipCode: zonecode,
-                            latitude: y,
-                            longitude: x,
-                        });
-                        updateCreateItemInfo({
-                            ...createItemInfo,
-                            location: roadAddress,
-                            zipCode: zonecode,
-                            latitude: y,
-                            longitude: x,
-                        });
-                    }
-                });
+    
+                try {
+                    await loadKakaoMapsAPI(); // Kakao API 로드 보장
+                    const geocoder = new window.kakao.maps.services.Geocoder();
+    
+                    geocoder.addressSearch(roadAddress, (result, status) => {
+                        if (status === window.kakao.maps.services.Status.OK) {
+                            const { x, y } = result[0]; // 경도 (x), 위도 (y)
+                            setAddressData({
+                                location: roadAddress,
+                                zipCode: zonecode,
+                                latitude: y,
+                                longitude: x,
+                            });
+                            updateCreateItemInfo({
+                                ...createItemInfo,
+                                location: roadAddress,
+                                zipCode: zonecode,
+                                latitude: y,
+                                longitude: x,
+                            });
+                        } else {
+                            console.error("주소 검색 실패:", status);
+                        }
+                    });
+                } catch (error) {
+                    console.error(error);
+                }
             },
         }).open();
     };
-
-
+   
     const onChangebedExist = (e) => {
         const checked = e.target.checked
         setBedExist(checked);
@@ -83,18 +107,39 @@ const CreateItemPage = () => {
             return newState;
         });
     };
-useEffect(() => {
-    // 스크립트 추가
-    const script = document.createElement("script");
-    script.src = "//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js";
-    script.async = true;
-    document.body.appendChild(script);
 
-    // 클린업
+    //774e3b62181c99d1ba97f5efdc1eab76
+    useEffect(() => {
+    // Kakao Maps API 로드
+    const kakaoScript = document.createElement("script");
+    kakaoScript.src =
+        "https://dapi.kakao.com/v2/maps/sdk.js?appkey=774e3b62181c99d1ba97f5efdc1eab76&libraries=services";
+    kakaoScript.async = true;
+
+    kakaoScript.onload = () => {
+        console.log("Kakao Maps API 로드 완료");
+    };
+
+    document.body.appendChild(kakaoScript);
+
+    // Daum Postcode API 로드
+    const daumScript = document.createElement("script");
+    daumScript.src = "//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js";
+    daumScript.async = true;
+
+    daumScript.onload = () => {
+        console.log("Daum Postcode API 로드 완료");
+    };
+
+    document.body.appendChild(daumScript);
+
     return () => {
-        document.body.removeChild(script);
+        document.body.removeChild(kakaoScript);
+        document.body.removeChild(daumScript);
     };
 }, []);
+
+
 
     useEffect(() => {
         updateCreateItemInfo({ ...createItemInfo, hasItems});
@@ -102,7 +147,8 @@ useEffect(() => {
 
     useEffect(() => {
         updateCreateItemInfo({ ...createItemInfo, bedSize: bedExist? createItemInfo.bedSize: "" })
-    }, [bedExist])
+    }, [bedExist]);
+
    // console.log("User in CreateItemPage:", user);
    useEffect(() => {
     if (user) {
