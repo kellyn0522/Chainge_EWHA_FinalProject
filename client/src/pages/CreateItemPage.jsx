@@ -141,7 +141,7 @@ useEffect(() => {
                             placeholder={user.name}
                             disabled/>
                         </Form.Group>
-                        <Form.Group className='formControl'>
+                        <Form.Group style = {{marginBottom: '10px', display: 'grid', gridTemplateColumns: '1fr 2fr 0.7fr', alignItems: 'center'}}>
                             <div style = {{display: 'flex', gap: '5px'}}>
                                 <Form.Label>매물 주소</Form.Label>
                                 <Form.Label style={{color: '#6495ED'}}> *</Form.Label>
@@ -152,7 +152,7 @@ useEffect(() => {
                             onChange={
                                 (e) => updateCreateItemInfo({ ...createItemInfo, location: e.target.value, itemID: new Date().getTime(), ownerId: user._id })
                             } />
-                            <Button onClick={handlePostcodeSearch}>주소 찾기</Button>
+                            <Button className = 'green' onClick={handlePostcodeSearch}>주소 찾기</Button>
                         </Form.Group>
                         <Form.Group className="formControl">
                                 <Form.Label>우편번호</Form.Label>
