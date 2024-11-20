@@ -5,6 +5,8 @@ const itemSchema = new mongoose.Schema({
     zipCode:{ type: String, required: true, match: /^[0-9]{5}$/  },
     houseAddress:{ type: String, required: true, maxlength: 30 },
     location :{ type: String, required: true, maxlength: 30 },
+    latitude: { type: Number, required: true }, // 위도
+    longitude: { type: Number, required: true }, // 경도
     area :{ type: String, required: true, maxlength: 30 },
     ownerId : { type: String, required: true, minlength: 3, maxlength: 30 },
     housePrice: { type: String, required: true, maxlength: 30 },

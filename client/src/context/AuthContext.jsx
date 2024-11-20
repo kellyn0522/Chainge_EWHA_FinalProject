@@ -104,9 +104,13 @@ export const AuthContextProvider = ({ children }) => {
     console.log("loginInfo", loginInfo);
 
     useEffect(() => {
-        const storedUser = localStorage.getItem("user");
+    const storedUser = localStorage.getItem("user");
+    console.log("Stored user:", storedUser);
+    if (storedUser) {
         setUser(JSON.parse(storedUser));
-    }, []);
+    }
+}, []);
+
 
     /*useEffect(() => {
         const storedUser = localStorage.getItem("user");
