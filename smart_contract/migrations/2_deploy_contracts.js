@@ -16,7 +16,7 @@ module.exports = async function (deployer) {
                 name: "John Doe",
                 phoneNumber: "010-1234-5678",
                 identityNumber: "123456-7890123",
-                addr: "0x44e2AfFCFAD498c14eBd1C042d9B2c72A0dF8BF5", // Ganache 첫 번째 계정
+                addr: "0x44e2AfFCFAD498c14eBd1C042d9B2c72A0dF8BF5",
             };
 
             // 2. 임차인 정보

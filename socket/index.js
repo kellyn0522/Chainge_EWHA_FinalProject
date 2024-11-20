@@ -41,7 +41,7 @@ io.on("connection", (socket) => {
         onlineUsers = onlineUsers.filter(user => user.socketId !== socket.id);
         io.emit("getOnlineUsers", onlineUsers);
     });
-// 누르
+
 });
 
 io.listen(3000);
