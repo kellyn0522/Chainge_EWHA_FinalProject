@@ -32,8 +32,16 @@
 .creatPageItem{
   display: flex;
   align-items: center;
+  justify-content: space-between;
   margin-bottom: 10px;
   font-size: 15px;
+}
+
+.optionCheck{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  column-gap: 80px;
+  row-gap: 10px;
 }
 
 .creatPageText{

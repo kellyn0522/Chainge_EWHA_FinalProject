@@ -63,12 +63,12 @@ const Mypage = () => {
                                     <div style ={{display:'flex', flexDirection: ' column', alignItems:'flex-start', width: '400px'}}>
                                     <Card style = {{width: '400px', marginBottom:'5px'}}>
                                         <Card.Body className="noto-sans-kr">
-                                            <div style = {{display : 'flex', alignItems: 'center'}}>
+                                            <div style = {{display : 'flex', alignItems: 'center', marginBottom : '0.9rem'}}>
                                                 <Card.Text>이름: {user.name}</Card.Text>
                                                 {user?.realEstateAgent && <Badge className = 'skyblue' style = {{marginLeft: '7px', marginBottom : '0.9rem', alignItems:'center'}}>중개사</Badge>}
                                             </div>
                                             <Card.Text>닉네임: {user.nickName}</Card.Text>
-                                            <Card.Text>전화번호: {user.phoneNumber}</Card.Text>
+                                            <Card.Text>전화번호: {user.phoneNumber.replace(/(\d{3})(\d{3})(\d{4})/,'$1-$2-$3')}</Card.Text>
                                             <Card.Text>Email: {user.email}</Card.Text>
                                         </Card.Body>
                                         <div style = {{display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', alignItems:'center', marginLeft:'10px',  marginRight:'10px',  marginBottom:'10px'}}>

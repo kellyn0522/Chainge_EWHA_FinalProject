@@ -113,7 +113,7 @@ const MakeContract = () => {
                                 <div className ="infotype">주민등록번호</div>
                                 <div className = "infoName">{user.birth}-{user.identityNum}</div>
                                 <div className="infotype">전화번호</div>
-                                <div className = "infoName">{user.phoneNumber}</div>
+                                <div className = "infoName">{user.phoneNumber.replace(/(\d{3})(\d{3})(\d{4})/,'$1-$2-$3')}</div>
                             </Card.Body>
                         </Card>
                         <Card style={{marginBottom:"20px"}}>
@@ -199,8 +199,8 @@ const MakeContract = () => {
                             </Card.Body>
                         </Card>
                         <div className='contractButton' style={{marginTop: '15px'}}>
-                            <Button style = {{backgroundColor: '#5B6A82', color: 'white', border: 'none', marginTop: '5px'}} onClick = {goToItem}>돌아가기</Button>
-                            <Button className="green" style = {{color: 'white', border: 'none', marginTop: '5px'}} onClick = {onContract}>거래 요청하기</Button>
+                            <Button style = {{backgroundColor: '#5B6A82', color: 'white', border: 'none', marginTop: '5px', width:'100px'}} onClick = {goToItem}>돌아가기</Button>
+                            <Button className="green" style = {{color: 'white', border: 'none', marginTop: '5px', width: '100px'}} onClick = {onContract}>거래 요청</Button>
                         </div>
                     </Col>
             </Row>

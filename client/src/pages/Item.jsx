@@ -7,6 +7,7 @@ import { AuthItemContext } from "../context/AuthItemContext";
 import { AuthContext } from "../context/AuthContext";
 import { Button, Card, Row, Col, Container } from "react-bootstrap";
 import DeleteItemData from "./DeleteItemData";
+import  UserChat  from "../components/chat/UserChat";
 import ac from '../icons/ac_unit.svg';
 import bed from '../icons/bed.svg';
 import blind from '../icons/blinds.svg';
@@ -20,6 +21,7 @@ import single_bed from '../icons/single_bed.svg';
 import tv from '../icons/tv.svg';
 import weekend from '../icons/weekend_24.svg';
 import house from '../icons/house.svg';
+import { ChatContext } from "../context/ChatContext";
 
 const Item = () => {
     const [showModalItem, setShowModalItem] = useState(false);
@@ -32,6 +34,7 @@ const Item = () => {
         updaterLike,
     } = useContext(AuthContext);
     const [liked, setLiked] = useState(false);
+    const { userChats, isUserChatsLoading, updateCurrentChat, potentialChats, createChat } = useContext(ChatContext);
 
     //const onHistory = () => {
     //    navigate("/userHistory");
@@ -97,12 +100,17 @@ const Item = () => {
             navigate(`/checkIdentity/${id}`);
         }
     }
-    /*
-    const makeContract = () => {
-        if(!isFindItemLoading && !findItemError && item){
-            navigate(`/makeContract/${item.itemID}`);
+    const onClickChatInd = (id) => {
+        const existingChat = userChats.find(chat => chat.members.includes(id));
+        if (existingChat){
+            updateCurrentChat(existingChat);
+        }else{
+            const newChat = createChat(user._id, id);
+            updateCurrentChat(newChat);
         }
-    }*/
+        return <ChatBox/>
+    }
+    console.log('!!!!!!!!!!!!!!!!', potentialChats, '!!!!!!!!!!!!!!!!', userChats);
 
     //<img src = {item.imageFile} style = {{width: '300px', height: 'auto', border: '2px solid #ccc', display: ' block', margin: '0 auto'}} />
 
@@ -112,7 +120,7 @@ const Item = () => {
                 <Row className = "noto-sans-kr" style = {{margin:"10px"}}>
                     <Col>
                         <div className = 'intro'>
-                            <img src={house} alt='house_pic' width = '300px' height = 'auto' style = {{border: '2px solid #ccc', display: ' block', margin: '0 auto'}}/>
+                            <img src={item.imageFile || house} alt='house_pic' width = '300px' height = 'auto' style = {{border: '2px solid #ccc', display: ' block', margin: '0 auto'}} onError = {(e) => e.target.src = house}/>
                             <div>
                                 <div className = 'introInfo' style = {{marginBottom : '10px'}}>  
                                 <h3>
@@ -157,6 +165,20 @@ const Item = () => {
                                 </Card>
                             </div> 
                         </div>
+                        <div className="all-users">
+                            {userChats?.map((chat) => {
+                                console.log(chat, chat._id, item.ownerId);
+                                if (chat._id === item.ownerId){
+                                    <img src={chat} alt='chat' width = '30px' height = '30px' style = {{cursor: "pointer"}} onClick = {() => onClickChatInd(item.ownerId)} />
+                        
+                            }})}
+                            {potentialChats?.map((u) => {
+                                console.log(u, u._id, item.ownerId);
+                                if (u._id === item.ownerId){
+                                    <img src={chat} alt='chat' width = '30px' height = '30px' style = {{cursor: "pointer"}} onClick = {() => onClickChatInd(item.ownerId)} />
+                                }})
+                            }
+                        </div>                        
                         <div style = {{marginTop:'20px'}}>
                             <div className = "optionCard">
                             <Card>

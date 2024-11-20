@@ -37,9 +37,6 @@ const MyItem = ({show ,handleClose}) => {
         <Modal show = {show} onHide={handleClose} className='longModalSize'>
             <Modal.Header closeButton style = {{display : 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
                 <div className = "noto-sans-kr" style = {{flex : 1}}>내 매물 목록</div>
-                {user && (<>
-                        <Button className="noto-sans-kr green" style = {{color: 'white', border: 'none', width: '80px', height: '30px', fontSize: '12px', alignItems: 'center', marginRight: '20px'}} onClick = {onCreateItem}>매물 등록</Button>
-                    </>)}
             </Modal.Header>
             <Modal.Body className = "noto-sans-kr">
                 <Form>

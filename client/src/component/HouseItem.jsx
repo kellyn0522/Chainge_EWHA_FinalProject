@@ -78,7 +78,7 @@ const HouseItem = ({itemId}) => {
     return (
         <Card className = 'houseItem' style = {{ width : '200px' }} onClick = {goToItem}>
             <div style = {{position: 'relative', display: 'inline-block'}}>
-                <img src={house} alt='house_pic' width = '200px' height = '150px' style = {{border: '2px solid #ccc', display: ' block', alignItems:'flex-start'}}/>
+                <img src={item.imageFile || house} alt='house_pic' width = '200px' height = '150px' style = {{border: '2px solid #ccc', display: ' block', alignItems:'flex-start'}} onError = {(e) => e.target.src = house} />
                 <div>
                     {user? (
                         user._id !== item.ownerId?(

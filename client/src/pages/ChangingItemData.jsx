@@ -92,7 +92,7 @@ const ChangingItemData = () => {
                     paddingTop: "10px",
                     paddingBottom:"10%"
                 }}>
-                    <Col xs={6}>
+                    <Col xs={8}>
                         <Stack gap={3}>
                         
                         <h2 style={{marginBottom: '15px'}}>매물 정보 변경</h2>
@@ -393,16 +393,17 @@ const ChangingItemData = () => {
                             />
                         </Form.Group>
                         <div className = "creatPageHasItem" style={{marginTop: '10px'}}>
-                            <div className="text" style = {{marginBottom: '15px'}}>옵션 여부 (옵션인 경우 체크해주세요.)</div>   
-                            <div className = "creatPageItem"> 
+                            <div className="text" style = {{marginBottom: '20px'}}>옵션 여부 (옵션인 경우 체크해주세요.)</div>   
+                            <div style = {{display: 'flex', alignItems: 'center', marginBottom: '15px', fontSize: '15px'}}> 
                                 <div className="creatPageText">침대</div>
                                 <input type = "checkbox" checked = {bedExist} onChange = {onChangebedExist} />
  
-                                <div className="creatPageText" style = {{marginLeft: '15px'}}>침대 크기</div>
+                                <div className="creatPageText" style = {{marginLeft: '80px', marginRight: '25px'}}>침대 크기</div>
                                 <input onChange={
                                     (e) => updateItemUpdaterInfo({ bedSize: e.target.value })
                                 } className="set"  maxLength="6" disabled = {!bedExist} />
                             </div>
+                            <div className = 'optionCheck'>
                             <div className="creatPageItem">
                                 <div className="creatPageText">세탁기</div>
                                 <input type = "checkbox" name = "hasWasher" checked = {hasItems.hasWasher} onChange = {onChangeCheckbox} />
@@ -446,6 +447,7 @@ const ChangingItemData = () => {
                             <div className="creatPageItem">
                                 <div className="creatPageText">의자</div>
                                 <input type = "checkbox" name = "hasChair" checked = {hasItems.hasChair} onChange = {onChangeCheckbox} />
+                            </div>
                             </div>
                         </div>
                         <Button className = 'green' style = {{color: 'white', border: 'none', marginTop: '5px'}} type="submit" >

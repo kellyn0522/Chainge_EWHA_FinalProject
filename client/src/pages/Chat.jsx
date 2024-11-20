@@ -10,7 +10,7 @@ import Logo from "../component/Logo";
 const chat = () => {    
     const { user } = useContext(AuthContext);
     const { userChats, isUserChatsLoading, updateCurrentChat } = useContext(ChatContext);
-
+    //<PotentialChats/>
     return (
         <Container>
             <div className = "logo"><Logo /></div>
