@@ -204,7 +204,7 @@
 .formControl{
   margin-bottom: 10px;
   display: grid;
-  grid-template-columns: 1fr 2.5fr;
+  grid-template-columns: 1fr 2.7fr;
   align-items: center;
 }
 .modalSize .modal-body{

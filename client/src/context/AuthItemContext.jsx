@@ -1,12 +1,17 @@
 import { createContext, useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { baseUrl } from "../utils/services";
+import { baseUrl, postRequest, getRequest, deleteRequest } from "../utils/services";
 
 export const AuthItemContext = createContext();
 
 export const AuthItemContextProvider = ({ children }) => {
     const navigate = useNavigate();
+    //const [item, setItem] = useState(null);
+    const [getItemError, setGetItemError] = useState(null);
+    const [findItemError, setFindItemError] = useState(null);
+    const [isFindItemLoading, setIsFindItemLoading] = useState(false);
+
     const [createItemInfo, setCreateItemInfo] = useState({
         itemID: "",
         ownerName: "",
@@ -70,6 +75,153 @@ export const AuthItemContextProvider = ({ children }) => {
         console.log("Updated createItemInfo:", createItemInfo);
     }, [createItemInfo]);
 
+    
+    const [updateItemError, setUpdateItemError] = useState(null);
+    const [isUpdateItemLoading, setIsUpdateItemLoading] = useState(false);
+
+    const [updaterItemInfo, setUpdaterItemInfo] = useState({
+        itemID: '', 
+        housePrice: '', 
+        memo: '', 
+        bedSize: '', 
+        hasItems: '',
+        hasAgent: false,
+        buildingName: '',
+        duplexAvailability: '',
+        exclusiveArea: '',
+        contractArea: '',
+        room: '',
+        bathroom: '',
+        facing: '',
+        elevator: '',
+        petFriendly: '',
+        number_of_units_in_the_given_area: '',
+        total_number_of_units: '',
+        parkingSpace: '',
+        availableMoveInDate: '',
+        deposit: ''
+    });
+
+    const updateItemUpdaterInfo = useCallback((info) => {
+        setUpdaterItemInfo((prevInfo) => ({ ...prevInfo, ...info }));
+    }, []);
+
+    const updaterItem = useCallback(async(e, itemID) => { 
+        e.preventDefault()
+        console.log("Update called");
+        setIsUpdateItemLoading(true);
+        setUpdateItemError(null);
+        
+        try{
+            if(!itemID){
+                setUpdateItemError("Invalid item ID");
+                setIsUpdateItemLoading(false);
+                throw new Error("Invalid item ID");
+            }
+
+            const response = await postRequest(
+                `${baseUrl}/items/updateItem/${itemID}`,
+                JSON.stringify(updaterItemInfo));
+
+            console.log("updater response ", response);
+            setIsUpdateItemLoading(false);
+        
+            if (response.error) {
+                console.log("error in updateItem");
+                return setUpdateItemError(response);
+            console.log(response);
+            navigate("/");
+            }
+
+        } catch (error){
+            setUpdateItemError(error.message)
+            console.log(error.message)
+        } finally{
+            setIsUpdateItemLoading(false);
+        }
+    }, [updaterItemInfo, navigate]);
+
+    const [deleteItemError, setDeleteItemError] = useState(null);
+    const [isDeleteItemLoading, setIsDeleteItemLoading] = useState(false);
+    const deleteItem = useCallback(async(e, itemID) => { 
+        console.log("delete called");
+        e.preventDefault()
+        setIsDeleteItemLoading(true);
+        setDeleteItemError(null);
+        try{
+            if(!itemID){
+                setDeleteItemError("Invalid item ID");
+                setIsDeleteItemLoading(false);
+                throw new Error("Invalid item ID");
+            }
+            
+            const response = await deleteRequest(
+                `${baseUrl}/items/deleteItem/${itemID}`
+            );
+
+            console.log("deleter response ", response);
+
+            console.log("Create Item Response:", response.data);
+            navigate("/");
+            setIsDeleteItemLoading(false);
+        
+            if (response.error) {
+                return setDeleteItemError(response);
+            }
+
+        }catch(error){
+            console.error("Falied to delete:", error);
+            setDeleteItemError({message: "Falied to delete item"});
+            setIsDeleteItemLoading(false);
+        }
+    }, []);
+
+
+    const getItem = useCallback(async(e) => {
+        if(e) e.preventDefault();
+        setGetItemError(null);
+        try{
+            const response = await getRequest(
+                `${baseUrl}/items/`);
+
+            console.log("Get Item response ", response);
+        
+            if (response.error) {
+                return setGetItemError(response.error);
+            }
+            return response;
+        } catch (error){
+            setGetItemError(error.message)
+        }
+    }, []);
+
+    const findItem = useCallback(async(itemID) => { 
+        setFindItemError(null);
+        setIsFindItemLoading(true)
+        
+        try{
+            if(!itemID){
+                setFindItemError("Invalid item ID");
+                setIsFindItemLoading(false);
+                throw new Error("Invalid item ID");
+            }
+
+            const response = await getRequest(
+                `${baseUrl}/items/find/${itemID}`);
+
+            console.log("Find Item response ", response);
+        
+            if (response.error) {
+                return setFindItemError(response.error);
+            }
+            setIsFindItemLoading(false);
+            return response;
+        } catch (error){
+            setFindItemError(error.message)
+            console.log(error.message)
+        }
+    }, []);
+
     return (
         <AuthItemContext.Provider
             value={{
@@ -78,6 +230,20 @@ export const AuthItemContextProvider = ({ children }) => {
                 createItem,
                 createItemError,
                 isCreateItemLoading,
+                
+                getItem,
+                getItemError,
+                findItem,
+                findItemError,
+                isFindItemLoading,
+                updaterItem,
+                updaterItemInfo,
+                updateItemUpdaterInfo,
+                isUpdateItemLoading,
+                updateItemError,
+                deleteItem,
+                deleteItemError,
+                isDeleteItemLoading
             }}
         >
             {children}
