@@ -128,6 +128,7 @@ useEffect(() => {
                         <Stack gap={3}>
                         
                         <h2 style={{marginBottom: '15px'}}>매물 등록</h2>
+                        <div style={{color: '#6495ED', fontSize: '12px', marginBottom:'10px'}}>* : 필수 작성 항목</div>
                         <Form.Control
                                 type="file"
                                 style = {{marginBottom: '10px'}}
@@ -141,12 +142,15 @@ useEffect(() => {
                             disabled/>
                         </Form.Group>
                         <Form.Group className='formControl'>
-                            <Form.Label>매물 주소</Form.Label>
+                            <div style = {{display: 'flex', gap: '5px'}}>
+                                <Form.Label>매물 주소</Form.Label>
+                                <Form.Label style={{color: '#6495ED'}}> *</Form.Label>
+                            </div>
                             <Form.Control 
                             type="text" 
                             value={addressData.location} readOnly 
                             onChange={
-                                (e) => updateCreateItemInfo({ ...createItemInfo, location: e.target.value, ownerName: user.name, itemID: new Date().getTime(), ownerId: user._id })
+                                (e) => updateCreateItemInfo({ ...createItemInfo, location: e.target.value, itemID: new Date().getTime(), ownerId: user._id })
                             } />
                             <Button onClick={handlePostcodeSearch}>주소 찾기</Button>
                         </Form.Group>
@@ -169,7 +173,10 @@ useEffect(() => {
                             } />
                         </Form.Group>
                         <Form.Group className='formControl'>
-                            <Form.Label>월세</Form.Label>
+                            <div style = {{display: 'flex', gap: '5px'}}>
+                                <Form.Label>월세</Form.Label>
+                                <Form.Label style={{color: '#6495ED'}}> *</Form.Label>
+                            </div>
                             <Form.Control
                                 type="text"
                                 placeholder="단위: 만원/월"
@@ -179,7 +186,10 @@ useEffect(() => {
                             />
                         </Form.Group>
                         <Form.Group className='formControl'>
-                            <Form.Label>보증금</Form.Label>
+                            <div style = {{display: 'flex', gap: '5px'}}>
+                                <Form.Label>보증금</Form.Label>
+                                <Form.Label style={{color: '#6495ED'}}> *</Form.Label>
+                            </div>
                             <Form.Control
                                 type="text"
                                 placeholder="단위: 만원"
@@ -198,7 +208,10 @@ useEffect(() => {
                             } />
                         </Form.Group>
                         <Form.Group className='formControl'>
-                            <Form.Label>방 개수</Form.Label>
+                            <div style = {{display: 'flex', gap: '5px'}}>
+                                <Form.Label>방 개수</Form.Label>
+                                <Form.Label style={{color: '#6495ED'}}> *</Form.Label>
+                            </div>
                             <Form.Control 
                             type="text" 
                             placeholder="방 개수"
@@ -207,7 +220,10 @@ useEffect(() => {
                             } />
                         </Form.Group>
                         <Form.Group className='formControl'>
-                            <Form.Label>화장실 개수</Form.Label>
+                            <div style = {{display: 'flex', gap: '5px'}}>
+                                <Form.Label>화장실 개수</Form.Label>
+                                <Form.Label style={{color: '#6495ED'}}> *</Form.Label>
+                            </div>
                             <Form.Control 
                             type="text" 
                             placeholder="화장실 개수"
@@ -496,8 +512,27 @@ useEffect(() => {
                                 <div className="creatPageText">블라인드</div>
                                 <input type = "checkbox" name = "hasBlinds" checked = {hasItems.hasBlinds} onChange = {onChangeCheckbox} />
                             </div>
+                            <div className="creatPageItem">
+                                <div className="creatPageText">옷장</div>
+                                <input type = "checkbox" name = "hasDresser" checked = {hasItems.hasDresser} onChange = {onChangeCheckbox} />
+                            </div>
+                            <div className="creatPageItem">
+                                <div className="creatPageText">전자레인지</div>
+                                <input type = "checkbox" name = "hasMicrowave" checked = {hasItems.hasMicrowave} onChange = {onChangeCheckbox} />
+                            </div>
+                            <div className="creatPageItem">
+                                <div className="creatPageText">냉장고</div>
+                                <input type = "checkbox" name = "hasFridge" checked = {hasItems.hasFridge} onChange = {onChangeCheckbox} />
+                            </div>
+                            <div className="creatPageItem">
+                                <div className="creatPageText">소파</div>
+                                <input type = "checkbox" name = "hasSofa" checked = {hasItems.hasSofa} onChange = {onChangeCheckbox} />
+                            </div>
+                            <div className="creatPageItem">
+                                <div className="creatPageText">의자</div>
+                                <input type = "checkbox" name = "hasChair" checked = {hasItems.hasChair} onChange = {onChangeCheckbox} />
+                            </div>
                         </div>
-                        
                         <Button className = 'green' style = {{color: 'white', border: 'none', marginTop: '5px'}} type="submit" >
                             { isCreateItemLoading? "Creating your Item":"매물 등록"}
                         </Button>

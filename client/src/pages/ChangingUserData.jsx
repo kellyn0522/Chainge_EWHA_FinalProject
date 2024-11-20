@@ -48,7 +48,7 @@ const ChangingUserData = () => {
                             />
                             <Form.Control
                                 type="text"
-                                placeholder={user.nickName || "Nickname"}
+                                placeholder= "Nickname"
                                 maxLength="10"
                                 onChange={(e) =>
                                     updateUpdaterInfo({nickName: e.target.value })
@@ -56,7 +56,7 @@ const ChangingUserData = () => {
                             />
                             <Form.Control
                                 type="tel"
-                                placeholder={user.phoneNumber || "Phone Number"}
+                                placeholder="Phone Number"
                                 maxLength="13"
                                 onChange={(e) =>
                                     updateUpdaterInfo({phoneNumber: e.target.value })

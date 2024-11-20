@@ -15,6 +15,7 @@ export const AuthContextProvider = ({ children }) => {
         nickName:"",
         phoneNumber:"",
         password: "",
+        realEstateAgent: false
     });
 // 임의로 추가
     const [updateError, setUpdateError] = useState(null);

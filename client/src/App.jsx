@@ -22,6 +22,7 @@ import DeleteItemData from "./pages/DeleteItemData";
 import ChangingItemData from "./pages/ChangingItemData";
 import MyItem from "./pages/MyItem";
 import LikedItem from "./pages/LikedItem";
+import CheckIdentity from "./pages/CheckIdentity";
 import "./pont.css";
 import "./icons.css";
 
@@ -50,6 +51,7 @@ function App() {
                          <Route path="/contractList" element={<ContractList />} />
                          <Route path="/changingUserData" element={<ChangingUserData />} />
                          <Route path="/userHistory" element={<UserHistory />} />
+                         <Route path="/checkIdentity/:id" element={<CheckIdentity />} />
                           <Route path="*" element ={<Navigate to ="/"/>} />
                          </Routes>
                       </div>             

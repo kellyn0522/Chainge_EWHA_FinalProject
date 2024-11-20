@@ -116,19 +116,6 @@ const MakeContract = () => {
                                 <div className = "infoName">{user.phoneNumber}</div>
                             </Card.Body>
                         </Card>
-                        <Card className = "information" style={{marginBottom:"20px"}}>
-                            <Card.Title className = "infoTitle">임차인 정보 확인</Card.Title>
-                            <Card.Body className = "info">
-                                <div className="infotype">이름</div>
-                                <div className = "infoName">황유저</div>
-                                <div className="infotype">우편번호</div>
-                                <div className = "infoName">55555</div>
-                                <div className ="infotype">주민등록번호</div>
-                                <div className = "infoName">222222-*******</div>
-                                <div className="infotype">전화번호</div>
-                                <div className = "infoName">01999999999</div>
-                            </Card.Body>
-                        </Card>
                         <Card style={{marginBottom:"20px"}}>
                             <Card.Title className = "infoTitle">계약 상세</Card.Title>
                             <Card.Body className = "inputCard">
@@ -211,9 +198,9 @@ const MakeContract = () => {
                                 ):null}
                             </Card.Body>
                         </Card>
-                        <div className='contractButton'>
-                            <Button style = {{backgroundColor: '#5B6A82', color: 'white', border: 'none', marginTop: '5px'}} onClick = {goToItem}>뒤로가기</Button>
-                            <Button className="green" style = {{color: 'white', border: 'none', marginTop: '5px'}} onClick = {onContract}>거래 시작</Button>
+                        <div className='contractButton' style={{marginTop: '15px'}}>
+                            <Button style = {{backgroundColor: '#5B6A82', color: 'white', border: 'none', marginTop: '5px'}} onClick = {goToItem}>돌아가기</Button>
+                            <Button className="green" style = {{color: 'white', border: 'none', marginTop: '5px'}} onClick = {onContract}>거래 요청하기</Button>
                         </div>
                     </Col>
             </Row>

@@ -10,7 +10,6 @@ const registerItem = async (req, res) => {
     try {
        const{
         itemID, 
-        ownerName, 
         zipCode, 
         houseAddress, 
         location, 
@@ -40,19 +39,21 @@ const registerItem = async (req, res) => {
         deposit
         } = req.body;
 
+<<<<<<< HEAD
         console.log("Received data:", {ownerName, location });
         console.log("Received data:", req.body);
         console.log("Latitude:", req.body.latitude);
         console.log("Longitude:", req.body.longitude);
         
+=======
+>>>>>>> badd544a42bc67598fbe4dd009ea0c37a55f9b1f
         let itemExists = await itemModel.findOne({ itemID });
 
         if (itemExists) return res.status(400).json("item already exists... ");
       
 
         Item = new itemModel({ 
-            itemID, 
-            ownerName, 
+            itemID,
             zipCode, 
             houseAddress, 
             location, // 도로명 주소
@@ -88,8 +89,7 @@ const registerItem = async (req, res) => {
         await Item.save();
 
         res.status(200).json({ 
-            itemID: Item.itemID,  
-            ownerName: Item.ownerName, 
+            itemID: Item.itemID,
             zipCode: Item.zipCode, 
             houseAddress: Item.houseAddress, 
             location: Item.location, 

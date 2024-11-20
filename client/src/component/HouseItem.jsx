@@ -41,7 +41,8 @@ const HouseItem = ({itemId}) => {
 
     useEffect(() => {
         if (user && item ){
-            setLiked(user.likedItemId.includes(itemId));
+            const likedItems = user.likedItemId || [];
+            setLiked(likedItems.includes(itemId));
         }
     }, [user, item, itemId]);
 
@@ -78,17 +79,17 @@ const HouseItem = ({itemId}) => {
         <Card className = 'houseItem' style = {{ width : '200px' }} onClick = {goToItem}>
             <div style = {{position: 'relative', display: 'inline-block'}}>
                 <img src={house} alt='house_pic' width = '200px' height = '150px' style = {{border: '2px solid #ccc', display: ' block', alignItems:'flex-start'}}/>
-                <div style = {{ position: 'absolute', top: '10px', left:'160px'}}>
+                <div>
                     {user? (
                         user._id !== item.ownerId?(
                         <>
-                            <span className={`material-symbols-outlined ${liked? 'liked':'dontlike'}`} style={{cursor: "pointer"}} onClick = {handleLike}>favorite</span>
+                            <span className={`material-symbols-outlined ${liked? 'liked':'dontlike'}`} style = {{ cursor: "pointer", position: 'absolute', top: '10px', left:'160px'}}onClick = {handleLike}>favorite</span>
                         
                         </>
                         ):(
                         <>
-                            <div style = {{display : 'flex', displayDirection: 'column', alignItems: 'center', gap: '10px', marginBottom : '12px'}}>
-                                <Badge className="noto-sans-kr bg-primary" style={{cursor: "pointer"}} onClick = {onClickUpdate}>수정</Badge>
+                            <div style = {{display : 'flex', displayDirection: 'column', alignItems: 'center', margin : '10px 15px 0px 15px', justifyContent: 'space-between'}}>
+                                <Badge className="noto-sans-kr skyblue" style={{cursor: "pointer"}} onClick = {onClickUpdate}>수정</Badge>
                                 <Badge className="noto-sans-kr bg-secondary" style={{cursor: "pointer"}} onClick = {handleShowItem}>삭제</Badge>
                                 <DeleteItemData show={showModalItem} handleClose={handleCloseItem} itemID = {item.itemID} />
                             </div>
@@ -112,7 +113,7 @@ const HouseItem = ({itemId}) => {
                     / {item.housePrice}만원
                 </Card.Text>
                 <Card.Text>{item.location} {item.houseAddress}</Card.Text>
-                <Card.Text>{item.area}평 {item.type}</Card.Text>
+                <Card.Text>{item.area}평/ {item.type}</Card.Text>
             </Card.Body>
         </Card>
     )
