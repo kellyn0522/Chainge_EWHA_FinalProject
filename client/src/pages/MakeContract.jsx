@@ -5,6 +5,7 @@ import { AuthItemContext } from "../context/AuthItemContext";
 import { AuthContext } from "../context/AuthContext";
 import { Button, Card, Row, Col, Container, Stack } from "react-bootstrap";
 import {ContractContext} from '../App';
+import axios from 'axios';
 
 
 const MakeContract = () => {
@@ -78,7 +79,9 @@ const MakeContract = () => {
     }
 
 
-    const onContract=(e)=>{
+    const onContract = async (e)=>{
+        e.preventDefault();
+
         const newContract = {
             ...info,
             itemID: item?.itemID,
@@ -90,9 +93,17 @@ const MakeContract = () => {
             price: item?.housePrice,
             deposit: item?.deposit
         }
+
         setContract((prev) => [...prev, newContract])
-        navigate('/');
-    }
+
+        try {
+            await axios.post('http://localhost:5000/api/contracts', newContract);
+            setContract((prev) => [...prev, newContract]);
+            navigate('/');
+        } catch (errer){
+            console.error('Error saving contract:', error);
+        }
+    };
 
     return (
         <Container>

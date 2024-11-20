@@ -8,6 +8,7 @@ const chatRoute = require("./Routes/chatRoute");
 const reqRoute = require("./Routes/reqRoute");
 
 const messageRoute = require("./Routes/messageRoute");
+const contractRoute = require("./Routes/contractRoute");
 
 require("dotenv").config();
 
@@ -19,6 +20,7 @@ app.use("/api/users", userRoute);
 app.use("/api/chats" , chatRoute);
 app.use("/api/itemReq" , reqRoute);
 app.use("/api/messages" , messageRoute);
+app.use("/api/contracts", contractRoute);
 app.use("/uploads", express.static('uploads'));
 
 app.get("/", (req,res) =>{ 
