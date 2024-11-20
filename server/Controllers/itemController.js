@@ -39,6 +39,14 @@ const registerItem = async (req, res) => {
         deposit
         } = req.body;
 
+<<<<<<< HEAD
+        console.log("Received data:", {ownerName, location });
+        console.log("Received data:", req.body);
+        console.log("Latitude:", req.body.latitude);
+        console.log("Longitude:", req.body.longitude);
+        
+=======
+>>>>>>> badd544a42bc67598fbe4dd009ea0c37a55f9b1f
         let itemExists = await itemModel.findOne({ itemID });
 
         if (itemExists) return res.status(400).json("item already exists... ");
@@ -48,7 +56,9 @@ const registerItem = async (req, res) => {
             itemID,
             zipCode, 
             houseAddress, 
-            location, 
+            location, // 도로명 주소
+            latitude, // 위도
+            longitude, // 경도
             area, 
             ownerId, 
             housePrice, 
@@ -83,6 +93,8 @@ const registerItem = async (req, res) => {
             zipCode: Item.zipCode, 
             houseAddress: Item.houseAddress, 
             location: Item.location, 
+            latitude: Item.latitude,
+            longitude: Item.longitude,
             area: Item.area, 
             ownerId: Item.ownerId, 
             housePrice: Item.housePrice, 
@@ -123,7 +135,8 @@ const updateItem = async (req, res) => {
             bedSize, 
             hasItems,
             hasAgent,
-            buildingName,
+            longitude,
+            latitude,
             duplexAvailability,
             exclusiveArea,
             contractArea,
@@ -148,7 +161,6 @@ const updateItem = async (req, res) => {
             bedSize, 
             hasItems,
             hasAgent,
-            buildingName,
             duplexAvailability,
             exclusiveArea,
             contractArea,

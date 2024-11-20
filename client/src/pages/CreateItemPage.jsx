@@ -4,10 +4,14 @@ import { Alert, Button, Form, Row, Col, Stack, Card } from "react-bootstrap";
 import { AuthItemContext } from "../context/AuthItemContext";
 import { AuthContext } from "../context/AuthContext";
 import Logo from "../component/Logo";
+import { useNavigate } from "react-router-dom";
 
 
 const CreateItemPage = () => {
 
+    const { user } = useContext(AuthContext); 
+    const navigate = useNavigate();
+    
     const { 
         //item,
         createItemInfo,
@@ -16,7 +20,7 @@ const CreateItemPage = () => {
         createItemError,
         isCreateItemLoading,
     } = useContext(AuthItemContext);
-    const{user} = useContext(AuthContext);
+    //const{user} = useContext(AuthContext);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [successMessage, setSuccessMessage] = useState(null);
     const [error, setError] = useState(null);
@@ -28,13 +32,43 @@ const CreateItemPage = () => {
         hasTV : false, 
         hasAirConditioner : false, 
         hasHeater : false, 
-        hasBlinds : false,
-        hasDresser: false,
-        hasMicrowave: false,
-        hasFridge: false,
-        hasSofa: false,            
-        hasChair: false,
+        hasBlinds : false});
+    const [addressData, setAddressData] = useState({
+        location: "",
+        zipCode: "",
+        latitude: null,
+        longitude: null,
     });
+    const handlePostcodeSearch = () => {
+        new window.daum.Postcode({
+            oncomplete: function (data) {
+                const roadAddress = data.roadAddress;
+                const zonecode = data.zonecode;
+
+                // 좌표 변환 API 호출 (Kakao REST API 사용)
+                const geocoder = new window.daum.maps.services.Geocoder();
+                geocoder.addressSearch(roadAddress, (result, status) => {
+                    if (status === window.daum.maps.services.Status.OK) {
+                        const { x, y } = result[0]; // 경도 (x), 위도 (y)
+                        setAddressData({
+                            location: roadAddress,
+                            zipCode: zonecode,
+                            latitude: y,
+                            longitude: x,
+                        });
+                        updateCreateItemInfo({
+                            ...createItemInfo,
+                            location: roadAddress,
+                            zipCode: zonecode,
+                            latitude: y,
+                            longitude: x,
+                        });
+                    }
+                });
+            },
+        }).open();
+    };
+
 
     const onChangebedExist = (e) => {
         const checked = e.target.checked
@@ -49,6 +83,18 @@ const CreateItemPage = () => {
             return newState;
         });
     };
+useEffect(() => {
+    // 스크립트 추가
+    const script = document.createElement("script");
+    script.src = "//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js";
+    script.async = true;
+    document.body.appendChild(script);
+
+    // 클린업
+    return () => {
+        document.body.removeChild(script);
+    };
+}, []);
 
     useEffect(() => {
         updateCreateItemInfo({ ...createItemInfo, hasItems});
@@ -57,6 +103,16 @@ const CreateItemPage = () => {
     useEffect(() => {
         updateCreateItemInfo({ ...createItemInfo, bedSize: bedExist? createItemInfo.bedSize: "" })
     }, [bedExist])
+   // console.log("User in CreateItemPage:", user);
+   useEffect(() => {
+    if (user) {
+        updateCreateItemInfo({
+            ItemId: new Date().getTime(),
+            ownerId: user._id,
+            ownerName: user.name,
+        });
+    }
+}, [user]);
 
     return (<>
         <div>
@@ -92,11 +148,21 @@ const CreateItemPage = () => {
                             </div>
                             <Form.Control 
                             type="text" 
-                            placeholder="Location" 
+                            value={addressData.location} readOnly 
                             onChange={
                                 (e) => updateCreateItemInfo({ ...createItemInfo, location: e.target.value, itemID: new Date().getTime(), ownerId: user._id })
                             } />
+                            <Button onClick={handlePostcodeSearch}>주소 찾기</Button>
                         </Form.Group>
+                        <Form.Group className="formControl">
+                                <Form.Label>우편번호</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    value={addressData.zipCode || ""}
+                                    readOnly
+                                    placeholder="우편번호"
+                                />
+                            </Form.Group>
                         <Form.Group className='formControl'>
                             <Form.Label>상세 주소</Form.Label>
                             <Form.Control 
@@ -105,29 +171,6 @@ const CreateItemPage = () => {
                             onChange={ 
                                 (e) => updateCreateItemInfo({ ...createItemInfo, houseAddress: e.target.value })
                             } />
-                        </Form.Group>
-                        <Form.Group className='formControl'>
-                            <Form.Label>건물 이름</Form.Label>
-                            <Form.Control 
-                            type="text" 
-                            placeholder="건물 이름"
-                            onChange={ 
-                                (e) => updateCreateItemInfo({ ...createItemInfo, buildingName: e.target.value })
-                            } />
-                        </Form.Group>
-                        <Form.Group className='formControl'>
-                            <div style = {{display: 'flex', gap: '5px'}}>
-                                <Form.Label>우편번호</Form.Label>
-                                <Form.Label style={{color: '#6495ED'}}> *</Form.Label>
-                            </div>
-                            <Form.Control
-                                type="text"
-                                placeholder="ZipCode"
-                                maxLength="5"
-                                onChange={ 
-                                    (e) => updateCreateItemInfo({ ...createItemInfo, zipCode: e.target.value })
-                                }
-                            />
                         </Form.Group>
                         <Form.Group className='formControl'>
                             <div style = {{display: 'flex', gap: '5px'}}>

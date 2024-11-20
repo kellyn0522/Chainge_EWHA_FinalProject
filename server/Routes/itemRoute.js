@@ -17,13 +17,27 @@ const storage = multer.diskStorage({
 
 
 // 매물 등록 시 multer 미들웨어를 추가하여 파일 처리
-router.post("/createItem", upload.single('imageFile'),(req,res) => { 
+router.post("/createItem", upload.single('imageFile'),async (req,res) => { 
     try{
         if(!req.file){
             return res.status(400).json({ error: "파일이 업로드되지 않았습니다."});
         }
 
-        registerItem(req, res);
+        const { location, zipCode, latitude, longitude, ownerName, itemID } = req.body;
+        if (!location || !zipCode || !latitude || !longitude) {
+            return res.status(400).json({ error: "필수 주소 데이터가 누락되었습니다." });
+        }
+
+        await registerItem({
+            location,
+            zipCode,
+            latitude,
+            longitude,
+            ownerName,
+            itemID,
+            imagePath: req.file.path // 업로드된 파일의 경로 추가
+        }, res);
+
     } catch (error){
         console.error('Error in createItem:', error);
         res.status(500).json({error: '서버에서 오류가 발생했습니다.'});
