@@ -36,15 +36,15 @@ const Home = () => {
         return search === "" 
         ? items 
         : items.filter((it) => it.location.toLowerCase().includes(search.toLowerCase()));
-    }
+    };
 
     const getResult = () => {
         return getSearchResult()
-        ?getSearchResult().map((it) => (
-            <HouseItem key = {it.itemId} itemId = {it.itemId} />
-        ))
-        :0
-    }
+            ?getSearchResult().map((it, index) => (
+                <HouseItem key = {it.itemId || index} itemId = {it.itemId} />
+            ))
+            :0
+    };
 
     const onSearch = () => {
         console.log("검색성공!");
