@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 
 const registerItem = async (req, res) => {
     const imageFile = req.file ? req.file.path : null;
-    //console.log("Received data:", { ownerName, zipCode, houseAddress, location, area, ownerId, housePrice, memo, type, isContract, bedSize, hasItems });
+    console.log("Received data:", { ownerName, zipCode, houseAddress, location, area, ownerId, housePrice, memo, type, isContract, bedSize, hasItems });
     console.log("Received file:", imageFile);
 
     try {
@@ -48,7 +48,7 @@ const registerItem = async (req, res) => {
         if (itemExists) return res.status(400).json("item already exists... ");
       
 
-        Item = new itemModel({ 
+        const Item = new itemModel({ 
             itemID,
             zipCode,
             houseAddress,
@@ -85,6 +85,7 @@ const registerItem = async (req, res) => {
 
         await Item.save();
 
+        console.log("!!!!!!!!!!");
         res.status(200).json({ 
             itemID: Item.itemID,
             zipCode: Item.zipCode, 

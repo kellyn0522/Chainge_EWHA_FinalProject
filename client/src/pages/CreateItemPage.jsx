@@ -7,13 +7,14 @@ import Logo from "../component/Logo";
 import { useNavigate } from "react-router-dom";
 
 
+
 const CreateItemPage = () => {
     const { user } = useContext(AuthContext); 
     const navigate = useNavigate();
     
     const { 
-        //item,
-        // createItemInfo,
+        // item,
+        createItemInfo,
         updateCreateItemInfo,
         createItem,
         createItemError,
@@ -45,12 +46,13 @@ const CreateItemPage = () => {
         longitude: null,
     });
 
-    const [createItemInfo, setCreateItemInfo] = useState({
+    /*const [createItemInfo, setCreateItemInfo] = useState({
         location: "",
         zipCode: "",
         latitude: null,
         longitude: null,
     });
+    */
     
     const [roadAddress, setRoadAddress] = useState('');
     const [zonecode, setZonecode] = useState('');
@@ -104,6 +106,8 @@ const CreateItemPage = () => {
                                 latitude, 
                                 longitude 
                             });
+
+                            
                         } else {
                             console.error("주소 검색 실패:", status);
                         }
@@ -156,6 +160,33 @@ const CreateItemPage = () => {
     useEffect(() => {
         updateCreateItemInfo({ ...createItemInfo, bedSize: bedExist? createItemInfo.bedSize: "" })
     }, [bedExist]);
+/*
+    useEffect(() => {
+        updateCreateItemInfo({ ...createItemInfo, zipCode: zonecode});
+    }, [zonecode]);
+
+    useEffect(() => {
+        updateCreateItemInfo({ ...createItemInfo, location: roadAddress});
+    }, [roadAddress]);
+*/
+
+    useEffect(() => {
+        updateCreateItemInfo({
+            ...createItemInfo,
+            zipCode: zonecode,
+            location: roadAddress,
+        });
+    }, [zonecode, roadAddress]);
+
+    useEffect(() => {
+        if (user) {
+            updateCreateItemInfo({
+                itemID : new Date().getTime(),
+                ownerId : user._id,
+                ownerName : user.name,
+            });
+        }
+    }, [user]);
 
    // console.log("User in CreateItemPage:", user);
 
@@ -203,7 +234,12 @@ const CreateItemPage = () => {
                                 type="text"
                                 value = {zonecode}
                                 placeholder="zipcode"
-                                onChange = {(e) => setZonecode(e.target.value)}
+                                readOnly
+                                onChange = {(e) => {
+                                    
+                                    setZonecode(updatedZonecode);
+                                    
+                                }}
                             />                                
                         </Form.Group>
 
@@ -215,6 +251,7 @@ const CreateItemPage = () => {
                                 type="text"
                                 value = {roadAddress}
                                 placeholder="Main Location"
+                                readOnly
                                 onChange = {(e) => setRoadAddress(e.target.value)}
                             /> 
                         </Form.Group>
@@ -224,13 +261,11 @@ const CreateItemPage = () => {
                             <Form.Control 
                                 type="text" 
                                 placeholder="Detail Location" 
-                                onChange={(e) => {
-                                    const detailAddress = e.target.value;
-                                    setAddressData((prev) => ({
-                                        ...prev,
-                                        location: `${prev.location} ${detailAddress}`,  // 상세 주소가 추가되도록
-                                    }));
-                                }}
+                                onChange={ 
+                                    (e) => updateCreateItemInfo({ ...createItemInfo, houseaddress: e.target.value })
+                                }
+
+                                
                             />
                         </Form.Group>   
                         <Form.Group className='formControl'>
