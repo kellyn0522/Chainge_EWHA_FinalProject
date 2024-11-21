@@ -55,12 +55,13 @@ export const AuthItemContextProvider = ({ children }) => {
         e.preventDefault();
         setIsCreateItemLoading(true);
         setCreateItemError(null);
+        console.log('!!!!!!!!!');
 
         try {
             // 필수 필드 검증
-            //if (!createItemInfo.itemID || !createItemInfo.ownerName || !createItemInfo.location) {
-            //    throw new Error("필수 입력값이 누락되었습니다.");
-            //}
+            if (!createItemInfo.itemID || !createItemInfo.ownerId || !createItemInfo.location) {
+                throw new Error("필수 입력값이 누락되었습니다.");
+            }
 
             const formData = new FormData();
             Object.keys(createItemInfo).forEach((key) => {
@@ -69,11 +70,13 @@ export const AuthItemContextProvider = ({ children }) => {
 
             console.log("Sending Request Data:", Object.fromEntries(formData.entries()));
 
-            const response = await axios.post(
+
+            const response = await postRequest(
                 `${baseUrl}/items/createItem`,
                 createItemInfo,
                 {
                     headers: {
+                        // "Content-Type": "multipart/form-data",
                         "Content-Type": "application/json",
                     },
                 }
@@ -86,6 +89,7 @@ export const AuthItemContextProvider = ({ children }) => {
             setCreateItemError(error.response?.data?.message || "매물 등록에 실패했습니다.");
         } finally {
             setIsCreateItemLoading(false);
+            navigate("/");
         }
     }, [createItemInfo]);
 
@@ -173,6 +177,7 @@ export const AuthItemContextProvider = ({ children }) => {
 
     const [deleteItemError, setDeleteItemError] = useState(null);
     const [isDeleteItemLoading, setIsDeleteItemLoading] = useState(false);
+
     const deleteItem = useCallback(async(e, itemID) => { 
         console.log("delete called");
         e.preventDefault()
@@ -196,7 +201,8 @@ export const AuthItemContextProvider = ({ children }) => {
             setIsDeleteItemLoading(false);
         
             if (response.error) {
-                return setDeleteItemError(response);
+                setDeleteItemError(response.error);
+                return;
             }
 
         }catch(error){

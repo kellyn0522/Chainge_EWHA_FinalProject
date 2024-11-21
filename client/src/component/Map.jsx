@@ -23,6 +23,8 @@ const Map = ({ properties = [] }) => {
         // 지도 생성
         const map = new kakao.maps.Map(mapContainer.current, mapOption);
 
+        const geocoder = new kakao.maps.services.Geocoder();
+
         const properties = [
           {
             latitude: 37.5665,
@@ -42,37 +44,57 @@ const Map = ({ properties = [] }) => {
         
         
         // 마커를 표시하는 함수
-        const addMarkers = (properties) => {
+        const addMarker = (latitude, longitude, address, price) => {
+          const marker = new kakao.maps.Marker({
+            position: new kakao.maps.LatLng(latitude, longitude),
+            map: map,
+          });
+
+          const infowindow = new kakao.maps.InfoWindow({
+            content: `<div style="padding:5px;">${address}<br/>가격: ${price}</div>`,
+          });
+
+          kakao.maps.event.addListener(marker, "click", () => {
+            infowindow.open(map, marker);
+          });
+        };
+
+        const addMarkersByAddress = (properties) => {
           properties.forEach((property) => {
-            const markerPosition = new kakao.maps.LatLng(
-              property.latitude,
-              property.longitude
-            );
-
-            const marker = new kakao.maps.Marker({
-              position: markerPosition,
-              title: property.houseAddress || "매물 위치",
-            });
-
-            marker.setMap(map); // 마커를 지도에 추가
-
-            // 마커 클릭 이벤트
-            kakao.maps.event.addListener(marker, "click", () => {
-              console.log(`Clicked on: ${property.houseAddress}`);
-              alert(`매물 정보: ${property.houseAddress}\n가격: ${property.housePrice}`);
-            });
+            if (property.latitude && property.longitude) {
+              addMarker(
+                property.latitude,
+                property.longitude,
+                property.houseAddress,
+                property.housePrice
+              );
+            } else {
+              geocoder.addressSearch(property.houseAddress, (result, status) => {
+                if (status === kakao.maps.services.Status.OK) {
+                  const { x: longitude, y: latitude } = result[0];
+                  addMarker(latitude, longitude, property.houseAddress, property.housePrice);
+                } else {
+                  console.error(`주소 변환 실패: ${property.houseAddress}`);
+                  alert(`"${property.houseAddress}" 주소를 변환할 수 없습니다.`);
+                }
+              });
+            }
           });
         };
 
         // 마커 추가
-        if (properties.length > 0) {
-          addMarkers(properties);
-          // 지도 범위 조정
+        if (validProperties.length > 0) {
+          addMarkersByAddress(validProperties);
+
           const bounds = new kakao.maps.LatLngBounds();
-          properties.forEach((property) => {
-            bounds.extend(new kakao.maps.LatLng(property.latitude, property.longitude));
+          validProperties.forEach((property) => {
+            bounds.extend(
+              new kakao.maps.LatLng(property.latitude, property.longitude)
+            );
           });
           map.setBounds(bounds);
+        } else {
+          console.warn("유효한 주소 데이터가 없습니다.");
         }
       });
     };
