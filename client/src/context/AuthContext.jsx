@@ -1,5 +1,5 @@
 import { createContext, useCallback, useEffect, useState } from "react";
-import { baseUrl, postRequest, deleteRequest } from "../utils/services";
+import { baseUrl, postRequest, deleteRequest, getRequest } from "../utils/services";
 import {useNavigate} from "react-router-dom";
 
 export const AuthContext = createContext();
@@ -8,6 +8,9 @@ export const AuthContextProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [registerError, setRegisterError] = useState(null);
     const [isRegisterLoading, setIsRegisterLoading] = useState(false);
+    
+    const [findUserError, setFindUserError] = useState(null);
+    const [isFindUserLoading, setIsFindUserLoading] = useState(null);
 
     const [registerInfo, setRegisterInfo] = useState({
         name: "",
@@ -228,6 +231,34 @@ export const AuthContextProvider = ({ children }) => {
         }
     }, [user, navigate, setUser, setDeleteError, setIsDeleteLoading]);
 
+    const findUser = useCallback(async(id) => { 
+        setFindUserError(null);
+        setIsFindUserLoading(true)
+        
+        try{
+            if(!id){
+                setFindUserError("Invalid ID");
+                setIsFindUserLoading(false);
+                throw new Error("Invalid ID");
+            }
+
+            const response = await getRequest(
+                `${baseUrl}/users/find/${id}`);
+
+            console.log("Find Item response ", response);
+        
+            if (response.error) {
+                return setFindUserError(response.error);
+            }
+            setIsFindUserLoading(false);
+            return response;
+        } catch (error){
+            setFindUserError(error.message)
+            console.log(error.message)
+            setIsFindUserLoading(false);
+        }
+    }, []);
+
 
     return (<AuthContext.Provider
         value={{
@@ -256,6 +287,9 @@ export const AuthContextProvider = ({ children }) => {
             isDeleteLoading,
 
             updaterLike,
+            findUser,
+            findUserError,
+            isFindUserLoading
         }}
     >
         {children}

@@ -1,6 +1,11 @@
 const mongoose = require("mongoose");
 const reqSchema = new mongoose.Schema({
-    members: Array,
+    senderId: String, 
+    itemId: String, 
+    ownerId: String,
+    start: Date,
+    end: Date,
+    period: Number,
 }, {
     timestamps: true,
 }

@@ -7,6 +7,7 @@ import {BrowserRouter} from "react-router-dom";
 // import 'bootstrap/dist/css/bootstrap.min.css';
 import { AuthContextProvider } from './context/AuthContext.jsx';
 import { AuthItemContextProvider } from './context/AuthItemContext.jsx';
+import { ReqContextProvider } from "./context/ReqContext";
 
 
 //const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -18,7 +19,9 @@ createRoot(document.getElementById('root')).render(
     <BrowserRouter>
       <AuthContextProvider>
         <AuthItemContextProvider>
-          <App />
+          <ReqContextProvider>
+            <App />
+          </ReqContextProvider>
         </AuthItemContextProvider>
       </AuthContextProvider>
     </BrowserRouter>

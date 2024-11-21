@@ -1,121 +1,109 @@
 import {useEffect, useState, useContext} from "react";
 import Logo from "../component/Logo";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { AuthItemContext } from "../context/AuthItemContext";
 import { AuthContext } from "../context/AuthContext";
 import { Button, Card, Row, Col, Container, Stack } from "react-bootstrap";
-import {ContractContext} from '../App';
-import axios from 'axios';
 import { ReqContext } from "../context/ReqContext";
 
-
-const MakeContract = () => {
+const ReqPage = () => {
     const navigate = useNavigate();
-    const {userInfo} = location.state || {};
-    const {id} = useParams();
-    const { user } = useContext(AuthContext);
-    const {createReq, updateReqInfo } = useContext(ReqContext);
+    const {otherUser,id,type} = useParams();
+    const { user, findUser, findUserError, isFindUserLoading } = useContext(AuthContext);
     const {
         findItem,
         findItemError,
         isFindItemLoading,
     } = useContext(AuthItemContext);
-    const [item, setItem] = useState(null)
-    const {setContract} = useContext(ContractContext);
-    const [info, setInfo] = useState(
-        {
-            itemID: item?.itemID,
-            tenantID: userInfo?.tenantID || user?._id,
-            tenantphoneNum: userInfo?.tenantphoneNum || user?.phoneNumber,
-            tenantBirth:userInfo?.tenantBirth || user?.birth,
-            tenantidentityNum: userInfo?.tenantidentityNum || user?.identityNum,
-            metamaskAdd: userInfo?.metamaskAdd,
-            price: item?.housePrice,
-            deposit: item?.deposit,
+    const [item, setItem] = useState(null);
+    const isOwner = type==='true';
 
-            landlordID: '',
-            landlordphoneNum: '',
-            landlordBirth: '',
+    const [reqInfo, setReqInfo] = useState(null);
 
-            start:'',
-            end:'',
-            period:'',
+    const [otherUserinfo, setOtherUserinfo] = useState(null);
+    const{findingReq} = useContext(ReqContext);
+    
+    useEffect(() =>{
+        const fetchReq = async () => {
+            try{
+                const result = await findingReq(id);
+                setReqInfo(result);
+            }catch{
+                return null;
+            }
         }
-    )
+        fetchReq();
+    }, [id]);
+    
+    console.log(reqInfo);
 
     useEffect(() => {
         const fetchItem = async () => {
-            if (!findItemError && !isFindItemLoading){
-                const result = await findItem(id);
+            if (reqInfo?.itemId && !findItemError && !isFindItemLoading){
+                const result = await findItem(reqInfo?.itemId);
                 setItem(result);
             }
         };
         fetchItem();
-    }, [findItem, findItemError]);
+    }, [reqInfo]);
 
+    useEffect(() => {
+        if (id && !findUserError && !isFindUserLoading){
+            const fetchUser = async () => {
+                const result = await findUser(otherUser);
+                setOtherUserinfo(result);
+            }
+        
+            fetchUser();
+        };
+    }, [otherUser]);
+
+    
+    
     if (isFindItemLoading){
         return <div>Loding...</div>
     }
+
     if (findItemError || !item){
         return <div>Error: {findItemError?.message || 'Page not found'}</div>
     }
-    
+
+    if (isFindUserLoading){
+        return <div>Loding...</div>
+    }
+
+    const onContract = () =>{
+        const contractInfo= {
+            itemID: item?.itemID,
+            tenantID: otherUserinfo?.tenantID,
+            tenantphoneNum: otherUserinfo?.tenantphoneNum,
+            tenantBirth:otherUserinfo?.tenantBirth,
+            tenantidentityNum: otherUserinfo?.tenantidentityNum,
+            metamaskAdd: otherUserinfo?.metamaskAdd,
+            price: item?.housePrice,
+            deposit: item?.deposit,
+
+            landlordID: user?._id,
+            landlordphoneNum: user?.phoneNumber,
+            landlordBirth: user?.birth,
+            landlordIdentityNum: user?.identityNum,
+
+            start: reqInfo?.start||'2024.11.21',
+            end:reqInfo?.end||'2025.11.20',
+            period:reqInfo?.period||12,
+        }
+        console.log('CCCCCCCCCCCCCCCCC',contractInfo);
+    }
+
     const goToItem = () => {
-        if(!isFindItemLoading && !findItemError && item){
-            navigate(`/item/${item.itemID}`);
+        if(!isFindItemLoading && !findItemError && item?.itemId){
+            navigate(`/item/${item.itemId}`);
         }
     }
     
     if(!user || !item){
         return null;
     }
-
-    const handleStart = (e) =>{
-        setInfo((prev) => ({...prev, start:e.target.value}));
-    }
-    const handleEnd = (e) =>{
-        setInfo((prev) => ({...prev, end:e.target.value}));
-    }
-    const handlePeriod = (e) =>{
-        setInfo((prev) => ({...prev, period:e.target.value}));
-    }
-
-
-    const onContract = async (e)=>{
-        e.preventDefault();
-
-        const newContract = {
-            ...info,
-            itemID: item?.itemID,
-            tenantID: userInfo?.tenantID || user?._id,
-            tenantphoneNum: userInfo?.tenantphoneNum || user?.phoneNumber,
-            tenantBirth:userInfo?.tenantBirth || user?.birth,
-            tenantidentityNum: userInfo?.tenantidentityNum || user?.identityNum,
-            metamaskAdd: userInfo?.metamaskAdd,
-            price: item?.housePrice,
-            deposit: item?.deposit
-        }
-
-        setContract((prev) => [...prev, newContract])
-            updateReqInfo({
-                senderId: userInfo?.tenantID || user?._id, 
-                itemId:item?.itemID, 
-                ownerId:item?.ownerId,
-                start: info.start,
-                end: info.end,
-                period: info.period,
-
-        })
-        await createReq(e);
-
-        try {
-            await axios.post('http://localhost:5000/api/contracts', newContract);
-            setContract((prev) => [...prev, newContract]);
-            navigate('/');
-        } catch (errer){
-            console.error('Error saving contract:', error);
-        }
-    };
 
     return (
         <Container>
@@ -129,35 +117,43 @@ const MakeContract = () => {
                     margin:"10px"
                 }}>
                     <Col xs={10}>
-                        <h2 style={{marginBottom: '20px'}}>거래 하기</h2>
+                        <h2 style={{marginBottom: '20px'}}>{isOwner?'받은 요청':'보낸 요청'}</h2>
                         <Card className = "information" style={{marginBottom:"20px"}}>
-                            <Card.Title className = "infoTitle">본인 정보 확인</Card.Title>
-                            <Card.Body className = "info">
-                                <div className="infotype">이름</div>
-                                <div className = "infoName">{user.name}</div>
-                                <div className="infotype">우편번호</div>
-                                <div className = "infoName">{user.zipCode}</div>
-                                <div className ="infotype">주민등록번호</div>
-                                <div className = "infoName">{info.tenantBirth}-{info.tenantidentityNum}</div>
-                                <div className="infotype">전화번호</div>
-                                <div className = "infoName">{info.tenantphoneNum.replace(/(\d{3})(\d{3})(\d{4})/,'$1-$2-$3')}</div>
-                            </Card.Body>
-                            <div className ="infotype">메타마스크 주소</div>
-                            <div className = "infoName">{info.metamaskAdd}</div>
+                            {isOwner?(
+                                <>
+                                    <Card.Title className = "infoTitle">상대 정보 확인</Card.Title>
+                                    <Card.Body className = "info">
+                                        <div className="infotype">이름</div>
+                                        <div className = "infoName">{user.name}</div>
+                                        <div className="infotype">전화번호</div>
+                                        <div className = "infoName">{user.phoneNumber.replace(/(\d{3})(\d{3})(\d{4})/,'$1-$2-$3')}</div>
+                                    </Card.Body>
+                                </>
+                            ):(
+                                <>
+                                    <Card.Title className = "infoTitle">내 정보 확인</Card.Title>
+                                    <Card.Body className = "info">
+                                        <div className="infotype">이름</div>
+                                        <div className = "infoName">{user.name}</div>
+                                        <div className="infotype">전화번호</div>
+                                        <div className = "infoName">{user.phoneNumber.replace(/(\d{3})(\d{3})(\d{4})/,'$1-$2-$3')}</div>
+                                    </Card.Body>
+                                </>
+                            )}
                         </Card>
                         <Card style={{marginBottom:"20px"}}>
-                            <Card.Title className = "infoTitle">계약 상세</Card.Title>
+                            <Card.Title className = "infoTitle">계약 요청 상세</Card.Title>
                             <Card.Body className = "inputCard">
                                 <div className="infotype">계약 시작 날짜</div>
-                                <input type = "date" className="set" onChange={handleStart} />
+                                <div className = "infoName">2024.11.11</div>
                                 <div className="infotype">계약 종료 날짜</div>
-                                <input type = "date" className="set" onChange={handleEnd} />
+                                <div className = "infoName">2025.11.10</div>
                                 <div className="infotype">계약 기간</div>
-                                <input placeholder=" 개월 수" className="set" onChange={handlePeriod} />
+                                <div className = "infoName">12 개월</div>
                             </Card.Body>
                         </Card>
                         <Card className = "information" style={{marginBottom:"10px"}}>
-                            <Card.Title className = "infoTitle">매물 정보 확인</Card.Title>
+                            <Card.Title className = "infoTitle">매물 정보</Card.Title>
                             <Card.Body className = "info">
                                 {item.buildingName? (
                                     <>
@@ -227,13 +223,21 @@ const MakeContract = () => {
                                 ):null}
                             </Card.Body>
                         </Card>
-                        <div className='contractButton' style={{marginTop: '15px'}}>
-                            <Button style = {{backgroundColor: '#5B6A82', color: 'white', border: 'none', marginTop: '5px', width:'100px'}} onClick = {goToItem}>돌아가기</Button>
-                            <Button className="green" style = {{color: 'white', border: 'none', marginTop: '5px', width: '100px'}} onClick = {onContract}>거래 요청</Button>
+                        <div className='contractButton' style={{marginTop: '15px'}}>{
+                            isOwner?(
+                            <>
+                                <Button style = {{backgroundColor: '#5B6A82', color: 'white', border: 'none', marginTop: '5px', width:'100px'}}>요청 거절</Button>
+                                <Button className="green" style = {{color: 'white', border: 'none', marginTop: '5px', width: '100px'}} onclick = {onContract} >요청 수락</Button>
+                            </>):(
+                                <>
+                                <Button style = {{backgroundColor: '#5B6A82', color: 'white', border: 'none', marginTop: '5px', width:'100px'}} onClick = {goToItem}>매물 자세히보기</Button>
+                                <Button className="green" style = {{color: 'white', border: 'none', marginTop: '5px', width: '100px'}} >요청 취소</Button>
+                                </>
+                            )}
                         </div>
                     </Col>
             </Row>
         </Container>
     )
 };
-export default MakeContract;
+export default ReqPage;

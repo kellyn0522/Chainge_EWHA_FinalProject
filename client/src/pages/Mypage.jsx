@@ -9,6 +9,7 @@ import Unregister from "./Unregister";
 import MyItem from "./MyItem";
 import LikedItem from "./LikedItem";
 import ContractReq from "./ContractReq";
+import SendContractReq from "./SendContractReq";
 import chat from '../icons/chat.svg';
 import account from '../icons/account.svg';
 import house from '../icons/house.svg';
@@ -33,6 +34,10 @@ const Mypage = () => {
     const [showReqModal, setShowReqModal] = useState(false);
     const handleReqShow = () => setShowReqModal(true);
     const handleReqClose = () => setShowReqModal(false);
+
+    const [showSendReqModal, setShowSendReqModal] = useState(false);
+    const handleSendReqShow = () => setShowSendReqModal(true);
+    const handleSendReqClose = () => setShowSendReqModal(false);
 
     
     const {contract} = useContext(ContractContext);
@@ -119,8 +124,9 @@ const Mypage = () => {
                                             ):null
                                         }
                                     </div>
-                                    <Button className = 'green' style = {{color: 'white', border: 'none', margin: '7px'}} onClick = {handleReqShow}>보낸 거래 요청</Button>
+                                    <Button className = 'green' style = {{color: 'white', border: 'none', margin: '7px'}} onClick = {handleSendReqShow}>보낸 거래 요청</Button>
                                     <Button className = 'green' style = {{color: 'white', border: 'none', margin: '7px'}} onClick = {handleReqShow}>받은 거래 요청</Button>
+                                    <SendContractReq show={showSendReqModal} handleClose={handleSendReqClose} />
                                     <ContractReq show={showReqModal} handleClose={handleReqClose} />
                                 </div>
                             </div>

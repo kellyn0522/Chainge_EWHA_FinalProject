@@ -26,6 +26,7 @@ import CheckIdentity from "./pages/CheckIdentity";
 import "./pont.css";
 import "./icons.css";
 import SearchMap from "./component/SearchMap";
+import ReqPage from "./pages/ReqPage";
 
 export const ContractContext = createContext();
 
@@ -53,6 +54,7 @@ function App() {
                          <Route path="/changingUserData" element={<ChangingUserData />} />
                          <Route path="/userHistory" element={<UserHistory />} />
                          <Route path="/checkIdentity/:id" element={<CheckIdentity />} />
+                         <Route path="/reqPage/:otherUser/:id/:type" element={<ReqPage />} />
                          <Route path="/searchMap" element={<SearchMap />} /> {/* Add SearchMap Route */}
                           <Route path="*" element ={<Navigate to ="/"/>} />
                          </Routes>

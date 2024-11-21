@@ -1,5 +1,5 @@
 import { createContext, useCallback, useEffect, useContext, useState } from "react";
-import { baseUrl, postRequest, deleteRequest } from "../utils/services";
+import { baseUrl, postRequest, deleteRequest, getRequest } from "../utils/services";
 import {useNavigate} from "react-router-dom";
 import { AuthContext } from "./AuthContext";
 
@@ -14,16 +14,15 @@ export const ReqContextProvider = ({ children }) => {
             senderId: '', 
             itemId:'', 
             ownerId:'',
+            start:'',
+            end:'',
+            period:'',
         }
     );
     const [isError, setIsError] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [isReqError, setIsReqError] = useState(null);
     const [isReqLoading, setIsReqLoading] = useState(false);
-    const [received, setReceived] = useState([]);
-    const [ send, setSend] = useState([]);
-    const [foundReq, setFoundReq] = useState([]);
-
 
     const updateReqInfo = useCallback((info) => {
         setReqInfo((prevInfo) => ({ ...prevInfo, ...info }));
@@ -52,7 +51,7 @@ export const ReqContextProvider = ({ children }) => {
     }
     }, [reqInfo, navigate]);
 
-    const getReq = async (url, setterFunction) => {
+    const getReq = async (url) => {
         if (user?._id) {
             setIsReqLoading(true);
             setIsReqError(null);
@@ -62,48 +61,45 @@ export const ReqContextProvider = ({ children }) => {
                 setIsReqLoading(false);
 
                 if (response.error) {
-                    return setIsReqError(response);
+                    setIsReqError(response);
+                    return null;
                 }
-                setterFunction(response);
+                console.log("!!!!!!!!!!!!!!!!!!", response);
+                return response;
             }catch(error){
                 console.log("ERRORRRRRRR");
                 setIsReqError(error.message);
                 setIsReqLoading(false);
+                return null;
             }
         }
     };
 
 
-    const getUserReceiveReq = () => {
+    const getUserReceiveReq = async() => {
         if (user?._id) {
-            getReq(`${baseUrl}/itemReq/r/${user?._id}`, setReceived);
+            return await getReq(`${baseUrl}/itemReq/r/${user?._id}`);
         }
+        return null;
     };
 
-    const getUserSendReq = () => {
+    const getUserSendReq = async() => {
         if (user?._id) {
-            getReq(`${baseUrl}/itemReq/s/${user?._id}`,setSend);
+            return await getReq(`${baseUrl}/itemReq/s/${user?._id}`);
         }
+        return null;
     };
 
-    const findReq = () => {
-        getReq(`${baseUrl}/find/${reqInfo.senderId}/${reqInfo.itemId}/${reqInfo.ownerId}`, setFoundReq);
+    const findingReq = async(reqID) => {
+        return await getReq(`${baseUrl}/itemReq/find/${reqID}`);
     };
-    
-    useEffect(()=>{
-        if (reqInfo.senderId && reqInfo.itemId && reqInfo.ownerId){
-            findReq();
-        }
-    }, [reqInfo]);
 
     return (<ReqContext.Provider value={{
         createReq,
         getUserReceiveReq,
         getUserSendReq,
-        findReq,
-        received,
-        send,
-        foundReq,
+        findingReq,
+        
         isLoading,
         isError,
         isReqLoading,
