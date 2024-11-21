@@ -1,5 +1,5 @@
 //import { AuthItemContext } from "../context/AuthItemContext";
-import { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Alert, Button, Form, Row, Col, Stack, Card } from "react-bootstrap";
 import { AuthItemContext } from "../context/AuthItemContext";
 import { AuthContext } from "../context/AuthContext";
@@ -13,7 +13,7 @@ const CreateItemPage = () => {
     
     const { 
         //item,
-        createItemInfo,
+        // createItemInfo,
         updateCreateItemInfo,
         createItem,
         createItemError,
@@ -37,6 +37,7 @@ const CreateItemPage = () => {
         hasFridge: false,
         hasSofa: false,
         hasChair: false,});
+    
     const [addressData, setAddressData] = useState({
         location: "",
         zipCode: "",
@@ -44,6 +45,15 @@ const CreateItemPage = () => {
         longitude: null,
     });
 
+    const [createItemInfo, setCreateItemInfo] = useState({
+        location: "",
+        zipCode: "",
+        latitude: null,
+        longitude: null,
+    });
+    
+    const [roadAddress, setRoadAddress] = useState('');
+    const [zonecode, setZonecode] = useState('');
 
     const loadKakaoMapsAPI = () => {
         return new Promise((resolve, reject) => {
@@ -53,48 +63,52 @@ const CreateItemPage = () => {
                     resolve();
                 });
             } else {
-                reject("Kakao Maps API가 로드되지 않았습니다.");
+                const kakaoScript = document.createElement("script");
+                kakaoScript.src = "https://dapi.kakao.com/v2/maps/sdk.js?appkey=774e3b62181c99d1ba97f5efdc1eab76&libraries=services";
+                kakaoScript.async = true;
+                kakaoScript.onload = () => resolve();
+                kakaoScript.onerror = () => reject("Kakao Maps API 로드 실패");
+                document.body.appendChild(kakaoScript);
+                // reject("Kakao Maps API가 로드되지 않았습니다.");
             }
         });
     };
+
     const handlePostcodeSearch = () => {
         if (!window.daum || !window.daum.Postcode) {
             console.error("Daum Postcode API가 로드되지 않았습니다.");
             return;
         }
-    
+
         new window.daum.Postcode({
             oncomplete: async function (data) {
                 const roadAddress = data.roadAddress;
                 const zonecode = data.zonecode;
+
+                console.log("검색된 주소:", roadAddress)
+                console.log("검색된 우편번호:", zonecode)
+
+                setRoadAddress(roadAddress);
+                setZonecode(zonecode);
     
-                try {
-                    await loadKakaoMapsAPI(); // Kakao API 로드 보장
+                loadKakaoMapsAPI().then(() => {
                     const geocoder = new window.kakao.maps.services.Geocoder();
-    
                     geocoder.addressSearch(roadAddress, (result, status) => {
                         if (status === window.kakao.maps.services.Status.OK) {
-                            const { x, y } = result[0]; // 경도 (x), 위도 (y)
-                            setAddressData({
-                                location: roadAddress,
-                                zipCode: zonecode,
-                                latitude: y,
-                                longitude: x,
-                            });
-                            updateCreateItemInfo({
-                                ...createItemInfo,
-                                location: roadAddress,
-                                zipCode: zonecode,
-                                latitude: y,
-                                longitude: x,
+                            const { x: longitude, y: latitude } = result[0]; // 경도 (x), 위도 (y)
+                            
+                            // 위치 정보로 상태 업데이트 (필요시)
+                            setAddressData({ 
+                                roadAddress, 
+                                zonecode, 
+                                latitude, 
+                                longitude 
                             });
                         } else {
                             console.error("주소 검색 실패:", status);
                         }
                     });
-                } catch (error) {
-                    console.error(error);
-                }
+                });
             },
         }).open();
     };
@@ -102,7 +116,11 @@ const CreateItemPage = () => {
     const onChangebedExist = (e) => {
         const checked = e.target.checked
         setBedExist(checked);
-        () => updateCreateItemInfo({ ...createItemInfo, bedSize: checked? createItemInfo.bedSize: "" })
+        updateCreateItemInfo({ 
+            ...createItemInfo, 
+            bedSize: checked? createItemInfo.bedSize: "" ,
+
+        });
     };
 
     const onChangeCheckbox = (e) => {
@@ -112,39 +130,24 @@ const CreateItemPage = () => {
             return newState;
         });
     };
-
-    //774e3b62181c99d1ba97f5efdc1eab76
+    
     useEffect(() => {
-    // Kakao Maps API 로드
-    const kakaoScript = document.createElement("script");
-    kakaoScript.src =
-        "https://dapi.kakao.com/v2/maps/sdk.js?appkey=774e3b62181c99d1ba97f5efdc1eab76&libraries=services";
-    kakaoScript.async = true;
+        // Daum Postcode API 로드
+        const daumScript = document.createElement("script");
+        daumScript.src = "//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js";
+        daumScript.async = true;
 
-    kakaoScript.onload = () => {
-        console.log("Kakao Maps API 로드 완료");
-    };
+        daumScript.onload = () => {
+            console.log("Daum Postcode API 로드 완료");
+        };
 
-    document.body.appendChild(kakaoScript);
+        document.body.appendChild(daumScript);
 
-    // Daum Postcode API 로드
-    const daumScript = document.createElement("script");
-    daumScript.src = "//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js";
-    daumScript.async = true;
-
-    daumScript.onload = () => {
-        console.log("Daum Postcode API 로드 완료");
-    };
-
-    document.body.appendChild(daumScript);
-
-    return () => {
-        document.body.removeChild(kakaoScript);
-        document.body.removeChild(daumScript);
-    };
-}, []);
-
-
+        return () => {
+            // document.body.removeChild(kakaoScript);
+            document.body.removeChild(daumScript);
+        };
+    }, []);
 
     useEffect(() => {
         updateCreateItemInfo({ ...createItemInfo, hasItems});
@@ -183,37 +186,53 @@ const CreateItemPage = () => {
                             placeholder={user.name}
                             disabled/>
                         </Form.Group>
+
                         <Form.Group style = {{marginBottom: '10px', display: 'grid', gridTemplateColumns: '1fr 2fr 0.7fr', alignItems: 'center'}}>
                             <div style = {{display: 'flex', gap: '5px'}}>
-                                <Form.Label>매물 주소</Form.Label>
+                                <Form.Label>주소 검색</Form.Label>
                                 <Form.Label style={{color: '#6495ED'}}> *</Form.Label>
                             </div>
-                            <Form.Control 
-                            type="text" 
-                            value={addressData.location} readOnly 
-                            onChange={
-                                (e) => updateCreateItemInfo({ ...createItemInfo, location: e.target.value, itemID: new Date().getTime(), ownerId: user._id })
-                            } />
                             <Button className = 'green' onClick={handlePostcodeSearch}>주소 찾기</Button>
                         </Form.Group>
+
                         <Form.Group className="formControl">
-                                <Form.Label>우편번호</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    value={addressData.zipCode || ""}
-                                    readOnly
-                                    placeholder="우편번호"
-                                />
-                            </Form.Group>
+                            <div style = {{display: 'flex', gap: '5px'}}>
+                                <Form.Label>우편 번호 </Form.Label>                                
+                            </div>
+                            <Form.Control
+                                type="text"
+                                value = {zonecode}
+                                placeholder="zipcode"
+                                onChange = {(e) => setZonecode(e.target.value)}
+                            />                                
+                        </Form.Group>
+
+                        <Form.Group className="formControl">
+                            <div style = {{display: 'flex', gap: '5px'}}>                            
+                                <Form.Label>매물 주소 </Form.Label>
+                            </div>
+                            <Form.Control
+                                type="text"
+                                value = {roadAddress}
+                                placeholder="Main Location"
+                                onChange = {(e) => setRoadAddress(e.target.value)}
+                            /> 
+                        </Form.Group>
+
                         <Form.Group className='formControl'>
                             <Form.Label>상세 주소</Form.Label>
                             <Form.Control 
-                            type="text" 
-                            placeholder="Detail Location" 
-                            onChange={ 
-                                (e) => updateCreateItemInfo({ ...createItemInfo, houseAddress: e.target.value })
-                            } />
-                        </Form.Group>
+                                type="text" 
+                                placeholder="Detail Location" 
+                                onChange={(e) => {
+                                    const detailAddress = e.target.value;
+                                    setAddressData((prev) => ({
+                                        ...prev,
+                                        location: `${prev.location} ${detailAddress}`,  // 상세 주소가 추가되도록
+                                    }));
+                                }}
+                            />
+                        </Form.Group>   
                         <Form.Group className='formControl'>
                             <div style = {{display: 'flex', gap: '5px'}}>
                                 <Form.Label>월세</Form.Label>
