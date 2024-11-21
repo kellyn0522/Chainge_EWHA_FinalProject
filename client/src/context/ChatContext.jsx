@@ -149,23 +149,7 @@ export const ChatContextProvider = ({ children, user }) => {
         };
         getMessages();
     }, [currentChat]);
-/*
-    useEffect(()=>{
-        if (socket == null) return;
 
-        socket.on('receiveAdminNotification', (notification) => {
-            const isChatOpen = currentChat?.members?.some((id) => id === notification.senderId);
-            if (isChatOpen){
-                setNotifications((prev) => [{...notification, isRead: true}, ...prev]);
-            } else{
-                setNotifications((prev) => [notification, ...prev]);
-            }
-        });
-        return () => {
-            socket.off('receiveAdminNotification');
-        };
-    }, [socket, currentChat]);
-*/
     const sendTextMessage = useCallback(async (textMessage, sender, currentChatId, setTextMessage) => {
 
         if (!textMessage) { return console.log("You must type something... "); }
@@ -246,20 +230,7 @@ export const ChatContextProvider = ({ children, user }) => {
         });
         setNotifications(mNotifications);
     },[]);
-/*
-    const sendAdminNotifiction = useCallback((userId, adminId, message) => {
-        if (socket == null) return;
-        
-        const adminNotification = {
-            senderID: user._id,
-            receiverID: item.ownerId,
-            reqObjsct: reqObject,
-            isRead: false
-        }
 
-        socket.emit('sendAdminNotification',adminNotification );
-    }, [socket]);
-*/
     return (<ChatContext.Provider value={{
         userChats,
         isUserChatsLoading,

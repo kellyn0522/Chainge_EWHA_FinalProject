@@ -1,10 +1,14 @@
-import { createContext, useCallback, useEffect, useState } from "react";
+import { createContext, useCallback, useEffect, useContext, useState } from "react";
 import { baseUrl, postRequest, deleteRequest } from "../utils/services";
 import {useNavigate} from "react-router-dom";
+import { AuthContext } from "./AuthContext";
 
 export const ReqContext = createContext();
 export const ReqContextProvider = ({ children }) => {
     const navigate = useNavigate();
+    const { 
+        user
+    } = useContext(AuthContext);
     const [reqInfo, setReqInfo] = useState(
         {
             senderId: '', 
@@ -14,65 +18,100 @@ export const ReqContextProvider = ({ children }) => {
     );
     const [isError, setIsError] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [isReqError, setIsReqError] = useState(null);
+    const [isReqLoading, setIsReqLoading] = useState(false);
+    const [received, setReceived] = useState([]);
+    const [ send, setSend] = useState([]);
+    const [foundReq, setFoundReq] = useState([]);
 
 
-    const makeReq = useCallback(async(senderId, itemId, ownerId) => {
+    const updateReqInfo = useCallback((info) => {
+        setReqInfo((prevInfo) => ({ ...prevInfo, ...info }));
+    }, []);
+
+    const createReq = useCallback(async(e) => {
         e.preventDefault();
+        setIsLoading(true);
 
-        const response = await postRequest(
-            `${baseUrl}/itemReq`,
-            JSON.stringify(reqInfo));
+        try{
+            const response = await postRequest(
+                `${baseUrl}/itemReq`,
+                JSON.stringify(reqInfo));
 
-        console.log("Request response ", response);
+            console.log("Request response ", response);
         
 
-        if (response.error) {
-            return setIsError(response);
-        }
+            if (response.error) {
+                return setIsError(response.error);
+            }
 
-        navigate("/");
-    }, [reqInfo]);
-/*
-    useEffect(() => {
-        const getUserReceiveReq = async () => {
+            navigate("/");
+    }catch(error){
+        console.log("ERRORRRRRRRRRR");
+        setIsError(error,message);
+    }
+    }, [reqInfo, navigate]);
 
-            //console.log('user:', user);
-            if (user?._id) {
-                setIsUserChatsLoading(true);
-                setUserChatsError(null);
+    const getReq = async (url, setterFunction) => {
+        if (user?._id) {
+            setIsReqLoading(true);
+            setIsReqError(null);
 
-                const response = await getRequest(`${baseUrl}/chats/${user?._id}`);
-                setIsUserChatsLoading(false);
-                //console.log('API response:', response);
+            try{
+                const response = await getRequest(url);
+                setIsReqLoading(false);
 
                 if (response.error) {
-                    return setUserChatsError(response);
+                    return setIsReqError(response);
                 }
-                setUserChats(response);
+                setterFunction(response);
+            }catch(error){
+                console.log("ERRORRRRRRR");
+                setIsReqError(error.message);
+                setIsReqLoading(false);
             }
-        };
-        getUserChats();
-    }, [user, notifications]);
-}
-
-    router.get("/s/:userId", findUserSendReq);
-    router.get("/r/:userId", findUserReceivedReq);
-    router.get("/find/:firstId/:secondId", findReq);
+        }
+    };
 
 
+    const getUserReceiveReq = () => {
+        if (user?._id) {
+            getReq(`${baseUrl}/itemReq/r/${user?._id}`, setReceived);
+        }
+    };
 
-*/
+    const getUserSendReq = () => {
+        if (user?._id) {
+            getReq(`${baseUrl}/itemReq/s/${user?._id}`,setSend);
+        }
+    };
 
+    const findReq = () => {
+        getReq(`${baseUrl}/find/${reqInfo.senderId}/${reqInfo.itemId}/${reqInfo.ownerId}`, setFoundReq);
+    };
+    
+    useEffect(()=>{
+        if (reqInfo.senderId && reqInfo.itemId && reqInfo.ownerId){
+            findReq();
+        }
+    }, [reqInfo]);
 
+    return (<ReqContext.Provider value={{
+        createReq,
+        getUserReceiveReq,
+        getUserSendReq,
+        findReq,
+        received,
+        send,
+        foundReq,
+        isLoading,
+        isError,
+        isReqLoading,
+        isReqError,
 
-
-
-
-
-
-
-
-
-
-
+        updateReqInfo
+    }}>
+        {children}
+    </ReqContext.Provider>
+    );
 }

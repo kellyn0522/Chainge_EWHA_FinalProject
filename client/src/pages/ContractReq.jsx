@@ -1,19 +1,21 @@
 import { Modal, Card } from "react-bootstrap";
+import { ReqContext } from "../context/ReqContext";
+import {useEffect, useState, useContext} from "react";
 
+const ContractReq = ({show ,handleClose}) => {
+    const {getUserReceiveReq} = useContext(ReqContext);
+    useEffect(() => {
+        const fetchItems = async () => {
+            const allItems = await getItem();
+            if (Array.isArray(allItems)){
+                setItems(allItems);
+            } else {
+                console.error('Failed to fetch items.');
+            }
+        };
+        fetchItems();
+    }, [getItem]);
 
-const ContractReq = ({show ,handleClose}) => {/*
-    const markAllNotificationAsRead = useCallback(() => {
-        const mNotifications = notifications.map(n => ({...n, isRead: true}));
-        setNotifications(mNotifications);
-    }, [notifications]);
-
-    const markNotificationAsRead = useCallback((notificationId) => {
-        const mNotifications = notifications.map(n => 
-            n.id === notificationId? {...n, isRead: true}: n
-        );
-        setNotifications(mNotifications);
-    }, [notifications]);
-    */
     const notifications = [{
         id:'ㅇㅇㅇㅇㅇ',
         senderId:'ㅇㅇㅇㅇ',

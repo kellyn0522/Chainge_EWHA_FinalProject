@@ -6,6 +6,7 @@ import { AuthContext } from "../context/AuthContext";
 import { Button, Card, Row, Col, Container, Stack } from "react-bootstrap";
 import {ContractContext} from '../App';
 import axios from 'axios';
+import { ReqContext } from "../context/ReqContext";
 
 
 const MakeContract = () => {
@@ -13,6 +14,7 @@ const MakeContract = () => {
     const {userInfo} = location.state || {};
     const {id} = useParams();
     const { user } = useContext(AuthContext);
+    const {createReq, updateReqInfo } = useContext(ReqContext);
     const {
         findItem,
         findItemError,
@@ -95,6 +97,12 @@ const MakeContract = () => {
         }
 
         setContract((prev) => [...prev, newContract])
+        updateReqInfo({
+            senderId: userInfo?.tenantID || user?._id, 
+            itemId:item?.itemID, 
+            ownerId:item?.ownerId,
+        })
+        await createReq(e);
 
         try {
             await axios.post('http://localhost:5000/api/contracts', newContract);
