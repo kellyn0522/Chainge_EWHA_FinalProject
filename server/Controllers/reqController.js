@@ -24,7 +24,7 @@ const findUserSendReq = async(req,res) =>{
     const userId = req.params.userId;
     try{
         const r = await reqModel.find({
-            members: { $in :[senderId] }
+            members: { $in :[userId] }
         });
         
 
@@ -41,7 +41,7 @@ const findUserReceivedReq = async(req,res) =>{
     const userId = req.params.userId;
     try{
         const r = await reqModel.find({
-            members: { $in :[ownerId] }
+            members: { $in :[userId] }
         });
         
 
@@ -60,6 +60,9 @@ const findReq = async(req,res) =>{
         const r = await reqModel.find({
             members: { $all :[senderId, itemId, ownerId] }
         });
+        if (r.length === 0){
+            return res.status(404).json({message: '요청을 찾을 수 없습니다.'});
+        }
 
         res.status(200).json(r);
 

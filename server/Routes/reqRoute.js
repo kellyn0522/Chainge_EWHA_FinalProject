@@ -5,6 +5,6 @@ const router = express.Router();
 router.post("/", createReq);
 router.get("/s/:userId", findUserSendReq);
 router.get("/r/:userId", findUserReceivedReq);
-router.get("/find/:firstId/:secondId", findReq);
+router.get("/find/:senderId/:itemId/:ownerId", findReq);
 
 module.exports = router;
