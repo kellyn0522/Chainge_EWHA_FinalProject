@@ -17,6 +17,7 @@ const MakeContract = () => {
     const [item, setItem] = useState(null);
     const {setContract} = useContext(ContractContext);
     const [reqInfo, setReqInfo] = useState(null);
+    const { user } = useContext(AuthContext);
 
     const {
         findItem,
@@ -95,18 +96,22 @@ const MakeContract = () => {
     }
 
     const onLSign = async()=>{
-        await landlordSigned(id);
-        setReqInfo(preState => ({
-            ...preState,
-            landlordSign: true,
-        }));
+        if(user._id === contractInfo.landlordID){
+            await landlordSigned(id);
+            setReqInfo(preState => ({
+                ...preState,
+                landlordSign: true,
+            }));
+        }
     }
     const onTSign = async()=>{
-        await tenantSigned(id);
-        setReqInfo(preState => ({
-            ...preState,
-            tenantSign: true,
-        }))
+        if(user._id === contractInfo.tenantID){
+            await tenantSigned(id);
+            setReqInfo(preState => ({
+                ...preState,
+                tenantSign: true,
+            }))
+        }
     }
 
     const onContract = async (e)=>{
