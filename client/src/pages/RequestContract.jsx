@@ -4,16 +4,22 @@ import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { AuthItemContext } from "../context/AuthItemContext";
 import { AuthContext } from "../context/AuthContext";
 import { Button, Card, Row, Col, Container, Stack } from "react-bootstrap";
-import {ContractContext} from '../App';
-import axios from 'axios';
 import { ReqContext } from "../context/ReqContext";
 
 
-const MakeContract = () => {
+const RequestContract = () => {
     const navigate = useNavigate();
-    const {info} = location.state || {};
+    const {id} = useParams();
+    const location = useLocation();
+    const {userInfo} = location.state || {};
+    const { user } = useContext(AuthContext);
+    const {createReq, updateReqInfo } = useContext(ReqContext);
+    const {
+        findItem,
+        findItemError,
+        isFindItemLoading,
+    } = useContext(AuthItemContext);
     const [item, setItem] = useState(null);
-    const {setContract} = useContext(ContractContext);
 
     useEffect(() => {
         const fetchItem = async () => {
@@ -32,33 +38,18 @@ const MakeContract = () => {
         return <div>Error: {findItemError?.message || 'Page not found'}</div>
     }
     
-    const receivedinfo =
-    {
-        itemID: item?.itemID,
-        tenantID: info.tenantID,
-        tenantphoneNum: info.tenantphoneNum,
-        tenantBirth: info.tenantBirth,
-        tenantidentityNum: info.tenantidentityNum,
-        tenantMetamaskAdd: info.metamaskAdd,
-        tenantname: info.tenantname,
-        tenantzipcode: info.tenantzipcode,
-
-        landlordID: info.landlordID,
-        landlordphoneNum: info.landlordphoneNum,
-        landlordBirth: info.landlordBirth,
-        landlordIdentityNum: info.landlordIdentityNum,
-        landlordMetamaskAdd: info.landlordMetamaskAdd,
-        landlordname: info.landlordname,
-        landlordzipcode: info.landlordzipcode,
-
-        price: item?.housePrice,
-        deposit: item?.deposit,
-        start: info.start,
-        end: info.end,
-        period: info.period,
-    }
-    console.log('receivedinfo!!!!!!!!!!!!!!!',receivedinfo);
-    console.log('info!!!!!!!!!!!!!!!!!!!!!!!',info);
+    const [info, setInfo] = useState(
+        {
+            itemID: item?.itemID,
+            tenantID: userInfo?.tenantID || user?._id,
+            tenantphoneNum: userInfo?.tenantphoneNum || user?.phoneNumber,
+            tenantBirth:userInfo?.tenantBirth || user?.birth,
+            tenantidentityNum: userInfo?.tenantidentityNum || user?.identityNum,
+            metamaskAdd: userInfo?.metamaskAdd,
+            price: item?.housePrice,
+            deposit: item?.deposit,
+        }
+    )
 
     const goToItem = () => {
         if(!isFindItemLoading && !findItemError && item){
@@ -66,23 +57,38 @@ const MakeContract = () => {
         }
     }
     
-    if(!info || !item){
+    if(!user || !item){
         return null;
     }
+
+    const handleStart = (e) =>{
+        setInfo((prev) => ({...prev, start:e.target.value}));
+    }
+    const handleEnd = (e) =>{
+        setInfo((prev) => ({...prev, end:e.target.value}));
+    }
+    const handlePeriod = (e) =>{
+        setInfo((prev) => ({...prev, period:e.target.value}));
+    }
+
 
     const onContract = async (e)=>{
         e.preventDefault();
 
-        await createReq(e);
+        updateReqInfo({
+                senderId: userInfo?.tenantID || user?._id, 
+                itemId:item?.itemID, 
+                ownerId:item?.ownerId,
+                start: info.start,
+                end: info.end,
+                period: info.period,
+        })
 
-        try {
-            await axios.post('http://localhost:5000/api/contracts', receivedinfo);
-            setContract((prev) => [...prev, receivedinfo]);
-            navigate('/');
-        } catch (errer){
-            console.error('Error saving contract:', error);
-        }
-    };
+        createReq();
+        alert("요청이 완료되었습니다");
+        goToItem();
+    }
+
 
     return (
         <Container>
@@ -96,48 +102,31 @@ const MakeContract = () => {
                     margin:"10px"
                 }}>
                     <Col xs={10}>
-                        <h2 style={{marginBottom: '20px'}}>거래 하기</h2>
+                        <h2 style={{marginBottom: '20px'}}>거래 요청하기</h2>
                         <Card className = "information" style={{marginBottom:"20px"}}>
-                            <Card.Title className = "infoTitle">임대인</Card.Title>
+                            <Card.Title className = "infoTitle">본인 정보 확인</Card.Title>
                             <Card.Body className = "info">
                                 <div className="infotype">이름</div>
-                                <div className = "infoName">{info.landlordname}</div>
+                                <div className = "infoName">{user.name}</div>
                                 <div className="infotype">우편번호</div>
-                                <div className = "infoName">{info.landlordzipcode}</div>
-                                <div className ="infotype">주민등록번호</div>
-                                <div className = "infoName">{info.landlordBirth}-{info.landlordIdentityNum}</div>
-                                <div className="infotype">전화번호</div>
-                                <div className = "infoName">{info.landlordphoneNum.replace(/(\d{3})(\d{3})(\d{4})/,'$1-$2-$3')}</div>
-                            </Card.Body>
-                            <div className ="infotype">메타마스크 주소</div>
-                            <div className = "infoName">{info.landlordMetamaskAdd}</div>
-                            <Button>전자 서명</Button>
-                        </Card>
-                        <Card className = "information" style={{marginBottom:"20px"}}>
-                            <Card.Title className = "infoTitle">임차인</Card.Title>
-                            <Card.Body className = "info">
-                                <div className="infotype">이름</div>
-                                <div className = "infoName">{info.tenantname}</div>
-                                <div className="infotype">우편번호</div>
-                                <div className = "infoName">{info.tenantzipcode}</div>
+                                <div className = "infoName">{user.zipCode}</div>
                                 <div className ="infotype">주민등록번호</div>
                                 <div className = "infoName">{info.tenantBirth}-{info.tenantidentityNum}</div>
                                 <div className="infotype">전화번호</div>
                                 <div className = "infoName">{info.tenantphoneNum.replace(/(\d{3})(\d{3})(\d{4})/,'$1-$2-$3')}</div>
                             </Card.Body>
                             <div className ="infotype">메타마스크 주소</div>
-                            <div className = "infoName">{info.tenantMetamaskAdd}</div>
-                            <Button>전자 서명</Button>
+                            <div className = "infoName">{info.metamaskAdd}</div>
                         </Card>
                         <Card style={{marginBottom:"20px"}}>
                             <Card.Title className = "infoTitle">계약 상세</Card.Title>
                             <Card.Body className = "inputCard">
                                 <div className="infotype">계약 시작 날짜</div>
-                                <div className = "infoName">{info.start}</div>
+                                <input type = "date" className="set" onChange={handleStart} />
                                 <div className="infotype">계약 종료 날짜</div>
-                                <div className = "infoName">{info.end}</div>
+                                <input type = "date" className="set" onChange={handleEnd} />
                                 <div className="infotype">계약 기간</div>
-                                <div className = "infoName">{info.period}</div>
+                                <input placeholder=" 개월 수" className="set" onChange={handlePeriod} />
                             </Card.Body>
                         </Card>
                         <Card className = "information" style={{marginBottom:"10px"}}>
@@ -213,11 +202,11 @@ const MakeContract = () => {
                         </Card>
                         <div className='contractButton' style={{marginTop: '15px'}}>
                             <Button style = {{backgroundColor: '#5B6A82', color: 'white', border: 'none', marginTop: '5px', width:'100px'}} onClick = {goToItem}>돌아가기</Button>
-                            <Button className="green" style = {{color: 'white', border: 'none', marginTop: '5px', width: '100px'}} onClick = {onContract}>거래 시작</Button>
+                            <Button className="green" style = {{color: 'white', border: 'none', marginTop: '5px', width: '100px'}} onClick = {onContract}>거래 요청</Button>
                         </div>
                     </Col>
             </Row>
         </Container>
     )
 };
-export default MakeContract;
+export default RequestContract;

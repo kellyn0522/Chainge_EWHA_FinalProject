@@ -1,9 +1,8 @@
-import {useEffect, useState, useContext} from "react";
+import {useEffect, useState, useContext, createContext} from "react";
 import Logo from "../component/Logo";
 import { useNavigate, useParams } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { Button, Card, Row, Col, Container, Stack, Form } from "react-bootstrap";
-
 
 const CheckIdentity = () => {
     const navigate = useNavigate();
@@ -33,9 +32,9 @@ const CheckIdentity = () => {
     const updateAccount = () => {
         setAccount(true);
     }
-
-    const makeContract = () => {
-        navigate(`/makeContract/${id}`, {state: {userInfo}});
+    
+    const reqContract = () => {
+        navigate(`/RequsetContract/${id}`, {state: {userInfo}});
     }
 
     const goToItem = () => {
@@ -106,7 +105,7 @@ const CheckIdentity = () => {
                             />
                             <div className='contractButton' style={{marginTop: '70px'}}>
                                 <Button style = {{backgroundColor: '#5B6A82', color: 'white', border: 'none', marginTop: '5px', width: '110px'}} onClick = {goToItem}>뒤로가기</Button>
-                                <Button style = {{color: 'white', border: 'none', backgroundColor: '#002D72', width: '110px', opacity: checked&&account? 1: 0.6}} disabled = {!checked||!account} onClick = {makeContract}>다음</Button>
+                                <Button style = {{color: 'white', border: 'none', backgroundColor: '#002D72', width: '110px', opacity: checked&&account? 1: 0.6}} disabled = {!checked||!account} onClick = {reqContract}>다음</Button>
                             </div>
                         </Stack>
                     </Col>

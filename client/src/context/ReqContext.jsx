@@ -47,8 +47,6 @@ export const ReqContextProvider = ({ children }) => {
             if (response.error) {
                 return setIsError(response.error);
             }
-
-            navigate("/");
     }catch(error){
         console.log("ERRORRRRRRRRRR");
         setIsError(error,message);
@@ -98,12 +96,8 @@ export const ReqContextProvider = ({ children }) => {
         return await getReq(`${baseUrl}/itemReq/find/${reqID}`);
     };
 
-    
-router.post("/update/:reqID", acceptReq);
-router.delete("/delete/:reqID", deleteReq);
-
 const updateAccept = useCallback(async(e, reqID) => { 
-    e.preventDefault()
+    if (e && typeof e.preventDefault === 'function'){e.preventDefault();}
     console.log("Update ACCEPT called");
     setAcceptError(null)
     setIsAcceptLoading(true)

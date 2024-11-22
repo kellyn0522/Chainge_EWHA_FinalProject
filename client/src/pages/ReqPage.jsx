@@ -48,16 +48,17 @@ const ReqPage = () => {
     }, [reqInfo]);
 
     useEffect(() => {
-        if (id && !findUserError && !isFindUserLoading){
-            const fetchUser = async () => {
-                const result = await findUser(otherUser);
-                setOtherUserinfo(result);
-            }
-        
-            fetchUser();
+        const fetchUser = async () => {
+            if (otherUser && !findUserError && !isFindUserLoading){
+                console.log('AAAAAAAAAAAAAAAAA');
+                    const result = await findUser(otherUser);
+                    setOtherUserinfo(result);
+            };
         };
-    }, [otherUser]);
+        fetchUser();
+    }, [reqInfo]);
 
+    console.log('CCCCCCCCCCCCCCCC',otherUserinfo);
     
     
     if (isFindItemLoading){
@@ -79,18 +80,24 @@ const ReqPage = () => {
     const onContract = () =>{
         const contractInfo= {
             itemID: item?.itemID,
-            tenantID: otherUserinfo?.tenantID,
-            tenantphoneNum: otherUserinfo?.tenantphoneNum,
-            tenantBirth:otherUserinfo?.tenantBirth,
-            tenantidentityNum: otherUserinfo?.tenantidentityNum,
-            metamaskAdd: otherUserinfo?.metamaskAdd,
             price: item?.housePrice,
             deposit: item?.deposit,
+
+            tenantID: otherUserinfo?._id,
+            tenantphoneNum: otherUserinfo?.phoneNumber,
+            tenantBirth:otherUserinfo?.birth,
+            tenantidentityNum: otherUserinfo?.identityNum,
+            tenantMetamaskAdd: otherUserinfo?.metamaskAdd,
+            tenantname: otherUserinfo.name,
+            tenantzipcode: otherUserinfo.zipCode,
 
             landlordID: user?._id,
             landlordphoneNum: user?.phoneNumber,
             landlordBirth: user?.birth,
             landlordIdentityNum: user?.identityNum,
+            landlordMetamaskAdd: 'landlordMetamaskAdd',
+            landlordname: user?.name,
+            landlordzipcode: user?.zipCode,
 
             start: reqInfo?.start||'2024.11.21',
             end:reqInfo?.end||'2025.11.20',
@@ -98,11 +105,14 @@ const ReqPage = () => {
         }
         console.log('CCCCCCCCCCCCCCCCC',contractInfo);
         updateAccept(id);
+        navigate(`/RequsetContract`, {state: {contractInfo}});
     }
 
     const goToItem = () => {
-        if(!isFindItemLoading && !findItemError && item?.itemId){
-            navigate(`/item/${item.itemId}`);
+        console.log('아이템 페이지로 이동');
+        if(!isFindItemLoading && !findItemError && item?.itemID){
+            console.log('이동 성공');
+            navigate(`/item/${item.itemID}`);
         }
     }
     
@@ -129,9 +139,9 @@ const ReqPage = () => {
                                     <Card.Title className = "infoTitle">상대 정보 확인</Card.Title>
                                     <Card.Body className = "info">
                                         <div className="infotype">이름</div>
-                                        <div className = "infoName">{user.name}</div>
+                                        <div className = "infoName">{otherUserinfo.name}</div>
                                         <div className="infotype">전화번호</div>
-                                        <div className = "infoName">{user.phoneNumber.replace(/(\d{3})(\d{3})(\d{4})/,'$1-$2-$3')}</div>
+                                        <div className = "infoName">{otherUserinfo.phoneNumber.replace(/(\d{3})(\d{3})(\d{4})/,'$1-$2-$3')}</div>
                                     </Card.Body>
                                 </>
                             ):(
@@ -232,7 +242,7 @@ const ReqPage = () => {
                             isOwner?(
                             <>
                                 <Button style = {{backgroundColor: '#5B6A82', color: 'white', border: 'none', marginTop: '5px', width:'100px'}} onClick = {onDeleteReq}>요청 거절</Button>
-                                <Button className="green" style = {{color: 'white', border: 'none', marginTop: '5px', width: '100px'}} onclick = {onContract} >요청 수락</Button>
+                                <Button className="green" style = {{color: 'white', border: 'none', marginTop: '5px', width: '100px'}} onClick = {onContract} >요청 수락</Button>
                             </>):(
                                 <>
                                 <Button style = {{backgroundColor: '#5B6A82', color: 'white', border: 'none', marginTop: '5px', width:'100px'}} onClick = {goToItem}>매물 보기</Button>
