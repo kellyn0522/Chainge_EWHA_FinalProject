@@ -255,7 +255,9 @@ export const AuthItemContextProvider = ({ children }) => {
         } catch (error){
             setFindItemError(error.message)
             console.log(error.message)
-        }
+        } finally{
+        setIsFindItemLoading(false);
+    }
     }, []);
 
     return (

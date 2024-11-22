@@ -68,6 +68,48 @@ export const AuthContextProvider = ({ children }) => {
         navigate("/mypage");
     }, [updaterInfo]);
 
+    const [identityInfo, setIdentityInfo] = useState({
+        id: "",
+        phoneNumber:'', 
+        birth:'',
+        identityNum:'', 
+        metaMaskAdd:''
+    });
+
+    const identityUpdaterInfo = useCallback((info) => {
+        setIdentityInfo((prevInfo) => ({ ...prevInfo, ...info }));
+    }, []);
+
+    const identityupdater = useCallback(async(e) => {
+        e.preventDefault();
+        setIsUpdateLoading(true);
+        setUpdateError(null);
+
+        const response = await postRequest(
+            `${baseUrl}/users/identityUpdate`,
+            JSON.stringify(identityInfo));
+
+        setIsUpdateLoading(false);
+
+        console.log("updater response ", response);
+        
+
+        if (response.error) {
+            return setUpdateError(response);
+        }
+
+        localStorage.setItem("user", JSON.stringify(response));
+
+        setUser(prev => ({
+            ...prev,
+            ...response,
+        }));
+
+        navigate("/mypage");
+    }, [updaterInfo]);
+
+
+
     const updaterLike = useCallback(async(itemID, newLikedState) => {
         setIsUpdateLoading(true);
         setUpdateError(null);
@@ -289,7 +331,10 @@ export const AuthContextProvider = ({ children }) => {
             updaterLike,
             findUser,
             findUserError,
-            isFindUserLoading
+            isFindUserLoading,
+
+            identityUpdaterInfo,
+            identityupdater,
         }}
     >
         {children}

@@ -12,6 +12,8 @@ const createReq = async(req,res) =>{
             end: end,
             period: period,
             accept: false,
+            tenantSign: false,
+            landlordSign: false,
         });
 
         const response = await newReq.save();
@@ -80,8 +82,6 @@ const findReq = async(req,res) =>{
         res.status(500).json(error);
     }
 
-
-
 };
 
 const acceptReq = async(req,res) => {
@@ -103,6 +103,45 @@ const acceptReq = async(req,res) => {
 
 };
 
+const doTenantSign = async(req,res) => {
+    const reqID = req.params.reqID;
+    try{
+        const r = await reqModel.findById(reqID);
+        if (!r){
+            return res.status(404).json({message: '요청을 찾을 수 없습니다.'});
+        }
+    
+        result = await reqModel.updateOne({_id : reqID}, {$set : {tenantSign: true}});
+        res.status(200).json(r);
+        console.log("RRSever", r);
+
+    }catch(error){
+        console.log('acceptReq ERROR ', error);
+        res.status(500).json(error);
+    }
+
+};
+
+const doLandlordSign = async(req,res) => {
+    const reqID = req.params.reqID;
+    try{
+        const r = await reqModel.findById(reqID);
+        if (!r){
+            return res.status(404).json({message: '요청을 찾을 수 없습니다.'});
+        }
+    
+        result = await reqModel.updateOne({_id : reqID}, {$set : {landlordSign: true}});
+        res.status(200).json(r);
+        console.log("RRSever", r);
+
+    }catch(error){
+        console.log('acceptReq ERROR ', error);
+        res.status(500).json(error);
+    }
+
+};
+
+
 const deleteReq = async(req, res) =>{
     const reqID = req.params.reqID;
     try {
@@ -121,5 +160,5 @@ const deleteReq = async(req, res) =>{
 };
 
 
-module.exports ={createReq, findUserSendReq, findUserReceivedReq, findReq, acceptReq, deleteReq};
+module.exports ={createReq, findUserSendReq, findUserReceivedReq, findReq, acceptReq, deleteReq, doTenantSign, doLandlordSign};
 

@@ -11,54 +11,78 @@ import { ReqContext } from "../context/ReqContext";
 
 const MakeContract = () => {
     const navigate = useNavigate();
-    const {info} = location.state || {};
+    const {id} = useParams();
+    const location = useLocation();
+    const {contractInfo} = location.state || {};
     const [item, setItem] = useState(null);
     const {setContract} = useContext(ContractContext);
+    const [reqInfo, setReqInfo] = useState(null);
+
+    const {
+        findItem,
+        findItemError,
+        isFindItemLoading,
+    } = useContext(AuthItemContext);
+    const{findingReq, signingError, isSigningLoading, tenantSigned, landlordSigned} = useContext(ReqContext);
+    
+    useEffect(() =>{
+        const fetchReq = async () => {
+            try{
+                const result = await findingReq(id);
+                setReqInfo(result);
+            }catch{
+                return null;
+            }
+        }
+        fetchReq();
+    }, [id]);
+    console.log(reqInfo);
 
     useEffect(() => {
         const fetchItem = async () => {
-            if (!findItemError && !isFindItemLoading){
-                const result = await findItem(id);
+            if (contractInfo && !findItemError && !isFindItemLoading){
+                const result = await findItem(contractInfo.itemID);
                 setItem(result);
             }
         };
         fetchItem();
-    }, [findItem, findItemError]);
+    }, [contractInfo, findItem]);
+    console.log('IIIIIIIIIIIIIItem', item);
 
     if (isFindItemLoading){
         return <div>Loding...</div>
     }
-    if (findItemError || !item){
+    if (!item){
         return <div>Error: {findItemError?.message || 'Page not found'}</div>
     }
     
-    const receivedinfo =
+    const info =
     {
-        itemID: item?.itemID,
-        tenantID: info.tenantID,
-        tenantphoneNum: info.tenantphoneNum,
-        tenantBirth: info.tenantBirth,
-        tenantidentityNum: info.tenantidentityNum,
-        tenantMetamaskAdd: info.metamaskAdd,
-        tenantname: info.tenantname,
-        tenantzipcode: info.tenantzipcode,
+        itemID: contractInfo?.itemID,
+        tenantID: contractInfo.tenantID,
+        tenantphoneNum: contractInfo.tenantphoneNum,
+        tenantBirth: contractInfo.tenantBirth,
+        tenantidentityNum: contractInfo.tenantidentityNum,
+        tenantMetamaskAdd: contractInfo.metamaskAdd,
+        tenantname: contractInfo.tenantname,
+        tenantzipcode: contractInfo.tenantzipcode,
 
-        landlordID: info.landlordID,
-        landlordphoneNum: info.landlordphoneNum,
-        landlordBirth: info.landlordBirth,
-        landlordIdentityNum: info.landlordIdentityNum,
-        landlordMetamaskAdd: info.landlordMetamaskAdd,
-        landlordname: info.landlordname,
-        landlordzipcode: info.landlordzipcode,
+        landlordID: contractInfo.landlordID,
+        landlordphoneNum: contractInfo.landlordphoneNum,
+        landlordBirth: contractInfo.landlordBirth,
+        landlordIdentityNum: contractInfo.landlordIdentityNum,
+        landlordMetamaskAdd: contractInfo.landlordMetamaskAdd,
+        landlordname: contractInfo.landlordname,
+        landlordzipcode: contractInfo.landlordzipcode,
 
-        price: item?.housePrice,
-        deposit: item?.deposit,
-        start: info.start,
-        end: info.end,
-        period: info.period,
+        price: contractInfo?.price,
+        deposit: contractInfo?.deposit,
+        start: contractInfo.start,
+        end: contractInfo.end,
+        period: contractInfo.period,
     }
-    console.log('receivedinfo!!!!!!!!!!!!!!!',receivedinfo);
-    console.log('info!!!!!!!!!!!!!!!!!!!!!!!',info);
+    console.log('receivedinfo!!!!!!!!!!!!!!!',info);
+    console.log('info!!!!!!!!!!!!!!!!!!!!!!!',contractInfo);
 
     const goToItem = () => {
         if(!isFindItemLoading && !findItemError && item){
@@ -66,8 +90,23 @@ const MakeContract = () => {
         }
     }
     
-    if(!info || !item){
+    if(!contractInfo || !item){
         return null;
+    }
+
+    const onLSign = async()=>{
+        await landlordSigned(id);
+        setReqInfo(preState => ({
+            ...preState,
+            landlordSign: true,
+        }));
+    }
+    const onTSign = async()=>{
+        await tenantSigned(id);
+        setReqInfo(preState => ({
+            ...preState,
+            tenantSign: true,
+        }))
     }
 
     const onContract = async (e)=>{
@@ -76,8 +115,8 @@ const MakeContract = () => {
         await createReq(e);
 
         try {
-            await axios.post('http://localhost:5000/api/contracts', receivedinfo);
-            setContract((prev) => [...prev, receivedinfo]);
+            await axios.post('http://localhost:5000/api/contracts', info);
+            setContract((prev) => [...prev, info]);
             navigate('/');
         } catch (errer){
             console.error('Error saving contract:', error);
@@ -98,46 +137,60 @@ const MakeContract = () => {
                     <Col xs={10}>
                         <h2 style={{marginBottom: '20px'}}>거래 하기</h2>
                         <Card className = "information" style={{marginBottom:"20px"}}>
-                            <Card.Title className = "infoTitle">임대인</Card.Title>
+                            <div style={{display:'flex', justifyContent: 'space-between'}}>
+                                <Card.Title className = "infoTitle">임대인</Card.Title>
+                                {reqInfo?.landlordSign?(
+                                    <Button className="green" style = {{color: 'white', border: 'none', margin: '15px', marginRight: '25px', width: '150px', alignItems:'center'}}>서명 완료</Button>
+                                ):(
+                                    <Button className="lightBlue" style = {{color: 'white', border: 'none', margin: '15px', marginRight: '25px', width: '150px', alignItems:'center'}} onClick ={onLSign}>전자 서명 하기</Button>)}
+                            </div>
                             <Card.Body className = "info">
                                 <div className="infotype">이름</div>
-                                <div className = "infoName">{info.landlordname}</div>
+                                <div className = "infoName">{contractInfo.landlordname}</div>
                                 <div className="infotype">우편번호</div>
-                                <div className = "infoName">{info.landlordzipcode}</div>
+                                <div className = "infoName">{contractInfo.landlordzipcode}</div>
                                 <div className ="infotype">주민등록번호</div>
-                                <div className = "infoName">{info.landlordBirth}-{info.landlordIdentityNum}</div>
+                                <div className = "infoName">{contractInfo.landlordBirth}-{contractInfo.landlordIdentityNum}</div>
                                 <div className="infotype">전화번호</div>
-                                <div className = "infoName">{info.landlordphoneNum.replace(/(\d{3})(\d{3})(\d{4})/,'$1-$2-$3')}</div>
+                                <div className = "infoName">{contractInfo.landlordphoneNum.replace(/(\d{3})(\d{3})(\d{4})/,'$1-$2-$3')}</div>
                             </Card.Body>
-                            <div className ="infotype">메타마스크 주소</div>
-                            <div className = "infoName">{info.landlordMetamaskAdd}</div>
-                            <Button>전자 서명</Button>
+                            <div style ={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', fontSize: '14px', paddingLeft:'17px', paddingBottom:'20px'}}>
+                                <div className ="infotype">메타마스크 주소</div>
+                                <div className = "infoName">{contractInfo.landlordMetamaskAdd}</div>
+                            </div>
                         </Card>
                         <Card className = "information" style={{marginBottom:"20px"}}>
-                            <Card.Title className = "infoTitle">임차인</Card.Title>
+                            <div style={{display:'flex', justifyContent: 'space-between'}}>
+                                <Card.Title className = "infoTitle">임차인</Card.Title>
+                                {reqInfo?.tenantSign?(
+                                    <Button className="green" style = {{color: 'white', border: 'none', margin: '15px', marginRight: '25px', width: '150px', alignItems:'center'}}>서명 완료</Button>
+                                ):(
+                                    <Button className="lightBlue" style = {{color: 'white', border: 'none', margin: '15px', marginRight: '25px', width: '150px', alignItems:'center'}} onClick ={onTSign}>전자 서명 하기</Button>)}
+                            </div>
                             <Card.Body className = "info">
                                 <div className="infotype">이름</div>
-                                <div className = "infoName">{info.tenantname}</div>
+                                <div className = "infoName">{contractInfo.tenantname}</div>
                                 <div className="infotype">우편번호</div>
-                                <div className = "infoName">{info.tenantzipcode}</div>
+                                <div className = "infoName">{contractInfo.tenantzipcode}</div>
                                 <div className ="infotype">주민등록번호</div>
-                                <div className = "infoName">{info.tenantBirth}-{info.tenantidentityNum}</div>
+                                <div className = "infoName">{contractInfo.tenantBirth}-{contractInfo.tenantidentityNum}</div>
                                 <div className="infotype">전화번호</div>
-                                <div className = "infoName">{info.tenantphoneNum.replace(/(\d{3})(\d{3})(\d{4})/,'$1-$2-$3')}</div>
+                                <div className = "infoName">{contractInfo.tenantphoneNum.replace(/(\d{3})(\d{3})(\d{4})/,'$1-$2-$3')}</div>
                             </Card.Body>
-                            <div className ="infotype">메타마스크 주소</div>
-                            <div className = "infoName">{info.tenantMetamaskAdd}</div>
-                            <Button>전자 서명</Button>
+                            <div style ={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', fontSize: '14px', paddingLeft:'17px', paddingBottom:'20px'}}>
+                                <div className ="infotype">메타마스크 주소</div>
+                                <div className = "infoName">{contractInfo.tenantMetamaskAdd}</div>
+                            </div>
                         </Card>
                         <Card style={{marginBottom:"20px"}}>
                             <Card.Title className = "infoTitle">계약 상세</Card.Title>
                             <Card.Body className = "inputCard">
                                 <div className="infotype">계약 시작 날짜</div>
-                                <div className = "infoName">{info.start}</div>
+                                <div className = "infoName">{contractInfo.start}</div>
                                 <div className="infotype">계약 종료 날짜</div>
-                                <div className = "infoName">{info.end}</div>
+                                <div className = "infoName">{contractInfo.end}</div>
                                 <div className="infotype">계약 기간</div>
-                                <div className = "infoName">{info.period}</div>
+                                <div className = "infoName">{contractInfo.period}</div>
                             </Card.Body>
                         </Card>
                         <Card className = "information" style={{marginBottom:"10px"}}>
@@ -213,7 +266,7 @@ const MakeContract = () => {
                         </Card>
                         <div className='contractButton' style={{marginTop: '15px'}}>
                             <Button style = {{backgroundColor: '#5B6A82', color: 'white', border: 'none', marginTop: '5px', width:'100px'}} onClick = {goToItem}>돌아가기</Button>
-                            <Button className="green" style = {{color: 'white', border: 'none', marginTop: '5px', width: '100px'}} onClick = {onContract}>거래 시작</Button>
+                            <Button className="green" style = {{color: 'white', border: 'none', marginTop: '5px', width: '100px', opacity: reqInfo?.tenantSign&&reqInfo.landlordSign? 1: 0.6}} disabled = {!reqInfo || !reqInfo?.tenantSign||!reqInfo?.landlordSign} onClick = {onContract}>거래 시작</Button>
                         </div>
                     </Col>
             </Row>

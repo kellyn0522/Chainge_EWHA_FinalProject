@@ -7,6 +7,8 @@ const reqSchema = new mongoose.Schema({
     end: Date,
     period: Number,
     accepnt: Boolean,
+    tenantSign: Boolean,
+    landlordSign: Boolean,
 }, {
     timestamps: true,
 }

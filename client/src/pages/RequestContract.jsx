@@ -13,13 +13,26 @@ const RequestContract = () => {
     const location = useLocation();
     const {userInfo} = location.state || {};
     const { user } = useContext(AuthContext);
-    const {createReq, updateReqInfo } = useContext(ReqContext);
+    const {reqInfo,createReq, updateReqInfo } = useContext(ReqContext);
     const {
         findItem,
         findItemError,
         isFindItemLoading,
     } = useContext(AuthItemContext);
     const [item, setItem] = useState(null);
+    const [info, setInfo] = useState(
+        {
+            tenantID: userInfo?.tenantID || user?._id,
+            tenantphoneNum: userInfo?.tenantphoneNum || user?.phoneNumber,
+            tenantBirth:userInfo?.tenantBirth || user?.birth,
+            tenantidentityNum: userInfo?.tenantidentityNum || user?.identityNum,
+            metamaskAdd: userInfo?.metamaskAdd,
+            start: '',
+            end: '',
+            period: '',
+        }
+    )
+
 
     useEffect(() => {
         const fetchItem = async () => {
@@ -31,25 +44,28 @@ const RequestContract = () => {
         fetchItem();
     }, [findItem, findItemError]);
 
+    useEffect(()=>{
+        if(item&&userInfo&&user){
+        const init = async() =>{
+            await updateReqInfo({
+                senderId: userInfo?.tenantID || user?._id, 
+                itemId:item?.itemID, 
+                price: item?.price,
+                deposit: item?.deposit,
+                ownerId:item?.ownerId,
+            });
+        }
+        init();
+    }
+    },[item, userInfo, user]);
+   console.log(reqInfo);
+
     if (isFindItemLoading){
         return <div>Loding...</div>
     }
     if (findItemError || !item){
         return <div>Error: {findItemError?.message || 'Page not found'}</div>
     }
-    
-    const [info, setInfo] = useState(
-        {
-            itemID: item?.itemID,
-            tenantID: userInfo?.tenantID || user?._id,
-            tenantphoneNum: userInfo?.tenantphoneNum || user?.phoneNumber,
-            tenantBirth:userInfo?.tenantBirth || user?.birth,
-            tenantidentityNum: userInfo?.tenantidentityNum || user?.identityNum,
-            metamaskAdd: userInfo?.metamaskAdd,
-            price: item?.housePrice,
-            deposit: item?.deposit,
-        }
-    )
 
     const goToItem = () => {
         if(!isFindItemLoading && !findItemError && item){
@@ -62,32 +78,24 @@ const RequestContract = () => {
     }
 
     const handleStart = (e) =>{
-        setInfo((prev) => ({...prev, start:e.target.value}));
+        updateReqInfo({start:e.target.value});
     }
     const handleEnd = (e) =>{
-        setInfo((prev) => ({...prev, end:e.target.value}));
+        updateReqInfo({end:e.target.value});
     }
     const handlePeriod = (e) =>{
-        setInfo((prev) => ({...prev, period:e.target.value}));
+        updateReqInfo({period:e.target.value});
     }
 
 
     const onContract = async (e)=>{
         e.preventDefault();
+        console.log('요청 내용',userInfo,user, item, info);
 
-        updateReqInfo({
-                senderId: userInfo?.tenantID || user?._id, 
-                itemId:item?.itemID, 
-                ownerId:item?.ownerId,
-                start: info.start,
-                end: info.end,
-                period: info.period,
-        })
-
-        createReq();
+        await createReq();
         alert("요청이 완료되었습니다");
         goToItem();
-    }
+    };
 
 
     return (
@@ -115,8 +123,10 @@ const RequestContract = () => {
                                 <div className="infotype">전화번호</div>
                                 <div className = "infoName">{info.tenantphoneNum.replace(/(\d{3})(\d{3})(\d{4})/,'$1-$2-$3')}</div>
                             </Card.Body>
-                            <div className ="infotype">메타마스크 주소</div>
-                            <div className = "infoName">{info.metamaskAdd}</div>
+                            <div style ={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', fontSize: '14px', paddingLeft:'17px', paddingBottom:'20px'}}>
+                                <div className ="infotype">메타마스크 주소</div>
+                                <div className = "infoName">{info.metamaskAdd}</div>
+                            </div>
                         </Card>
                         <Card style={{marginBottom:"20px"}}>
                             <Card.Title className = "infoTitle">계약 상세</Card.Title>
@@ -202,7 +212,7 @@ const RequestContract = () => {
                         </Card>
                         <div className='contractButton' style={{marginTop: '15px'}}>
                             <Button style = {{backgroundColor: '#5B6A82', color: 'white', border: 'none', marginTop: '5px', width:'100px'}} onClick = {goToItem}>돌아가기</Button>
-                            <Button className="green" style = {{color: 'white', border: 'none', marginTop: '5px', width: '100px'}} onClick = {onContract}>거래 요청</Button>
+                            <Button className="green" style = {{color: 'white', border: 'none', marginTop: '5px', width: '100px'}} onClick={onContract}>거래 요청</Button>
                         </div>
                     </Col>
             </Row>

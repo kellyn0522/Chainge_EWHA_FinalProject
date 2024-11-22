@@ -88,6 +88,30 @@ const updateUser = async (req, res) => {
     }
 };
 
+const identityUpdate = async (req, res) => {
+    try {
+        const { id, phoneNumber, birth,identityNum, metaMaskAdd } = req.body;
+
+        console.log("Received data:", { id, phoneNumber, birth,identityNum, metaMaskAdd });
+
+        const user = await userModel.findById( id );
+        if (!user) return res.status(400).json("User Not Found");
+        console.log(user);
+        result = await userModel.updateOne({_id : user._id}, {$set : {phoneNumber, birth,identityNum, metaMaskAdd} });
+        if (result.modifiedCount > 0){
+            const update = await userModel.findById(user._id);
+            console.log(update);
+            res.status(200).json({ _id: update._id, phoneNumber: update.phoneNumber, birth:update.birth, identityNum:update.identityNum, metaMaskAdd: update.metaMaskAdd });
+        } else{
+            return res.status(400).json({error : "사용자를 찾을 수 없습니다."});
+        }
+
+    } catch (error) {
+        console.log(error); // 에러 로그
+        res.status(500).json(error);
+    }
+};
+
 const updateLike = async (req, res) => {
     try {
         const { userId, itemId, liked } = req.body;
@@ -172,4 +196,4 @@ const getUsers = async(req, res) =>{
     }
 };
 
-module.exports = { registerUser, updateUser, loginUser, findUser, getUsers, deleteUser, updateLike };
+module.exports = { registerUser, updateUser, loginUser, findUser, getUsers, deleteUser, updateLike, identityUpdate };

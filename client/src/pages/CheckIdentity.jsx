@@ -34,7 +34,7 @@ const CheckIdentity = () => {
     }
     
     const reqContract = () => {
-        navigate(`/RequsetContract/${id}`, {state: {userInfo}});
+        navigate(`/reqContract/${id}`, {state: {userInfo}});
     }
 
     const goToItem = () => {
@@ -90,10 +90,10 @@ const CheckIdentity = () => {
                                 onChange={(e) => setUserInfo
                                     ({ ...userInfo, tenantphoneNum: e.target.value })}
                                 />
-                                <Button className = 'lightBlue' style = {{color: 'white', border: 'none', width : '140px'}} onClick = {updateCheck}>{!checked?'인증':'인증 완료'}</Button>
+                                <Button className = {checked?'green':'lightBlue'} style = {{color: 'white', border: 'none', width : '140px'}} onClick = {updateCheck}>{!checked?'인증':'인증 완료'}</Button>
                             </div>
                             <div style = {{display:'flex', alignItems: 'center', gap: '30px'}}>
-                                <Button className = 'lightBlue' style = {{color: 'white', border: 'none', width : '140px'}} onClick = {updateAccount}>계좌 연결</Button>
+                                <Button className = {account?'green':'lightBlue'} style = {{color: 'white', border: 'none', width : '140px'}} onClick = {updateAccount}>계좌 연결</Button>
                                 {!account? (<div>계좌 연결이 필요합니다. </div>): <div>계좌 연결이 완료되었습니다. </div>}
                             </div>
                             <Form.Control 

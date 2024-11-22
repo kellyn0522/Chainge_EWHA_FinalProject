@@ -27,13 +27,14 @@ export const ReqContextProvider = ({ children }) => {
     const [isAcceptLoading, setIsAcceptLoading] = useState(false);
     const [deleteReqError, setDeleteReqError] = useState(null);
     const [isDeleteReqLoading, setIsDeleteReqLoading] = useState(false);
+    const [signingError, setSigningError] = useState(null);
+    const [isSigningLoading, setIsSigningLoading] = useState(false);
 
     const updateReqInfo = useCallback((info) => {
         setReqInfo((prevInfo) => ({ ...prevInfo, ...info }));
     }, []);
 
-    const createReq = useCallback(async(e) => {
-        e.preventDefault();
+    const createReq = useCallback(async() => {
         setIsLoading(true);
 
         try{
@@ -96,17 +97,16 @@ export const ReqContextProvider = ({ children }) => {
         return await getReq(`${baseUrl}/itemReq/find/${reqID}`);
     };
 
-const updateAccept = useCallback(async(e, reqID) => { 
-    if (e && typeof e.preventDefault === 'function'){e.preventDefault();}
+const updateAccept = useCallback(async(reqID) => {
     console.log("Update ACCEPT called");
-    setAcceptError(null)
-    setIsAcceptLoading(true)
+    setAcceptError(null);
+    setIsAcceptLoading(true);
 
     try{
         if(!reqID){
-            setAcceptError("Invalid item ID");
+            setAcceptError("Invalid Req ID");
             setIsAcceptLoading(false);
-            throw new Error("Invalid item ID");
+            throw new Error("Invalid Req ID");
         }
 
         const response = await postRequest(
@@ -129,9 +129,72 @@ const updateAccept = useCallback(async(e, reqID) => {
     }
 }, []);
 
-    const deleteR = useCallback(async(e, reqID) => { 
+const tenantSigned = useCallback(async(reqID) => {
+    console.log("Tenant is signing the contract");
+    setSigningError(null);
+    setIsSigningLoading(true);
+
+    try{
+        if(!reqID){
+            setSigningError("Invalid Req ID");
+            setIsSigningLoading(false);
+            throw new Error("Invalid Req ID");
+        }
+
+        const response = await postRequest(
+            `${baseUrl}/itemReq/tSign/${reqID}`,);
+
+        console.log("Sign response ", response);
+        setIsSigningLoading(false);
+    
+        if (response.error) {
+            console.log("error in Sign request");
+            return setSigningError(response);
+        }
+        console.log(response);
+
+    } catch (error){
+        setSigningError(error.message)
+        console.log(error.message)
+    } finally{
+        setIsSigningLoading(false);
+    }
+}, []);
+
+const landlordSigned = useCallback(async(reqID) => {
+    console.log("Landlord is signing the contract");
+    setSigningError(null);
+    setIsSigningLoading(true);
+
+    try{
+        if(!reqID){
+            setSigningError("Invalid Req ID");
+            setIsSigningLoading(false);
+            throw new Error("Invalid Req ID");
+        }
+
+        const response = await postRequest(
+            `${baseUrl}/itemReq/lSign/${reqID}`,);
+
+        console.log("Sign response ", response);
+        setIsSigningLoading(false);
+    
+        if (response.error) {
+            console.log("error in Sign request");
+            return setSigningError(response);
+        }
+        console.log(response);
+
+    } catch (error){
+        setSigningError(error.message)
+        console.log(error.message)
+    } finally{
+        setIsSigningLoading(false);
+    }
+}, []);
+
+const deleteR = useCallback(async(reqID) => { 
         console.log("delete request called");
-        e.preventDefault()
         setIsDeleteReqLoading(true);
         setDeleteReqError(null);
         try{
@@ -159,7 +222,7 @@ const updateAccept = useCallback(async(e, reqID) => {
             setDeleteReqError({message: "Falied to delete Request"});
             setIsDeleteReqLoading(false);
         }
-    }, []);
+}, []);
 
     return (<ReqContext.Provider value={{
         createReq,
@@ -172,9 +235,16 @@ const updateAccept = useCallback(async(e, reqID) => {
         isReqLoading,
         isReqError,
 
+        reqInfo,
         updateReqInfo,
         updateAccept,
-        deleteR
+        deleteR,
+
+        signingError,
+        isSigningLoading,
+        tenantSigned,
+        landlordSigned,
+
     }}>
         {children}
     </ReqContext.Provider>

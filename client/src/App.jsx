@@ -55,7 +55,7 @@ function App() {
                          <Route path="/changingUserData" element={<ChangingUserData />} />
                          <Route path="/userHistory" element={<UserHistory />} />
                          <Route path="/checkIdentity/:id" element={<CheckIdentity />} />
-                         <Route path="/reqContract" element={<RequestContract />} />
+                         <Route path="/reqContract/:id" element={<RequestContract />} />
                          <Route path="/reqPage/:otherUser/:id/:type" element={<ReqPage />} />
                          <Route path="/searchMap" element={<SearchMap />} /> {/* Add SearchMap Route */}
                           <Route path="*" element ={<Navigate to ="/"/>} />

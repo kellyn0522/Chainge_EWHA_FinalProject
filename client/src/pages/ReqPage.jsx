@@ -73,11 +73,12 @@ const ReqPage = () => {
         return <div>Loding...</div>
     }
 
-    const onDeleteReq = () => {
-        deleteR(id);
+    const onDeleteReq = async() => {
+        await deleteR(id);
+        navigate("/mypage");
     }
 
-    const onContract = () =>{
+    const onContract = async() =>{
         const contractInfo= {
             itemID: item?.itemID,
             price: item?.housePrice,
@@ -104,8 +105,8 @@ const ReqPage = () => {
             period:reqInfo?.period||12,
         }
         console.log('CCCCCCCCCCCCCCCCC',contractInfo);
-        updateAccept(id);
-        navigate(`/RequsetContract`, {state: {contractInfo}});
+        await updateAccept(id);
+        navigate(`/makeContract/${id}`, {state: {contractInfo}});
     }
 
     const goToItem = () => {
@@ -119,6 +120,19 @@ const ReqPage = () => {
     if(!user || !item){
         return null;
     }
+    const s = reqInfo?.start? reqInfo.start:null;
+    const timeStart = s instanceof Date
+        ? s.toISOString().split('T')[0]
+        : (typeof s === 'string' && !isNaN(new Date(s).getTime()))
+        ? new Date(s).toISOString().split('T')[0]
+        : '';
+        
+    const e = reqInfo?.end? reqInfo.end:null;
+    const timeEnd = e instanceof Date
+        ? e.toISOString().split('T')[0]
+        : (typeof e === 'string' && !isNaN(new Date(e).getTime()))
+        ? new Date(e).toISOString().split('T')[0]
+        : '';
 
     return (
         <Container>
@@ -160,11 +174,11 @@ const ReqPage = () => {
                             <Card.Title className = "infoTitle">계약 요청 상세</Card.Title>
                             <Card.Body className = "inputCard">
                                 <div className="infotype">계약 시작 날짜</div>
-                                <div className = "infoName">2024.11.11</div>
+                                <div className = "infoName">{timeStart}</div>
                                 <div className="infotype">계약 종료 날짜</div>
-                                <div className = "infoName">2025.11.10</div>
+                                <div className = "infoName">{timeEnd}</div>
                                 <div className="infotype">계약 기간</div>
-                                <div className = "infoName">12 개월</div>
+                                <div className = "infoName">{reqInfo.period} 개월</div>
                             </Card.Body>
                         </Card>
                         <Card className = "information" style={{marginBottom:"10px"}}>
