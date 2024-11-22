@@ -1,13 +1,17 @@
 const reqModel = require('../Models/reqModel');
 
 const createReq = async(req,res) =>{
-    const {senderId, itemId, ownerId} = req.body;
+    const {senderId, itemId, ownerId, start, end, period} = req.body;
     console.log()
     try{
         const newReq = new reqModel({
             senderId:senderId, 
             itemId: itemId, 
-            ownerId: ownerId
+            ownerId: ownerId,
+            start: start,
+            end: end,
+            period: period,
+            accept: false,
         });
 
         const response = await newReq.save();
@@ -21,24 +25,6 @@ const createReq = async(req,res) =>{
     }
 };
 
-
-//getMessages 
-const getMessages = async(req,res)=>{
-    const {chatId} = req.params;
-
-    try{
-        const messages = await messageModel.find({chatId});
-        res.status(200).json(messages);
-
-    }catch(error){
-        console.log(error);
-        res.status(500).json(error);
-    }
-
-};
-
-
-//id가 존재하면 해당 채팅 찾는 기능 
 const findUserSendReq = async(req,res) =>{
     const userId = req.params.userId;
     try{
@@ -94,7 +80,46 @@ const findReq = async(req,res) =>{
         res.status(500).json(error);
     }
 
+
+
 };
 
-module.exports ={createReq, findUserSendReq, findUserReceivedReq, findReq};
+const acceptReq = async(req,res) => {
+    const reqID = req.params.reqID;
+    try{
+        const r = await reqModel.findById(reqID);
+        if (!r){
+            return res.status(404).json({message: '요청을 찾을 수 없습니다.'});
+        }
+    
+        result = await reqModel.updateOne({_id : reqID}, {$set : {accept: true}});
+        res.status(200).json(r);
+        console.log("RRSever", r);
+
+    }catch(error){
+        console.log('acceptReq ERROR ', error);
+        res.status(500).json(error);
+    }
+
+};
+
+const deleteReq = async(req, res) =>{
+    const reqID = req.params.reqID;
+    try {
+        const r = await reqModel.findById(reqID);
+
+        if (!r){
+            return res.status(404).json({messege:"Request not found"});
+        }
+        await reqModel.deleteOne({_id:reqID});
+        res.status(200).json("REQUEST DELETE"); 
+        console.log("REQUEST Delete success");
+    }catch(error){
+        console.log('Request Delete',error); 
+        res.status(500).json(error);
+    }
+};
+
+
+module.exports ={createReq, findUserSendReq, findUserReceivedReq, findReq, acceptReq, deleteReq};
 

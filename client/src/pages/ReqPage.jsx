@@ -21,7 +21,7 @@ const ReqPage = () => {
     const [reqInfo, setReqInfo] = useState(null);
 
     const [otherUserinfo, setOtherUserinfo] = useState(null);
-    const{findingReq} = useContext(ReqContext);
+    const{findingReq, updateAccept, deleteR} = useContext(ReqContext);
     
     useEffect(() =>{
         const fetchReq = async () => {
@@ -72,6 +72,10 @@ const ReqPage = () => {
         return <div>Loding...</div>
     }
 
+    const onDeleteReq = () => {
+        deleteR(id);
+    }
+
     const onContract = () =>{
         const contractInfo= {
             itemID: item?.itemID,
@@ -93,6 +97,7 @@ const ReqPage = () => {
             period:reqInfo?.period||12,
         }
         console.log('CCCCCCCCCCCCCCCCC',contractInfo);
+        updateAccept(id);
     }
 
     const goToItem = () => {
@@ -226,12 +231,12 @@ const ReqPage = () => {
                         <div className='contractButton' style={{marginTop: '15px'}}>{
                             isOwner?(
                             <>
-                                <Button style = {{backgroundColor: '#5B6A82', color: 'white', border: 'none', marginTop: '5px', width:'100px'}}>요청 거절</Button>
+                                <Button style = {{backgroundColor: '#5B6A82', color: 'white', border: 'none', marginTop: '5px', width:'100px'}} onClick = {onDeleteReq}>요청 거절</Button>
                                 <Button className="green" style = {{color: 'white', border: 'none', marginTop: '5px', width: '100px'}} onclick = {onContract} >요청 수락</Button>
                             </>):(
                                 <>
-                                <Button style = {{backgroundColor: '#5B6A82', color: 'white', border: 'none', marginTop: '5px', width:'100px'}} onClick = {goToItem}>매물 자세히보기</Button>
-                                <Button className="green" style = {{color: 'white', border: 'none', marginTop: '5px', width: '100px'}} >요청 취소</Button>
+                                <Button style = {{backgroundColor: '#5B6A82', color: 'white', border: 'none', marginTop: '5px', width:'100px'}} onClick = {goToItem}>매물 보기</Button>
+                                <Button className="green" style = {{color: 'white', border: 'none', marginTop: '5px', width: '100px'}} onClick = {onDeleteReq}>요청 취소</Button>
                                 </>
                             )}
                         </div>

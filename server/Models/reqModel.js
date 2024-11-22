@@ -6,6 +6,7 @@ const reqSchema = new mongoose.Schema({
     start: Date,
     end: Date,
     period: Number,
+    accepnt: Boolean,
 }, {
     timestamps: true,
 }
