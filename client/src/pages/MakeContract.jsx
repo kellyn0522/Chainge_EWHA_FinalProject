@@ -123,6 +123,20 @@ const MakeContract = () => {
         }
     };
 
+    const s = contractInfo?.start? contractInfo.start:null;
+    const timeStart = s instanceof Date
+        ? s.toISOString().split('T')[0]
+        : (typeof s === 'string' && !isNaN(new Date(s).getTime()))
+        ? new Date(s).toISOString().split('T')[0]
+        : '';
+        
+    const e = contractInfo?.end? contractInfo.end:null;
+    const timeEnd = e instanceof Date
+        ? e.toISOString().split('T')[0]
+        : (typeof e === 'string' && !isNaN(new Date(e).getTime()))
+        ? new Date(e).toISOString().split('T')[0]
+        : '';
+
     return (
         <Container>
             <div className = "logo"><Logo /></div>
@@ -186,11 +200,11 @@ const MakeContract = () => {
                             <Card.Title className = "infoTitle">계약 상세</Card.Title>
                             <Card.Body className = "inputCard">
                                 <div className="infotype">계약 시작 날짜</div>
-                                <div className = "infoName">{contractInfo.start}</div>
+                                <div className = "infoName">{timeStart}</div>
                                 <div className="infotype">계약 종료 날짜</div>
-                                <div className = "infoName">{contractInfo.end}</div>
+                                <div className = "infoName">{timeEnd}</div>
                                 <div className="infotype">계약 기간</div>
-                                <div className = "infoName">{contractInfo.period}</div>
+                                <div className = "infoName">{contractInfo.period} 개월</div>
                             </Card.Body>
                         </Card>
                         <Card className = "information" style={{marginBottom:"10px"}}>
