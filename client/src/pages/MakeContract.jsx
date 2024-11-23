@@ -13,7 +13,7 @@ const MakeContract = () => {
     const navigate = useNavigate();
     const {id} = useParams();
     const location = useLocation();
-    const {contractInfo} = location.state || {};
+    const {updatedInfo} = location.state || {};
     const [item, setItem] = useState(null);
     const {setContract} = useContext(ContractContext);
     const [reqInfo, setReqInfo] = useState(null);
@@ -41,13 +41,13 @@ const MakeContract = () => {
 
     useEffect(() => {
         const fetchItem = async () => {
-            if (contractInfo && !findItemError && !isFindItemLoading){
-                const result = await findItem(contractInfo.itemID);
+            if (updatedInfo && !findItemError && !isFindItemLoading){
+                const result = await findItem(updatedInfo.itemID);
                 setItem(result);
             }
         };
         fetchItem();
-    }, [contractInfo, findItem]);
+    }, [updatedInfo, findItem]);
     console.log('IIIIIIIIIIIIIItem', item);
 
     if (isFindItemLoading){
@@ -59,31 +59,33 @@ const MakeContract = () => {
     
     const info =
     {
-        itemID: contractInfo?.itemID,
-        tenantID: contractInfo.tenantID,
-        tenantphoneNum: contractInfo.tenantphoneNum,
-        tenantBirth: contractInfo.tenantBirth,
-        tenantidentityNum: contractInfo.tenantidentityNum,
-        tenantMetamaskAdd: contractInfo.metamaskAdd,
-        tenantname: contractInfo.tenantname,
-        tenantzipcode: contractInfo.tenantzipcode,
+        itemID: updatedInfo?.itemID,
+        tenantID: updatedInfo.tenantID,
+        tenantphoneNum: updatedInfo.tenantphoneNum,
+        tenantBirth: updatedInfo.tenantBirth,
+        tenantidentityNum: updatedInfo.tenantidentityNum,
+        tenantMetamaskAdd: updatedInfo.tenantMetamaskAdd,
+        tenantname: updatedInfo.tenantname,
+        tenantzipcode: updatedInfo.tenantzipcode,
+        tenantAccount: updatedInfo.tenantAccount,
 
-        landlordID: contractInfo.landlordID,
-        landlordphoneNum: contractInfo.landlordphoneNum,
-        landlordBirth: contractInfo.landlordBirth,
-        landlordIdentityNum: contractInfo.landlordIdentityNum,
-        landlordMetamaskAdd: contractInfo.landlordMetamaskAdd,
-        landlordname: contractInfo.landlordname,
-        landlordzipcode: contractInfo.landlordzipcode,
+        landlordID: updatedInfo.landlordID,
+        landlordphoneNum: updatedInfo.landlordphoneNum,
+        landlordBirth: updatedInfo.landlordBirth,
+        landlordIdentityNum: updatedInfo.landlordIdentityNum,
+        landlordMetamaskAdd: updatedInfo.landlordMetamaskAdd,
+        landlordname: updatedInfo.landlordname,
+        landlordzipcode: updatedInfo.landlordzipcode,
+        landlordAccount: updatedInfo.landlordAccount,
 
-        price: contractInfo?.price,
-        deposit: contractInfo?.deposit,
-        start: contractInfo.start,
-        end: contractInfo.end,
-        period: contractInfo.period,
+        price: updatedInfo?.price,
+        deposit: updatedInfo?.deposit,
+        start: updatedInfo.start,
+        end: updatedInfo.end,
+        period: updatedInfo.period,
     }
     console.log('receivedinfo!!!!!!!!!!!!!!!',info);
-    console.log('info!!!!!!!!!!!!!!!!!!!!!!!',contractInfo);
+    console.log('info!!!!!!!!!!!!!!!!!!!!!!!',updatedInfo);
 
     const goToItem = () => {
         if(!isFindItemLoading && !findItemError && item){
@@ -91,12 +93,12 @@ const MakeContract = () => {
         }
     }
     
-    if(!contractInfo || !item){
+    if(!updatedInfo || !item){
         return null;
     }
 
     const onLSign = async()=>{
-        if(user._id === contractInfo.landlordID){
+        if(user._id === updatedInfo.landlordID){
             await landlordSigned(id);
             setReqInfo(preState => ({
                 ...preState,
@@ -105,7 +107,7 @@ const MakeContract = () => {
         }
     }
     const onTSign = async()=>{
-        if(user._id === contractInfo.tenantID){
+        if(user._id === updatedInfo.tenantID){
             await tenantSigned(id);
             setReqInfo(preState => ({
                 ...preState,
@@ -128,14 +130,14 @@ const MakeContract = () => {
         }
     };
 
-    const s = contractInfo?.start? contractInfo.start:null;
+    const s = updatedInfo?.start? updatedInfo.start:null;
     const timeStart = s instanceof Date
         ? s.toISOString().split('T')[0]
         : (typeof s === 'string' && !isNaN(new Date(s).getTime()))
         ? new Date(s).toISOString().split('T')[0]
         : '';
         
-    const e = contractInfo?.end? contractInfo.end:null;
+    const e = updatedInfo?.end? updatedInfo.end:null;
     const timeEnd = e instanceof Date
         ? e.toISOString().split('T')[0]
         : (typeof e === 'string' && !isNaN(new Date(e).getTime()))
@@ -165,18 +167,18 @@ const MakeContract = () => {
                             </div>
                             <Card.Body className = "info">
                                 <div className="infotype">이름</div>
-                                <div className = "infoName">{contractInfo.landlordname}</div>
+                                <div className = "infoName">{updatedInfo.landlordname}</div>
                                 <div className="infotype">우편번호</div>
-                                <div className = "infoName">{contractInfo.landlordzipcode}</div>
+                                <div className = "infoName">{updatedInfo.landlordzipcode}</div>
                                 <div className ="infotype">주민등록번호</div>
-                                <div className = "infoName">{contractInfo.landlordBirth}-{contractInfo.landlordIdentityNum}</div>
+                                <div className = "infoName">{updatedInfo.landlordBirth}-{updatedInfo.landlordIdentityNum}</div>
                                 <div className="infotype">전화번호</div>
-                                <div className = "infoName">{contractInfo.landlordphoneNum.replace(/(\d{3})(\d{3})(\d{4})/,'$1-$2-$3')}</div>
-                            </Card.Body>
-                            <div style ={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', fontSize: '14px', paddingLeft:'17px', paddingBottom:'20px'}}>
+                                <div className = "infoName">{updatedInfo.landlordphoneNum.replace(/(\d{3})(\d{3})(\d{4})/,'$1-$2-$3')}</div>
+                                <div className ="infotype">연결된 계좌</div>
+                                <div className = "infoName">{updatedInfo.landlordAccount}</div>
                                 <div className ="infotype">메타마스크 주소</div>
-                                <div className = "infoName">{contractInfo.landlordMetamaskAdd}</div>
-                            </div>
+                                <div className = "infoName">{updatedInfo.landlordMetamaskAdd}</div>
+                            </Card.Body>
                         </Card>
                         <Card className = "information" style={{marginBottom:"20px"}}>
                             <div style={{display:'flex', justifyContent: 'space-between'}}>
@@ -188,18 +190,18 @@ const MakeContract = () => {
                             </div>
                             <Card.Body className = "info">
                                 <div className="infotype">이름</div>
-                                <div className = "infoName">{contractInfo.tenantname}</div>
+                                <div className = "infoName">{updatedInfo.tenantname}</div>
                                 <div className="infotype">우편번호</div>
-                                <div className = "infoName">{contractInfo.tenantzipcode}</div>
+                                <div className = "infoName">{updatedInfo.tenantzipcode}</div>
                                 <div className ="infotype">주민등록번호</div>
-                                <div className = "infoName">{contractInfo.tenantBirth}-{contractInfo.tenantidentityNum}</div>
+                                <div className = "infoName">{updatedInfo.tenantBirth}-{updatedInfo.tenantidentityNum}</div>
                                 <div className="infotype">전화번호</div>
-                                <div className = "infoName">{contractInfo.tenantphoneNum.replace(/(\d{3})(\d{3})(\d{4})/,'$1-$2-$3')}</div>
-                            </Card.Body>
-                            <div style ={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', fontSize: '14px', paddingLeft:'17px', paddingBottom:'20px'}}>
+                                <div className = "infoName">{updatedInfo.tenantphoneNum.replace(/(\d{3})(\d{3})(\d{4})/,'$1-$2-$3')}</div>
+                                <div className ="infotype">연결된 계좌</div>
+                                <div className = "infoName">{updatedInfo.tenantAccount}</div>
                                 <div className ="infotype">메타마스크 주소</div>
-                                <div className = "infoName">{contractInfo.tenantMetamaskAdd}</div>
-                            </div>
+                                <div className = "infoName">{updatedInfo.tenantMetamaskAdd}</div>
+                            </Card.Body>
                         </Card>
                         <Card style={{marginBottom:"20px"}}>
                             <Card.Title className = "infoTitle">계약 상세</Card.Title>
@@ -209,7 +211,7 @@ const MakeContract = () => {
                                 <div className="infotype">계약 종료 날짜</div>
                                 <div className = "infoName">{timeEnd}</div>
                                 <div className="infotype">계약 기간</div>
-                                <div className = "infoName">{contractInfo.period} 개월</div>
+                                <div className = "infoName">{updatedInfo.period} 개월</div>
                             </Card.Body>
                         </Card>
                         <Card className = "information" style={{marginBottom:"10px"}}>

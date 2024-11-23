@@ -68,13 +68,13 @@ export const AuthContextProvider = ({ children }) => {
         navigate("/mypage");
     }, [updaterInfo]);
 
-    const metaMaskUpdater = useCallback(async(add) => {
+    const metaMaskUpdater = useCallback(async(id,add) => {
         setIsUpdateLoading(true);
         setUpdateError(null);
 
         const response = await postRequest(
             `${baseUrl}/users/metaMask`,
-            JSON.stringify({id: user._id, metaMaskAdd: add}));
+            JSON.stringify({id: id, metaMaskAdd: add}));
 
         setIsUpdateLoading(false);
 
@@ -87,21 +87,16 @@ export const AuthContextProvider = ({ children }) => {
 
         localStorage.setItem("user", JSON.stringify(response));
 
-        setUser(prev => ({
-            ...prev,
-            ...response,
-        }));
-
-        navigate("/mypage");
+        setUser(response);
     }, []);
     
-    const accountUpdater = useCallback(async(account) => {
+    const accountUpdater = useCallback(async(id,account) => {
         setIsUpdateLoading(true);
         setUpdateError(null);
 
         const response = await postRequest(
             `${baseUrl}/users/account`,
-            JSON.stringify({id: user._id, account: account}));
+            JSON.stringify({id: id, account: account}));
 
         setIsUpdateLoading(false);
 
@@ -114,12 +109,7 @@ export const AuthContextProvider = ({ children }) => {
 
         localStorage.setItem("user", JSON.stringify(response));
 
-        setUser(prev => ({
-            ...prev,
-            ...response,
-        }));
-
-        navigate("/mypage");
+        setUser(response);
     }, []);
 
 

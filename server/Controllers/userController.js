@@ -72,12 +72,15 @@ const updateUser = async (req, res) => {
         //if (!nickName || !phoneNumber || !password || !birth || !identityNum || !zipCode || !houseAddress ) return res.status(400).json("All fields are required");
 
         if (!validator.isStrongPassword(password)) return res.status(400).json("Password must be a strong password");
+        
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt); // 비밀번호 해싱
 
-        result = await userModel.updateOne({_id : user._id}, {$set : {nickName, phoneNumber, password, birth, identityNum, zipCode, houseAddress} });
+        result = await userModel.updateOne({_id : user._id}, {$set : {nickName, phoneNumber, hashedPassword, birth, identityNum, zipCode, houseAddress} });
         if (result.modifiedCount > 0){
             const update = await userModel.findById(user._id);
             console.log(update);
-            res.status(200).json({ _id: update._id, name: update.name, nickName: update.nickName, email: update.email, phoneNumber: update.phoneNumber, birth : update.birth, identityNum : update.identityNum, zipCode : update.zipCode, houseAddress : update.houseAddress, likedItemId: update.likedItemId, realEstateAgent:update.realEstateAgent });
+            res.status(200).json({ _id: update._id, name: update.name, nickName: update.nickName, email: update.email, phoneNumber: update.phoneNumber, birth : update.birth, identityNum : update.identityNum, zipCode : update.zipCode, houseAddress : update.houseAddress, likedItemId: update.likedItemId, realEstateAgent:update.realEstateAgent, account: update.account, metaMaskAdd: update.metaMaskAdd });
         } else{
             return res.status(400).json({error : "사용자를 찾을 수 없습니다."});
         }
@@ -101,7 +104,7 @@ const accountUpdate = async (req, res) => {
         if (result.modifiedCount > 0){
             const update = await userModel.findById(user._id);
             console.log(update);
-            res.status(200).json({ _id: update._id, account: update.account });
+            res.status(200).json(update);
         } else{
             return res.status(400).json({error : "사용자를 찾을 수 없습니다."});
         }
@@ -125,7 +128,7 @@ const metaMaskUpdate = async (req, res) => {
         if (result.modifiedCount > 0){
             const update = await userModel.findById(user._id);
             console.log(update);
-            res.status(200).json({ _id: update._id, metaMaskAdd: update.metaMaskAdd });
+            res.status(200).json(update); 
         } else{
             return res.status(400).json({error : "사용자를 찾을 수 없습니다."});
         }
@@ -150,7 +153,7 @@ const updateLike = async (req, res) => {
         if (result.modifiedCount > 0){
             const update = await userModel.findById(user._id);
             console.log(update.likedItemId);
-            res.status(200).json({ _id: update._id, name: update.name, nickName: update.nickName, email: update.email, phoneNumber: update.phoneNumber, birth : update.birth, identityNum : update.identityNum, zipCode : update.zipCode, houseAddress : update.houseAddress, likedItemId: update.likedItemId, realEstateAgent:update.realEstateAgent });
+            res.status(200).json(update); 
         } else{
             return res.status(400).json({error : "사용자를 찾을 수 없습니다."});
         }
@@ -165,6 +168,7 @@ const loginUser = async (req, res) => {
     try {
         let user = await userModel.findOne({ email });
 
+        console.log(user);
         if (!user) return res.status(400).json("Invalid email or password.. ");
 
         const isValidPassword = await bcrypt.compare(password, user.password);
@@ -172,8 +176,7 @@ const loginUser = async (req, res) => {
         if (!isValidPassword) return res.status(400).json("Invalid email or password.. ");
         const token = createToken(user._id); 
 
-        res.status(200).json({ _id: user._id, name: user.name , email, token, nickName: user.nickName, phoneNumber: user.phoneNumber, likedItemId: user.likedItemId, realEstateAgent:user.realEstateAgent });
-
+        res.status(200).json(user); 
     } catch (error) {
         console.log(error); 
         res.status(500).json(error);

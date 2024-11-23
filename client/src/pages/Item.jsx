@@ -99,7 +99,7 @@ const Item = () => {
 
     const makeContract = () => {
         if(!isFindItemLoading && !findItemError && item){
-            navigate(`/checkIdentity/${id}`);
+            navigate(`/checkIdentity/${id}/${false}`, {state: {}});
         }
     }
     const onClickChatInd = () => {

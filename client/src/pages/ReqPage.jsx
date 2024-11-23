@@ -88,17 +88,10 @@ const ReqPage = () => {
             tenantphoneNum: otherUserinfo?.phoneNumber,
             tenantBirth:otherUserinfo?.birth,
             tenantidentityNum: otherUserinfo?.identityNum,
-            tenantMetamaskAdd: otherUserinfo?.metamaskAdd,
+            tenantAccount: otherUserinfo?.account,
+            tenantMetamaskAdd: otherUserinfo?.metaMaskAdd,
             tenantname: otherUserinfo.name,
             tenantzipcode: otherUserinfo.zipCode,
-
-            landlordID: user?._id,
-            landlordphoneNum: user?.phoneNumber,
-            landlordBirth: user?.birth,
-            landlordIdentityNum: user?.identityNum,
-            landlordMetamaskAdd: 'landlordMetamaskAdd',
-            landlordname: user?.name,
-            landlordzipcode: user?.zipCode,
 
             start: reqInfo?.start||'2024.11.21',
             end:reqInfo?.end||'2025.11.20',
@@ -106,7 +99,7 @@ const ReqPage = () => {
         }
         console.log('CCCCCCCCCCCCCCCCC',contractInfo);
         await updateAccept(id);
-        navigate(`/makeContract/${id}`, {state: {contractInfo}});
+        navigate(`/checkIdentity/${id}/${true}`, {state: {contractInfo}});
     }
 
     const goToItem = () => {

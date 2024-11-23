@@ -10,8 +10,6 @@ import { ReqContext } from "../context/ReqContext";
 const RequestContract = () => {
     const navigate = useNavigate();
     const {id} = useParams();
-    const location = useLocation();
-    const {userInfo} = location.state || {};
     const { user } = useContext(AuthContext);
     const {reqInfo,createReq, updateReqInfo } = useContext(ReqContext);
     const {
@@ -20,19 +18,6 @@ const RequestContract = () => {
         isFindItemLoading,
     } = useContext(AuthItemContext);
     const [item, setItem] = useState(null);
-    const [info, setInfo] = useState(
-        {
-            tenantID: userInfo?.tenantID || user?._id,
-            tenantphoneNum: userInfo?.tenantphoneNum || user?.phoneNumber,
-            tenantBirth:userInfo?.tenantBirth || user?.birth,
-            tenantidentityNum: userInfo?.tenantidentityNum || user?.identityNum,
-            metamaskAdd: userInfo?.metamaskAdd,
-            start: '',
-            end: '',
-            period: '',
-        }
-    )
-
 
     useEffect(() => {
         const fetchItem = async () => {
@@ -45,21 +30,15 @@ const RequestContract = () => {
     }, [findItem, findItemError]);
 
     useEffect(()=>{
-        if(item&&userInfo&&user){
-        const init = async() =>{
-            await updateReqInfo({
-                senderId: userInfo?.tenantID || user?._id, 
-                itemId:item?.itemID, 
-                price: item?.price,
-                deposit: item?.deposit,
-                ownerId:item?.ownerId,
-            });
-        }
-        init();
+        if(user&&item){
+        updateReqInfo({
+            senderId: user._id, 
+            itemId:item.itemID, 
+            ownerId:item.ownerId
+        })
     }
-    },[item, userInfo, user]);
-   console.log(reqInfo);
-
+    },[user._id, item]);
+    
     if (isFindItemLoading){
         return <div>Loding...</div>
     }
@@ -90,7 +69,7 @@ const RequestContract = () => {
 
     const onContract = async (e)=>{
         e.preventDefault();
-        console.log('요청 내용',userInfo,user, item, info);
+        console.log('요청 내용',user, item);
 
         await createReq();
         alert("요청이 완료되었습니다");
@@ -111,7 +90,7 @@ const RequestContract = () => {
                 }}>
                     <Col xs={10}>
                         <h2 style={{marginBottom: '20px'}}>거래 요청하기</h2>
-                        <Card className = "information" style={{marginBottom:"20px"}}>
+                        <Card className = "information" style={{paddingBottom:'10px',marginBottom:"20px"}}>
                             <Card.Title className = "infoTitle">본인 정보 확인</Card.Title>
                             <Card.Body className = "info">
                                 <div className="infotype">이름</div>
@@ -119,16 +98,16 @@ const RequestContract = () => {
                                 <div className="infotype">우편번호</div>
                                 <div className = "infoName">{user.zipCode}</div>
                                 <div className ="infotype">주민등록번호</div>
-                                <div className = "infoName">{info.tenantBirth}-{info.tenantidentityNum}</div>
+                                <div className = "infoName">{user.birth}-{user.identityNum}</div>
                                 <div className="infotype">전화번호</div>
-                                <div className = "infoName">{info.tenantphoneNum.replace(/(\d{3})(\d{3})(\d{4})/,'$1-$2-$3')}</div>
-                            </Card.Body>
-                            <div style ={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', fontSize: '14px', paddingLeft:'17px', paddingBottom:'20px'}}>
+                                <div className = "infoName">{user.phoneNumber?.replace(/(\d{3})(\d{3})(\d{4})/,'$1-$2-$3')}</div>
+                                <div className ="infotype">연결된 계좌</div>
+                                <div className = "infoName">{user.account}</div>
                                 <div className ="infotype">메타마스크 주소</div>
-                                <div className = "infoName">{info.metamaskAdd}</div>
-                            </div>
+                                <div className = "infoName">{user.metaMaskAdd}</div>
+                            </Card.Body>
                         </Card>
-                        <Card style={{marginBottom:"20px"}}>
+                        <Card style={{marginBottom:"20px", paddingBottom:'10px'}}>
                             <Card.Title className = "infoTitle">계약 상세</Card.Title>
                             <Card.Body className = "inputCard">
                                 <div className="infotype">계약 시작 날짜</div>
@@ -139,7 +118,7 @@ const RequestContract = () => {
                                 <input placeholder=" 개월 수" className="set" onChange={handlePeriod} />
                             </Card.Body>
                         </Card>
-                        <Card className = "information" style={{marginBottom:"10px"}}>
+                        <Card className = "information" style={{marginBottom:"10px", paddingBottom:'10px'}}>
                             <Card.Title className = "infoTitle">매물 정보 확인</Card.Title>
                             <Card.Body className = "info">
                                 {item.buildingName? (

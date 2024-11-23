@@ -10,8 +10,8 @@ import MyItem from "./MyItem";
 import LikedItem from "./LikedItem";
 import ContractReq from "./ContractReq";
 import SendContractReq from "./SendContractReq";
-import AccountLinking from './AccountLinking';
-import MetaMaskAddress from './MetaMaskAddress';
+import LinkingAccount from './LinkingAccount';
+import LinkingMetaMask from './LinkingMetaMask';
 import chat from '../icons/chat.svg';
 import account from '../icons/account.svg';
 import house from '../icons/house.svg';
@@ -83,25 +83,25 @@ const Mypage = () => {
                                     <div style ={{display:'flex', flexDirection: ' column', alignItems:'flex-start', width: '400px'}}>
                                     <Card style = {{width: '400px', marginBottom:'5px'}}>
                                         <Card.Body className="noto-sans-kr">
-                                            <div style = {{display : 'flex', alignItems: 'center'}}>
-                                                <Card.Text>이름: {user.name}</Card.Text>
-                                                {user?.realEstateAgent && <Badge className = 'skyblue' style = {{marginLeft: '7px', marginBottom : '0.9rem', alignItems:'center'}}>중개사</Badge>}
+                                            <div style = {{display : 'flex', alignItems: 'center', marginBottom : '1rem'}}>
+                                                <Card.Text style={{marginBottom:'0px'}}>이름: {user.name}</Card.Text>
+                                                {user?.realEstateAgent && <Badge className = 'skyblue' style = {{marginLeft: '7px', alignItems:'center'}}>중개사</Badge>}
                                             </div>
                                             <Card.Text>닉네임: {user.nickName}</Card.Text>
-                                            <Card.Text>전화번호: {user.phoneNumber.replace(/(\d{3})(\d{3})(\d{4})/,'$1-$2-$3')}</Card.Text>
+                                            <Card.Text>전화번호: {user.phoneNumber?.replace(/(\d{3})(\d{3})(\d{4})/,'$1-$2-$3')}</Card.Text>
                                             <Card.Text>Email: {user.email}</Card.Text>
-                                            <div style = {{display : 'flex', alignItems: 'center', gap:'10px'}}>
-                                                <Card.Text>계좌 연결 상태: </Card.Text>
+                                            <div style = {{display : 'flex', alignItems: 'center', gap:'10px', marginBottom : '1rem'}}>
+                                                <Card.Text style={{marginBottom:'0px'}}>계좌 연결 상태: </Card.Text>
                                                 <Card.Text className={user.account?'blueFont':'skyblueFont'}>{user.account?"연결 완료":"미연결"}</Card.Text>
                                                 {!user?.account && <Badge className = 'skyblue' style = {{marginLeft: '7px', marginBottom : '0.9rem', display : 'flex',alignItems:'center'}} onClick = {handleAccountShow}>연결하기</Badge>}
                                             </div>
-                                            <AccountLinking show={showAccountModal} handleClose={handleAccountClose}/>
-                                            <div style = {{display : 'flex', alignItems: 'center', gap:'10px'}}>
-                                                <Card.Text>이더리움 주소: </Card.Text>
+                                            <LinkingAccount show={showAccountModal} handleClose={handleAccountClose}/>
+                                            <div style = {{display : 'flex', alignItems: 'center', gap:'10px', marginBottom : '1rem'}}>
+                                                <Card.Text style={{marginBottom:'0px'}}>이더리움 주소: </Card.Text>
                                                 <Card.Text className={user.metaMaskAdd?'blueFont':'skyblueFont'}>{user.metaMaskAdd?user.metaMaskAdd:"미연결"}</Card.Text>
                                                 {!user?.metaMaskAdd && <Badge className = 'skyblue' style = {{marginLeft: '7px', marginBottom : '0.9rem', display : 'flex', alignItems:'center'}} onClick = {handleMetaMaskShow}>등록하기</Badge>}
                                             </div>
-                                            <MetaMaskAddress show={showMetaMaskModal} handleClose={handleMetaMaskClose}/>
+                                            <LinkingMetaMask show={showMetaMaskModal} handleClose={handleMetaMaskClose}/>
                                         </Card.Body>
                                         <div style = {{display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', alignItems:'center', marginLeft:'10px',  marginRight:'10px',  marginBottom:'10px'}}>
                                             <Button className = 'green' style = {{color: 'white', border: 'none', margin: '7px'}} onClick = {onClickChat}>채팅 목록</Button>

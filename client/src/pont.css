@@ -211,6 +211,15 @@
   grid-template-columns: 1fr 2.7fr;
   align-items: center;
 }
+
+.formControl2{
+  margin :15px;
+  display: grid;
+  grid-template-columns: 0.5fr 2fr 0.7fr;
+  gap: 20px;
+  align-items: center;
+}
+
 .modalSize .modal-body{
   max-height: 35000px;
 }
