@@ -21,6 +21,10 @@
 }
 .skyblue{
   background-color: #6495ED !important;
+  border: none;
+}
+.skyblueFont{
+  color:#6495ED;
 }
 .green:hover{
   background-color: #002D72;

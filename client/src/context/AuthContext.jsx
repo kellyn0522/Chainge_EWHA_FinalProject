@@ -68,26 +68,13 @@ export const AuthContextProvider = ({ children }) => {
         navigate("/mypage");
     }, [updaterInfo]);
 
-    const [identityInfo, setIdentityInfo] = useState({
-        id: "",
-        phoneNumber:'', 
-        birth:'',
-        identityNum:'', 
-        metaMaskAdd:''
-    });
-
-    const identityUpdaterInfo = useCallback((info) => {
-        setIdentityInfo((prevInfo) => ({ ...prevInfo, ...info }));
-    }, []);
-
-    const identityupdater = useCallback(async(e) => {
-        e.preventDefault();
+    const metaMaskUpdater = useCallback(async(add) => {
         setIsUpdateLoading(true);
         setUpdateError(null);
 
         const response = await postRequest(
-            `${baseUrl}/users/identityUpdate`,
-            JSON.stringify(identityInfo));
+            `${baseUrl}/users/metaMask`,
+            JSON.stringify({id: user._id, metaMaskAdd: add}));
 
         setIsUpdateLoading(false);
 
@@ -106,7 +93,34 @@ export const AuthContextProvider = ({ children }) => {
         }));
 
         navigate("/mypage");
-    }, [updaterInfo]);
+    }, []);
+    
+    const accountUpdater = useCallback(async(account) => {
+        setIsUpdateLoading(true);
+        setUpdateError(null);
+
+        const response = await postRequest(
+            `${baseUrl}/users/account`,
+            JSON.stringify({id: user._id, account: account}));
+
+        setIsUpdateLoading(false);
+
+        console.log("updater response ", response);
+        
+
+        if (response.error) {
+            return setUpdateError(response);
+        }
+
+        localStorage.setItem("user", JSON.stringify(response));
+
+        setUser(prev => ({
+            ...prev,
+            ...response,
+        }));
+
+        navigate("/mypage");
+    }, []);
 
 
 
@@ -333,8 +347,8 @@ export const AuthContextProvider = ({ children }) => {
             findUserError,
             isFindUserLoading,
 
-            identityUpdaterInfo,
-            identityupdater,
+            metaMaskUpdater,
+            accountUpdater,
         }}
     >
         {children}

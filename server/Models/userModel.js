@@ -12,6 +12,7 @@ const userSchema = new mongoose.Schema({
     contracts : { type: [String], required: false, minlength: 3, maxlength: 30 },
     houseAddress : { type: String, required: false, minlength: 3, maxlength: 30 },
     realEstateAgent : {type:Boolean, required: false},
+    account:{type: String, required:false},
     metaMaskAdd:{type: String, required:false},
 }, {
     timestamps: true,
