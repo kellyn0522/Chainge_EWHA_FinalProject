@@ -12,7 +12,7 @@
 }
 
 .green{
-  background-color: #002D72;
+  background-color: #002D72 !important;
   border: none;
 }
 .disable{

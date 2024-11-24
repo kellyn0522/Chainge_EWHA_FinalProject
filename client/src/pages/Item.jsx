@@ -1,3 +1,4 @@
+import { baseUrl} from "../utils/services";
 import { useNavigate, useParams } from "react-router-dom";
 //import ContractANDChat from "../component/ContractANDChat";
 //import Option from "../component/Option";
@@ -115,7 +116,6 @@ const Item = () => {
         }
         setShowModal(true);
     }
-    console.log('!!!!!!!!!!!!!!!!', potentialChats, '!!!!!!!!!!!!!!!!', userChats);
 
     //<img src = {item.imageFile} style = {{width: '300px', height: 'auto', border: '2px solid #ccc', display: ' block', margin: '0 auto'}} />
 
@@ -125,7 +125,7 @@ const Item = () => {
                 <Row className = "noto-sans-kr" style = {{margin:"10px"}}>
                     <Col>
                         <div className = 'intro'>
-                            <img src={item.imageFile || house} alt='house_pic' width = '300px' height = 'auto' style = {{border: '2px solid #ccc', display: ' block', margin: '0 auto'}} onError = {(e) => e.target.src = house}/>
+                            <img src={item.imageFile?`${baseUrl}/uploads/${item.imageFile.replace(/\\/g, '/')}`:house} alt='house_pic' width = '300px' height = 'auto' style = {{border: '2px solid #ccc', display: ' block', margin: '0 auto'}} onError = {(e) => e.target.src = house}/>
                             <div>
                                 <div className = 'introInfo' style = {{marginBottom : '10px'}}>  
                                 <h3>

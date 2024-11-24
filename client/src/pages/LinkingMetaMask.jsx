@@ -21,6 +21,12 @@ const LinkingMetaMask = ({show ,handleClose}) => {
                 <div className = "noto-sans-kr"> 이더리움 주소 등록</div>
             </Modal.Header>
             <Modal.Body className = "noto-sans-kr">
+                {user?.metaMaskAdd&&(
+                    <div style ={{margin: '15px', marginBottom:'20px', gap:'20px', display: 'grid', gridTemplateColumns: '1fr 1fr', alignItems: 'center'}}>
+                        <div>현재 등록된 이더리움 주소: </div>
+                        <div>{user.metaMaskAdd}</div>
+                    </div>
+                )}
                 <Form className = 'formControl2'>
                     <Form.Label>이더리움 주소</Form.Label>
                     <Form.Control 
@@ -28,7 +34,7 @@ const LinkingMetaMask = ({show ,handleClose}) => {
                         onChange={(e) => setInput( e.target.value )}
                         />
                     <Button className = 'green' style = {{color: 'white', border: 'none', width:'100px'}} onClick={onLinking} >
-                        { user?.account? "등록 완료":"등록"}
+                        { user?.metaMaskAdd? "변경":"등록"}
                     </Button>
                 </Form>
             </Modal.Body>

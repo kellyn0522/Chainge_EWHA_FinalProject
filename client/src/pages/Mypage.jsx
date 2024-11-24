@@ -1,7 +1,7 @@
 import {useNavigate} from "react-router-dom";
 import Logo from "../component/Logo";
 import HouseItem from "../component/HouseItem";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { AuthItemContext } from "../context/AuthItemContext";
 import { Card, Button,Badge, Container, Row, Col} from "react-bootstrap";
@@ -17,10 +17,16 @@ import account from '../icons/account.svg';
 import house from '../icons/house.svg';
 import ContractCard from "../component/ContractCard";
 import {ContractContext} from '../App';
+import { ReqContext } from "../context/ReqContext";
 
 const Mypage = () => {
     const navigate = useNavigate();
     const { user } = useContext(AuthContext);
+    const { getUserSendReq,getUserReceiveReq} = useContext(ReqContext);
+    const [receiveRequest, setReceiveRequest] = useState(null);
+    const [sendReq, setSendReq] = useState(null);
+
+
     const [showModal, setShowModal] = useState(false);
     const handleShow = () => setShowModal(true);
     const handleClose = () => setShowModal(false);
@@ -48,6 +54,31 @@ const Mypage = () => {
     const [showMetaMaskModal, setShowMetaMaskModal] = useState(false);
     const handleMetaMaskShow = () => setShowMetaMaskModal(true);
     const handleMetaMaskClose = () => setShowMetaMaskModal(false);
+
+    
+    useEffect(() => {
+        const fetchReq = async () => {
+            const allReqs = await getUserSendReq();
+            if (Array.isArray(allReqs)){
+                setSendReq(allReqs);
+            } else {
+                console.error('Failed to fetch Sended Request.');
+            }
+        };
+        fetchReq();
+    }, []);
+
+    useEffect(() => {
+        const fetchReq = async () => {
+            const allReqs = await getUserReceiveReq();
+            if (Array.isArray(allReqs)){
+                setReceiveRequest(allReqs);
+            } else {
+                console.error('Failed to fetch Request1111111.');
+            }
+        };
+        fetchReq();
+    }, []);
 
     
     const {contract} = useContext(ContractContext);
@@ -92,14 +123,18 @@ const Mypage = () => {
                                             <Card.Text>Email: {user.email}</Card.Text>
                                             <div style = {{display : 'flex', alignItems: 'center', gap:'10px', marginBottom : '1rem'}}>
                                                 <Card.Text style={{marginBottom:'0px'}}>계좌 연결 상태: </Card.Text>
-                                                <Card.Text className={user.account?'blueFont':'skyblueFont'}>{user.account?"연결 완료":"미연결"}</Card.Text>
-                                                {!user?.account && <Badge className = 'skyblue' style = {{marginLeft: '7px', marginBottom : '0.9rem', display : 'flex',alignItems:'center'}} onClick = {handleAccountShow}>연결하기</Badge>}
+                                                <Card.Text className={user.account?'blueFont':'skyblueFont'} style = {{marginBottom : '0'}}>{user.account?"연결 완료":"미연결"}</Card.Text>
+                                                {!user?.account && <Badge className = 'skyblue' style = {{marginLeft: '7px', marginBottom : '0', display : 'flex',alignItems:'center'}} onClick = {handleAccountShow}>연결하기</Badge>}
+                                                {user?.account && <Badge className = 'skyblue' style = {{marginLeft: '7px', marginBottom : '0', display : 'flex',alignItems:'center'}} onClick = {handleAccountShow}>계좌 변경</Badge>}
+                                            
                                             </div>
                                             <LinkingAccount show={showAccountModal} handleClose={handleAccountClose}/>
-                                            <div style = {{display : 'flex', alignItems: 'center', gap:'10px', marginBottom : '1rem'}}>
+                                            <div style = {{display : 'flex', alignItems: 'center', gap:'10px'}}>
                                                 <Card.Text style={{marginBottom:'0px'}}>이더리움 주소: </Card.Text>
-                                                <Card.Text className={user.metaMaskAdd?'blueFont':'skyblueFont'}>{user.metaMaskAdd?user.metaMaskAdd:"미연결"}</Card.Text>
-                                                {!user?.metaMaskAdd && <Badge className = 'skyblue' style = {{marginLeft: '7px', marginBottom : '0.9rem', display : 'flex', alignItems:'center'}} onClick = {handleMetaMaskShow}>등록하기</Badge>}
+                                                <Card.Text className={user.metaMaskAdd?'blueFont':'skyblueFont'} style = {{marginBottom : '0'}}>{user.metaMaskAdd?user.metaMaskAdd:"미연결"}</Card.Text>
+                                                {!user?.metaMaskAdd && <Badge className = 'skyblue' style = {{marginLeft: '7px', marginBottom : '0', display : 'flex', alignItems:'center'}} onClick = {handleMetaMaskShow}>등록하기</Badge>}
+                                                {user?.metaMaskAdd && <Badge className = 'skyblue' style = {{marginLeft: '7px', marginBottom : '0', display : 'flex', alignItems:'center'}} onClick = {handleMetaMaskShow}>변경하기</Badge>}
+                                            
                                             </div>
                                             <LinkingMetaMask show={showMetaMaskModal} handleClose={handleMetaMaskClose}/>
                                         </Card.Body>
@@ -120,6 +155,32 @@ const Mypage = () => {
                             </div>     
                             <div>
                                 <div >
+                                    <Button className = 'green' style = {{color: 'white', border: 'none', margin: '7px'}} onClick = {handleSendReqShow}>보낸 거래 요청</Button>
+                                    <Button className = 'green' style = {{color: 'white', border: 'none', margin: '7px'}} onClick = {handleReqShow}>받은 거래 요청</Button>
+                                    <SendContractReq show={showSendReqModal} handleClose={handleSendReqClose} />
+                                    <ContractReq show={showReqModal} handleClose={handleReqClose} />
+                                    <div style = {{display: "flex", alignItems: 'center', textAlign: 'center'}}>
+                                        <img src={house} alt='house_pic' width = '30px' height = 'auto'/>
+                                        <div style={{marginLeft:"10px", marginRight:'15px'}}>진행 중인 거래</div>
+                                    </div>
+                                        <div>
+                                            {sendReq?.map((s) => (
+                                                s.accept &&
+                                                <Card style = {{display: 'flex', justifyContent: 'center', padding: '1rem', gap: '7px'}}>
+                                                    <strong>ID: {s.ownerId} 님이 거래 요청을 수락하였습니다.</strong>
+                                                    <p style={{marginBottom: '0'}}>거래 요청 한 매물: {s.itemId}</p>
+                                                </Card>
+                                            ))}
+                                        </div>
+                                        <div>
+                                            {receiveRequest?.map((r) => (
+                                                r.accept &&
+                                                <Card  style = {{display: 'flex', justifyContent: 'center', padding: '1rem', gap: '7px'}}>
+                                                    <strong>ID: {r.senderId} 님의 거래 요청을 수락하였습니다.</strong>
+                                                    <p style={{marginBottom: '0'}}>거래 요청 한 매물: {r.itemId}</p>
+                                                </Card>
+                                            ))}
+                                        </div>
                                     <div style = {{display: "flex", alignItems: 'center', textAlign: 'center'}}>
                                         <img src={house} alt='house_pic' width = '30px' height = 'auto'/>
                                         <div style={{marginLeft:"10px", marginRight:'15px'}}>임대 중</div>
@@ -146,10 +207,6 @@ const Mypage = () => {
                                             ):null
                                         }
                                     </div>
-                                    <Button className = 'green' style = {{color: 'white', border: 'none', margin: '7px'}} onClick = {handleSendReqShow}>보낸 거래 요청</Button>
-                                    <Button className = 'green' style = {{color: 'white', border: 'none', margin: '7px'}} onClick = {handleReqShow}>받은 거래 요청</Button>
-                                    <SendContractReq show={showSendReqModal} handleClose={handleSendReqClose} />
-                                    <ContractReq show={showReqModal} handleClose={handleReqClose} />
                                 </div>
                             </div>
                         </div>

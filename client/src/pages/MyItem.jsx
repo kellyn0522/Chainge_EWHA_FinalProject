@@ -40,14 +40,14 @@ const MyItem = ({show ,handleClose}) => {
             </Modal.Header>
             <Modal.Body className = "noto-sans-kr">
                 <Form>
-                                <div className= "list_column" style = {{display: 'flex'}}>
+                                <div className= "list_column" style = {{display: 'flex', alignItems:'center'}}>
                                     {getItemError && <p>Error: {getItemError}</p>}
                                     {items.map(it => (
                                         userID === it.ownerId?(
                                             <HouseItem itemId={it.itemID} />
                                         ):null
                                     ))}
-                                    <img src={add_circle} alt='add_circle' width = '50px' height = '50px' style = {{cursor: "pointer", margin:'120px 20px 0px 0px'}} onClick = {onCreateItem} />
+                                    <img src={add_circle} alt='add_circle' width = '50px' height = '50px' style = {{cursor: "pointer", marginLeft:'20px'}} onClick = {onCreateItem} />
                                 
                                 </div>
                                 

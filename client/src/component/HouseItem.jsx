@@ -76,14 +76,14 @@ const HouseItem = ({itemId}) => {
     }
                           
     return (
-        <Card className = 'houseItem' style = {{ width : '200px' }} onClick = {goToItem}>
+        <Card className = 'houseItem' style = {{ width : '210px' }} onClick = {goToItem}>
             <div style = {{position: 'relative', display: 'inline-block'}}>
-                <img src={item.imageFile || house} alt='house_pic' width = '200px' height = '150px' style = {{border: '2px solid #ccc', display: ' block', alignItems:'flex-start'}} onError = {(e) => e.target.src = house} />
+                <img src={item.imageFile || house} alt='house_pic' width = '210px' height = '150px' style = {{border: '2px solid #ccc', display: ' block', alignItems:'flex-start'}} onError = {(e) => e.target.src = house} />
                 <div>
                     {user? (
                         user._id !== item.ownerId?(
                         <>
-                            <span className={`material-symbols-outlined ${liked? 'liked':'dontlike'}`} style = {{ cursor: "pointer", position: 'absolute', top: '10px', left:'160px'}}onClick = {handleLike}>favorite</span>
+                            <span className={`material-symbols-outlined ${liked? 'liked':'dontlike'}`} style = {{ cursor: "pointer", position: 'absolute', top: '10px', left:'170px'}}onClick = {handleLike}>favorite</span>
                         
                         </>
                         ):(
@@ -112,7 +112,8 @@ const HouseItem = ({itemId}) => {
                     )}
                     / {item.housePrice}만원
                 </Card.Text>
-                <Card.Text>{item.location} {item.houseAddress}</Card.Text>
+                <Card.Text>{item.location}</Card.Text>
+                <Card.Text>{item.houseAddress}</Card.Text>
                 <Card.Text>{item.area}평/ {item.type}</Card.Text>
             </Card.Body>
         </Card>

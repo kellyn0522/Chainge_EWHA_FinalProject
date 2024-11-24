@@ -21,6 +21,12 @@ const LinkingAccount = ({show ,handleClose}) => {
                 <div className = "noto-sans-kr"> 계좌 연결</div>
             </Modal.Header>
             <Modal.Body className = "noto-sans-kr">
+                {user?.account&&(
+                    <div style ={{margin: '15px', marginBottom:'20px', gap:'20px', display: 'grid', gridTemplateColumns: '1fr 1fr', alignItems: 'center'}}>
+                        <div>현재 연결된 계좌: </div>
+                        <div>{user.account}</div>
+                    </div>
+                )}
                 <Form className = 'formControl2'>
                     <Form.Label style={{marginBottom:'0px'}}>계좌번호</Form.Label>
                     <Form.Control 
@@ -28,7 +34,7 @@ const LinkingAccount = ({show ,handleClose}) => {
                         onChange={(e) => setInput(e.target.value)}
                         />
                     <Button className = 'green' style = {{color: 'white', border: 'none', width:'100px'}} onClick={onLinking} >
-                        { user?.account? "연결 완료":"연결"}
+                        { user?.account? "변경":"연결"}
                     </Button>
                 </Form>
             </Modal.Body>

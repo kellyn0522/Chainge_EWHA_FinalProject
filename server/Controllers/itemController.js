@@ -52,8 +52,8 @@ const registerItem = async (req, res) => {
             zipCode,
             houseAddress,
             location,
-            latitude, // 위도
-            longitude, // 경도
+            latitude: 0, // 위도
+            longitude: 0, // 경도
             area,
             ownerId,
             housePrice,

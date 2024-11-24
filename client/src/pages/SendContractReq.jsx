@@ -26,7 +26,6 @@ const SendContractReq = ({show ,handleClose}) => {
 
     
     const goToReq = (ownerId, id) => {
-        console.log(`/reqPage/${ownerId}/${id}/${false}`);
         navigate(`/reqPage/${ownerId}/${id}/${false}`);
     }
 

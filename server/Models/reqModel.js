@@ -6,7 +6,7 @@ const reqSchema = new mongoose.Schema({
     start: Date,
     end: Date,
     period: Number,
-    accepnt: Boolean,
+    accept: Boolean,
     tenantSign: Boolean,
     landlordSign: Boolean,
 }, {
