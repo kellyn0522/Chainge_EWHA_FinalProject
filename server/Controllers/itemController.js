@@ -3,9 +3,7 @@ const itemModel = require('../Models/itemModel');
 const jwt = require("jsonwebtoken");
 
 const registerItem = async (req, res) => {
-    const imageFile = req.file ? req.file.path : null;
-    console.log("Received data:", { ownerName, zipCode, houseAddress, location, area, ownerId, housePrice, memo, type, isContract, bedSize, hasItems });
-    console.log("Received file:", imageFile);
+    console.log("Received file!!!!!!!!!");
 
     try {
        const{
@@ -25,7 +23,6 @@ const registerItem = async (req, res) => {
         bedSize,
         hasItems,
         hasAgent,
-        imageFile,
         buildingName,
         floor,
         duplexAvailability,
@@ -41,13 +38,15 @@ const registerItem = async (req, res) => {
         parkingSpace,
         availableMoveInDate
         } = req.body;
+  
+        const imageFilePath = req.file ? req.file.path : null;
 
 
         let itemExists = await itemModel.findOne({ itemID });
 
         if (itemExists) return res.status(400).json("item already exists... ");
       
-
+        console.log("Received file!!!!!!!!!");
         const Item = new itemModel({ 
             itemID,
             zipCode,
@@ -65,7 +64,7 @@ const registerItem = async (req, res) => {
             bedSize,
             hasItems,
             hasAgent,
-            imageFile,
+            imageFile:imageFilePath,
             buildingName,
             floor,
             duplexAvailability,
@@ -85,7 +84,7 @@ const registerItem = async (req, res) => {
 
         await Item.save();
 
-        console.log("!!!!!!!!!!");
+        console.log("Received file!!!!!!!!!");
         res.status(200).json({ 
             itemID: Item.itemID,
             zipCode: Item.zipCode, 

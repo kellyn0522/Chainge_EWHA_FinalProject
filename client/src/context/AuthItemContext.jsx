@@ -1,7 +1,7 @@
 import { createContext, useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { baseUrl, postRequest, getRequest, deleteRequest } from "../utils/services";
+import { baseUrl, postRequest, getRequest, deleteRequest, postFormRequest } from "../utils/services";
 
 export const AuthItemContext = createContext();
 
@@ -42,6 +42,7 @@ export const AuthItemContextProvider = ({ children }) => {
         total_number_of_units: '',
         parkingSpace: '',
         availableMoveInDate: '',
+        imageFile:'',
     });
 
     const [createItemError, setCreateItemError] = useState(null);
@@ -65,21 +66,20 @@ export const AuthItemContextProvider = ({ children }) => {
 
             const formData = new FormData();
             Object.keys(createItemInfo).forEach((key) => {
-                formData.append(key, createItemInfo[key]);
+                if(key !=='imageFile'){
+                    formData.append(key, createItemInfo[key]);
+                }
             });
+            if (createItemInfo.imageFile){
+                formData.append("imageFile", createItemInfo.imageFile)
+            }
 
             console.log("Sending Request Data:", Object.fromEntries(formData.entries()));
 
 
-            const response = await postRequest(
+            const response = await postFormRequest(
                 `${baseUrl}/items/createItem`,
-                createItemInfo,
-                {
-                    headers: {
-                        // "Content-Type": "multipart/form-data",
-                        "Content-Type": "application/json",
-                    },
-                }
+                formData,
             );
 
             console.log("Create Item Response:", response.data);

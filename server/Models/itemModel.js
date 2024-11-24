@@ -4,18 +4,18 @@ const itemSchema = new mongoose.Schema({
     zipCode:{ type: String, required: true, match: /^[0-9]{5}$/  },
     houseAddress:{ type: String, required: true, maxlength: 30 },
     location :{ type: String, required: true, maxlength: 30 },
-    latitude: { type: Number, required: true }, // 위도
-    longitude: { type: Number, required: true }, // 경도
+    latitude: { type: Number, required: false }, // 위도
+    longitude: { type: Number, required: false }, // 경도
     area :{ type: String, required: true, maxlength: 30 },
     ownerId : { type: String, required: true, minlength: 3, maxlength: 30 },
-    housePrice: { type: String, required: true, maxlength: 30 },
+    housePrice: { type: Number, required: true, maxlength: 30 },
     deposit: {type: Number, required: true},
     memo : { type: String, required: false, maxlength: 500 },
     type : { type: String, required: true, maxlength: 30 },
     isContract: {type : String,required: true, maxlength: 30 },
     bedSize: {type : String,required: false, maxlength: 10 },
-    hasItems: {type : Object,required: true, maxlength: 30 },
-    hasAgent: {type : Boolean,required: false, maxlength: 3 },
+    hasItems: {type : Object,required: true},
+    hasAgent: {type : Boolean,required: false},
     imageFile: {type: String, required: false},
     floor: {type: Number, required: false},
     duplexAvailability: {type: Boolean, required: false},

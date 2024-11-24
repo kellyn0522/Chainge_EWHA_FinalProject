@@ -47,7 +47,7 @@ const Item = () => {
         isFindItemLoading,
     } = useContext(AuthItemContext);
     const [item, setItem] = useState(null)
-    const itemHasItems = item?.hasItems? (typeof item.hasItems === 'string'? JSON.parse(item.hasItems): item.hasItems) :null;
+    const itemHasItems = item?.hasItems? ( item.hasItems) :null;
 
     const handleLike = (event) => {
         event.stopPropagation();
@@ -57,6 +57,17 @@ const Item = () => {
             updaterLike(id, newLikedState);
         }
     };
+
+    useEffect(() => {
+        const fetchItem = async () => {
+            if (!findItemError && !isFindItemLoading){
+                const result = await findItem(id);
+                setItem(result);
+            }
+        };
+        fetchItem();
+    }, [findItem, findItemError]);
+
 
     useEffect(() => {
         if (user && item ){
@@ -72,15 +83,6 @@ const Item = () => {
             ? new Date(availableMoveInDate).toISOString().split('T')[0]
             : '')
         : '';
-    useEffect(() => {
-        const fetchItem = async () => {
-            if (!findItemError && !isFindItemLoading){
-                const result = await findItem(id);
-                setItem(result);
-            }
-        };
-        fetchItem();
-    }, [findItem, findItemError]);
 
     if (isFindItemLoading){
         return <div>Loding...</div>

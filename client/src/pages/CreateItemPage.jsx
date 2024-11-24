@@ -40,19 +40,10 @@ const CreateItemPage = () => {
         hasChair: false,});
     
     const [addressData, setAddressData] = useState({
-        location: "",
-        zipCode: "",
         latitude: null,
         longitude: null,
     });
 
-    /*const [createItemInfo, setCreateItemInfo] = useState({
-        location: "",
-        zipCode: "",
-        latitude: null,
-        longitude: null,
-    });
-    */
     
     const [roadAddress, setRoadAddress] = useState('');
     const [zonecode, setZonecode] = useState('');
@@ -93,16 +84,16 @@ const CreateItemPage = () => {
                 setRoadAddress(roadAddress);
                 setZonecode(zonecode);
     
+                console.log('출력111111111111111');
                 loadKakaoMapsAPI().then(() => {
                     const geocoder = new window.kakao.maps.services.Geocoder();
+                    console.log('출력2222222222222222222222');
                     geocoder.addressSearch(roadAddress, (result, status) => {
+                        console.log('출력33333333333333333');
                         if (status === window.kakao.maps.services.Status.OK) {
                             const { x: longitude, y: latitude } = result[0]; // 경도 (x), 위도 (y)
-                            
                             // 위치 정보로 상태 업데이트 (필요시)
                             setAddressData({ 
-                                roadAddress, 
-                                zonecode, 
                                 latitude, 
                                 longitude 
                             });
@@ -121,7 +112,6 @@ const CreateItemPage = () => {
         const checked = e.target.checked
         setBedExist(checked);
         updateCreateItemInfo({ 
-            ...createItemInfo, 
             bedSize: checked? createItemInfo.bedSize: "" ,
 
         });
@@ -154,29 +144,27 @@ const CreateItemPage = () => {
     }, []);
 
     useEffect(() => {
-        updateCreateItemInfo({ ...createItemInfo, hasItems});
+        updateCreateItemInfo({hasItems});
     },[hasItems]);
 
     useEffect(() => {
-        updateCreateItemInfo({ ...createItemInfo, bedSize: bedExist? createItemInfo.bedSize: "" })
+        updateCreateItemInfo({bedSize: bedExist? createItemInfo.bedSize: "" })
     }, [bedExist]);
-/*
-    useEffect(() => {
-        updateCreateItemInfo({ ...createItemInfo, zipCode: zonecode});
-    }, [zonecode]);
-
-    useEffect(() => {
-        updateCreateItemInfo({ ...createItemInfo, location: roadAddress});
-    }, [roadAddress]);
-*/
 
     useEffect(() => {
         updateCreateItemInfo({
-            ...createItemInfo,
             zipCode: zonecode,
             location: roadAddress,
         });
     }, [zonecode, roadAddress]);
+
+    useEffect(() => {
+        updateCreateItemInfo({
+            latitude: addressData.latitude,
+            longitude: addressData.longitude
+        })
+        console.log(addressData);
+    }, [addressData])
 
     useEffect(() => {
         if (user) {
@@ -208,7 +196,7 @@ const CreateItemPage = () => {
                         <Form.Control
                                 type="file"
                                 style = {{marginBottom: '10px'}}
-                                onChange={(e) => updateCreateItemInfo({ ...createItemInfo, imageFile: e.target.files[0] })}
+                                onChange={(e) => updateCreateItemInfo({imageFile: e.target.files[0] })}
                         />
                         <Form.Group className='formControl'>
                             <Form.Label>소유주 이름</Form.Label>
@@ -262,7 +250,7 @@ const CreateItemPage = () => {
                                 type="text" 
                                 placeholder="Detail Location" 
                                 onChange={ 
-                                    (e) => updateCreateItemInfo({ ...createItemInfo, houseaddress: e.target.value })
+                                    (e) => updateCreateItemInfo({houseAddress: e.target.value })
                                 }
 
                                 
@@ -277,7 +265,7 @@ const CreateItemPage = () => {
                                 type="text"
                                 placeholder="단위: 만원/월"
                                 onChange={ 
-                                    (e) => updateCreateItemInfo({ ...createItemInfo, housePrice: e.target.value })
+                                    (e) => updateCreateItemInfo({housePrice: e.target.value })
                                 }
                             />
                         </Form.Group>
@@ -290,7 +278,7 @@ const CreateItemPage = () => {
                                 type="text"
                                 placeholder="단위: 만원"
                                 onChange={ 
-                                    (e) => updateCreateItemInfo({ ...createItemInfo, deposit: e.target.value })
+                                    (e) => updateCreateItemInfo({ deposit: e.target.value })
                                 }
                             />
                         </Form.Group>
@@ -300,7 +288,7 @@ const CreateItemPage = () => {
                             type="text" 
                             placeholder="층"
                             onChange={ 
-                                (e) => updateCreateItemInfo({ ...createItemInfo, floor: e.target.value })
+                                (e) => updateCreateItemInfo({floor: e.target.value })
                             } />
                         </Form.Group>
                         <Form.Group className='formControl'>
@@ -312,7 +300,7 @@ const CreateItemPage = () => {
                             type="text" 
                             placeholder="방 개수"
                             onChange={ 
-                                (e) => updateCreateItemInfo({ ...createItemInfo, room: e.target.value })
+                                (e) => updateCreateItemInfo({ room: e.target.value })
                             } />
                         </Form.Group>
                         <Form.Group className='formControl'>
@@ -324,7 +312,7 @@ const CreateItemPage = () => {
                             type="text" 
                             placeholder="화장실 개수"
                             onChange={ 
-                                (e) => updateCreateItemInfo({ ...createItemInfo, bathroom: e.target.value })
+                                (e) => updateCreateItemInfo({bathroom: e.target.value })
                             } />
                         </Form.Group>
                         <Form.Group className='formControl'>
@@ -333,7 +321,7 @@ const CreateItemPage = () => {
                             type="text" 
                             placeholder="총 주차대수"
                             onChange={ 
-                                (e) => updateCreateItemInfo({ ...createItemInfo, parkingSpace: e.target.value })
+                                (e) => updateCreateItemInfo({ parkingSpace: e.target.value })
                             } />
                         </Form.Group>
                         <div className='checkContainer'>
@@ -348,7 +336,7 @@ const CreateItemPage = () => {
                             value = '남향'
                             checked = {createItemInfo.facing === '남향'}
                             onChange={ 
-                                (e) => updateCreateItemInfo({ ...createItemInfo, facing: e.target.value })
+                                (e) => updateCreateItemInfo({facing: e.target.value })
                             } />
                             <Form.Check 
                             type="radio" 
@@ -357,7 +345,7 @@ const CreateItemPage = () => {
                             value = '남동향'
                             checked = {createItemInfo.facing === '남동향'}
                             onChange={ 
-                                (e) => updateCreateItemInfo({ ...createItemInfo, facing: e.target.value })
+                                (e) => updateCreateItemInfo({ facing: e.target.value })
                             } />
                             <Form.Check 
                             type="radio" 
@@ -366,7 +354,7 @@ const CreateItemPage = () => {
                             value = '동향'
                             checked = {createItemInfo.facing === '동향'}
                             onChange={ 
-                                (e) => updateCreateItemInfo({ ...createItemInfo, facing: e.target.value })
+                                (e) => updateCreateItemInfo({facing: e.target.value })
                             } />
                             <Form.Check 
                             type="radio" 
@@ -375,7 +363,7 @@ const CreateItemPage = () => {
                             value = '북동향'
                             checked = {createItemInfo.facing === '북동향'}
                             onChange={ 
-                                (e) => updateCreateItemInfo({ ...createItemInfo, facing: e.target.value })
+                                (e) => updateCreateItemInfo({facing: e.target.value })
                             } />
                             <Form.Check 
                             type="radio" 
@@ -384,7 +372,7 @@ const CreateItemPage = () => {
                             value = '북향'
                             checked = {createItemInfo.facing === '북향'}
                             onChange={ 
-                                (e) => updateCreateItemInfo({ ...createItemInfo, facing: e.target.value })
+                                (e) => updateCreateItemInfo({ facing: e.target.value })
                             } />
                             <Form.Check 
                             type="radio" 
@@ -393,7 +381,7 @@ const CreateItemPage = () => {
                             value = '북서향'
                             checked = {createItemInfo.facing === '북서향'}
                             onChange={ 
-                                (e) => updateCreateItemInfo({ ...createItemInfo, facing: e.target.value })
+                                (e) => updateCreateItemInfo({facing: e.target.value })
                             } />
                             <Form.Check 
                             type="radio" 
@@ -402,7 +390,7 @@ const CreateItemPage = () => {
                             value = '서향'
                             checked = {createItemInfo.facing === '서향'}
                             onChange={ 
-                                (e) => updateCreateItemInfo({ ...createItemInfo, facing: e.target.value })
+                                (e) => updateCreateItemInfo({facing: e.target.value })
                             } />
                             <Form.Check 
                             type="radio" 
@@ -411,7 +399,7 @@ const CreateItemPage = () => {
                             value = '남서향'
                             checked = {createItemInfo.facing === '남서향'}
                             onChange={ 
-                                (e) => updateCreateItemInfo({ ...createItemInfo, facing: e.target.value })
+                                (e) => updateCreateItemInfo({ facing: e.target.value })
                             } />
                         </Form.Group>
                         </Card>
@@ -427,7 +415,7 @@ const CreateItemPage = () => {
                                 value = 'true'
                                 checked = {createItemInfo.elevator === true}
                                 onChange={ 
-                                    (e) => updateCreateItemInfo({ ...createItemInfo, elevator: e.target.value === 'true' })
+                                    (e) => updateCreateItemInfo({elevator: e.target.value === 'true' })
                                 } />
                                 <Form.Check 
                                 type="radio" 
@@ -436,7 +424,7 @@ const CreateItemPage = () => {
                                 value = 'false'
                                 checked = {createItemInfo.elevator === false}
                                 onChange={ 
-                                    (e) => updateCreateItemInfo({ ...createItemInfo, elevator: e.target.value === 'true' })
+                                    (e) => updateCreateItemInfo({ elevator: e.target.value === 'true' })
                                 } />
                             </Form.Group>
                         </Card>
@@ -450,7 +438,7 @@ const CreateItemPage = () => {
                                 value = 'false'
                                 checked = {createItemInfo.duplexAvailability === false}
                                 onChange={ 
-                                    (e) => updateCreateItemInfo({ ...createItemInfo, duplexAvailability: e.target.value === 'true' })
+                                    (e) => updateCreateItemInfo({ duplexAvailability: e.target.value === 'true' })
                                 } />
                                 <Form.Check 
                                 type="radio" 
@@ -459,7 +447,7 @@ const CreateItemPage = () => {
                                 value = 'true'
                                 checked = {createItemInfo.duplexAvailability === true}
                                 onChange={ 
-                                    (e) => updateCreateItemInfo({ ...createItemInfo, duplexAvailability: e.target.value === 'true' })
+                                    (e) => updateCreateItemInfo({ duplexAvailability: e.target.value === 'true' })
                                 } />
                             </Form.Group>
                         </Card>
@@ -473,7 +461,7 @@ const CreateItemPage = () => {
                                 value = 'true'
                                 checked = {createItemInfo.petFriendly === true}
                                 onChange={ 
-                                    (e) => updateCreateItemInfo({ ...createItemInfo, petFriendly: e.target.value === 'true' })
+                                    (e) => updateCreateItemInfo({  petFriendly: e.target.value === 'true' })
                                 } />
                                 <Form.Check 
                                 type="radio" 
@@ -482,7 +470,7 @@ const CreateItemPage = () => {
                                 value = 'false'
                                 checked = {createItemInfo.petFriendly === false}
                                 onChange={ 
-                                    (e) => updateCreateItemInfo({ ...createItemInfo, petFriendly: e.target.value === 'true' })
+                                    (e) => updateCreateItemInfo({ petFriendly: e.target.value === 'true' })
                                 } />
                             </Form.Group>
                         </Card>
@@ -495,7 +483,7 @@ const CreateItemPage = () => {
                                 type="text"
                                 placeholder="평"
                                 onChange={ 
-                                    (e) => updateCreateItemInfo({ ...createItemInfo, area: e.target.value })
+                                    (e) => updateCreateItemInfo({  area: e.target.value })
                                 }
                             />
                         </Form.Group>
@@ -505,7 +493,7 @@ const CreateItemPage = () => {
                                 type="text"
                                 placeholder="제곱미터"
                                 onChange={ 
-                                    (e) => updateCreateItemInfo({ ...createItemInfo, exclusiveArea: e.target.value })
+                                    (e) => updateCreateItemInfo({  exclusiveArea: e.target.value })
                                 }
                             />
                         </Form.Group>
@@ -515,7 +503,7 @@ const CreateItemPage = () => {
                                 type="text"
                                 placeholder="제곱미터"
                                 onChange={ 
-                                    (e) => updateCreateItemInfo({ ...createItemInfo, contractArea: e.target.value })
+                                    (e) => updateCreateItemInfo({  contractArea: e.target.value })
                                 }
                             />
                         </Form.Group>
@@ -525,7 +513,7 @@ const CreateItemPage = () => {
                                 type="text"
                                 placeholder="세대"
                                 onChange={ 
-                                    (e) => updateCreateItemInfo({ ...createItemInfo, total_number_of_units: e.target.value })
+                                    (e) => updateCreateItemInfo({total_number_of_units: e.target.value })
                                 }
                             />
                         </Form.Group>
@@ -535,7 +523,7 @@ const CreateItemPage = () => {
                                 type="text"
                                 placeholder="세대"
                                 onChange={ 
-                                    (e) => updateCreateItemInfo({ ...createItemInfo, number_of_units_in_the_given_area: e.target.value })
+                                    (e) => updateCreateItemInfo({number_of_units_in_the_given_area: e.target.value })
                                 }
                             />
                         </Form.Group>
@@ -544,7 +532,7 @@ const CreateItemPage = () => {
                             <Form.Control
                                 type="date"
                                 onChange={ 
-                                    (e) => updateCreateItemInfo({ ...createItemInfo, availableMoveInDate: e.target.value })
+                                    (e) => updateCreateItemInfo({availableMoveInDate: e.target.value })
                                 }
                             />
                         </Form.Group>
@@ -554,7 +542,7 @@ const CreateItemPage = () => {
                                 className = "typeSelect"
                                 value={createItemInfo.type}
                                 onChange={
-                                    (e) => updateCreateItemInfo({ ...createItemInfo, type: e.target.value })
+                                    (e) => updateCreateItemInfo({ type: e.target.value })
                                 } >
                                 <option value = "select">매물 종류</option>
                                 <option value = "아파트">아파트</option>
@@ -569,7 +557,7 @@ const CreateItemPage = () => {
                                 type="text"
                                 placeholder="Memo"
                                 onChange={ 
-                                    (e) => updateCreateItemInfo({ ...createItemInfo, memo: e.target.value })
+                                    (e) => updateCreateItemInfo({ memo: e.target.value })
                                 }
                             />
                         </Form.Group>
@@ -581,7 +569,7 @@ const CreateItemPage = () => {
  
                                 <div className="creatPageText" style = {{marginLeft: '80px', marginRight: '25px'}}>침대 크기</div>
                                 <input onChange={
-                                    (e) => updateCreateItemInfo({ ...createItemInfo, bedSize: e.target.value })
+                                    (e) => updateCreateItemInfo({ bedSize: e.target.value })
                                 } className="set"  maxLength="6" disabled = {!bedExist} />
                             </div>
                             <div className = 'optionCheck'>

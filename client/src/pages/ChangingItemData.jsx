@@ -126,15 +126,6 @@ const ChangingItemData = () => {
                             <Form.Label className='blueFont'>{item.floor}층</Form.Label>
                         </Form.Group>
                         <Form.Group className='formControl'>
-                            <Form.Label>건물 이름</Form.Label>
-                            <Form.Control 
-                            type="text" 
-                            placeholder="건물 이름"
-                            onChange={ 
-                                (e) => updateItemUpdaterInfo({ buildingName: e.target.value })
-                            } />
-                        </Form.Group>
-                        <Form.Group className='formControl'>
                             <Form.Label>월세</Form.Label>
                             <Form.Control
                                 type="text"

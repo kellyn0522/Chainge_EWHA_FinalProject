@@ -3,8 +3,6 @@ const router = express.Router();
 const {registerItem, updateItem, deleteItem, findItem, getItems } = require("../Controllers/itemController");
 const multer = require('multer');
 const path = require('path');
-const upload = multer({ dest: 'uploads/' });
-
 // multer 설정: 파일을 'uploads' 폴더에 저장
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -16,7 +14,10 @@ const storage = multer.diskStorage({
 });
 
 
-// 매물 등록 시 multer 미들웨어를 추가하여 파일 처리
+const upload = multer({ storage: storage });
+
+
+/* 매물 등록 시 multer 미들웨어를 추가하여 파일 처리
 router.post("/createItem", upload.single('imageFile'),async (req,res) => { 
     try{
         if(!req.file){
@@ -42,10 +43,10 @@ router.post("/createItem", upload.single('imageFile'),async (req,res) => {
         console.error('Error in createItem:', error);
         res.status(500).json({error: '서버에서 오류가 발생했습니다.'});
     }
-});
+});*/
 
 
-router.post("/createItem", registerItem);
+router.post("/createItem", upload.single('imageFile'), registerItem);
 router.post("/updateItem/:itemID", updateItem);
 router.delete("/deleteItem/:itemID", deleteItem);
 router.get("/find/:itemID", findItem);
