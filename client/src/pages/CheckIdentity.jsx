@@ -12,7 +12,7 @@ const CheckIdentity = () => {
     const location = useLocation();
     const {id, type} = useParams();
     const isOwner = type==='true';
-    const {contractInfo} = location.state?location.state : {};
+    const {otherUser} = location.state?location.state : {};
     const { 
         user
     } = useContext(AuthContext);
@@ -91,22 +91,9 @@ const CheckIdentity = () => {
     
     const acceptContract = async()=>{
         if(isOwner){
-        const updatedInfo= {
-            ...contractInfo,
-
-            landlordID: user?._id,
-            landlordphoneNum: user?.phoneNumber,
-            landlordBirth: user?.birth,
-            landlordIdentityNum: user?.identityNum,
-            landlordMetamaskAdd: user?.metaMaskAdd,
-            landlordAccount: user?.account,
-            landlordname: user?.name,
-            landlordzipcode: user?.zipCode,
-        };
-        console.log('CCCCCCCCCCCCCCCCC',updatedInfo);
         await updateAccept(id);
-        navigate(`/makeContract/${id}`, {state: {updatedInfo}});
-    }else{
+        navigate(`/makeContract/${otherUser}/${id}/${true}`);
+        }else{
             console.log('User is not the owner');
         }
     };

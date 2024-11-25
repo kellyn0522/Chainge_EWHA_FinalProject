@@ -11,23 +11,25 @@ import { ReqContext } from "../context/ReqContext";
 
 const MakeContract = () => {
     const navigate = useNavigate();
-    const {id} = useParams();
-    const location = useLocation();
-    const {updatedInfo} = location.state || {};
+    const {otherUser,id,type} = useParams();
     const [item, setItem] = useState(null);
-    const {setContract} = useContext(ContractContext);
     const [reqInfo, setReqInfo] = useState(null);
-    const { user } = useContext(AuthContext);
-
+    const [info, setInfo] = useState(null);
+    const { user, findUser, findUserError, isFindUserLoading } = useContext(AuthContext);
     const {
         findItem,
         findItemError,
         isFindItemLoading,
+        isContractUpdater
     } = useContext(AuthItemContext);
+    const isOwner = type==='true';
+    const [otherUserinfo, setOtherUserinfo] = useState(null);
+
     const{findingReq, signingError, isSigningLoading, tenantSigned, landlordSigned} = useContext(ReqContext);
     
     useEffect(() =>{
         const fetchReq = async () => {
+            console.log(id);
             try{
                 const result = await findingReq(id);
                 setReqInfo(result);
@@ -41,64 +43,128 @@ const MakeContract = () => {
 
     useEffect(() => {
         const fetchItem = async () => {
-            if (updatedInfo && !findItemError && !isFindItemLoading){
-                const result = await findItem(updatedInfo.itemID);
+            if (reqInfo?.itemId && !findItemError && !isFindItemLoading){
+                const result = await findItem(reqInfo?.itemId);
                 setItem(result);
             }
         };
         fetchItem();
-    }, [updatedInfo, findItem]);
-    console.log('IIIIIIIIIIIIIItem', item);
+    }, [reqInfo]);
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            if (otherUser && !findUserError && !isFindUserLoading){
+                console.log('AAAAAAAAAAAAAAAAA');
+                    const result = await findUser(otherUser);
+                    setOtherUserinfo(result);
+            };
+        };
+        fetchUser();
+    }, [reqInfo]);
+
+    useEffect(() => {
+        if(user && otherUserinfo && item && reqInfo){
+            const newInfo = isOwner?
+                {
+                    tenantID: otherUserinfo._id,
+                    tenantphoneNum: otherUserinfo.phoneNumber,
+                    tenantBirth: otherUserinfo.birth,
+                    tenantidentityNum: otherUserinfo.identityNum,
+                    tenantMetamaskAdd: otherUserinfo.metaMaskAdd,
+                    tenantname: otherUserinfo.name,
+                    tenantzipcode: otherUserinfo.zipCode,
+                    tenantAccount: otherUserinfo.account,
+
+                    landlordID: user._id,
+                    landlordphoneNum: user.phoneNumber,
+                    landlordBirth: user.birth,
+                    landlordIdentityNum: user.identityNum,
+                    landlordMetamaskAdd: user.metaMaskAdd,
+                    landlordname: user.name,
+                    landlordzipcode: user.zipCode,
+                    landlordAccount: user.account,
+
+                    itemID: item?.itemID,
+                    price: item?.price,
+                    deposit: item?.deposit,
+                    start: reqInfo.start,
+                    end: reqInfo.end,
+                    period: reqInfo.period,
+                }:{
+                    tenantID: user._id,
+                    tenantphoneNum: user.phoneNumber,
+                    tenantBirth: user.birth,
+                    tenantidentityNum: user.identityNum,
+                    tenantMetamaskAdd: user.metaMaskAdd,
+                    tenantname: user.name,
+                    tenantzipcode: user.zipCode,
+                    tenantAccount: user.account,
+
+                    landlordID: otherUserinfo._id,
+                    landlordphoneNum: otherUserinfo.phoneNumber,
+                    landlordBirth: otherUserinfo.birth,
+                    landlordIdentityNum: otherUserinfo.identityNum,
+                    landlordMetamaskAdd: otherUserinfo.metaMaskAdd,
+                    landlordname: otherUserinfo.name,
+                    landlordzipcode: otherUserinfo.zipCode,
+                    landlordAccount: otherUserinfo.account,
+
+                    itemID: item?.itemID,
+                    price: item?.price,
+                    deposit: item?.deposit,
+                    start: reqInfo.start,
+                    end: reqInfo.end,
+                    period: reqInfo.period,
+                };
+                setInfo(newInfo);
+        };
+    }, [otherUserinfo,user,item,reqInfo, isOwner]);
 
     if (isFindItemLoading){
         return <div>Loding...</div>
     }
-    if (!item){
+
+    if (findItemError || !item){
         return <div>Error: {findItemError?.message || 'Page not found'}</div>
     }
-    
-    const info =
-    {
-        itemID: updatedInfo?.itemID,
-        tenantID: updatedInfo.tenantID,
-        tenantphoneNum: updatedInfo.tenantphoneNum,
-        tenantBirth: updatedInfo.tenantBirth,
-        tenantidentityNum: updatedInfo.tenantidentityNum,
-        tenantMetamaskAdd: updatedInfo.tenantMetamaskAdd,
-        tenantname: updatedInfo.tenantname,
-        tenantzipcode: updatedInfo.tenantzipcode,
-        tenantAccount: updatedInfo.tenantAccount,
 
-        landlordID: updatedInfo.landlordID,
-        landlordphoneNum: updatedInfo.landlordphoneNum,
-        landlordBirth: updatedInfo.landlordBirth,
-        landlordIdentityNum: updatedInfo.landlordIdentityNum,
-        landlordMetamaskAdd: updatedInfo.landlordMetamaskAdd,
-        landlordname: updatedInfo.landlordname,
-        landlordzipcode: updatedInfo.landlordzipcode,
-        landlordAccount: updatedInfo.landlordAccount,
-
-        price: updatedInfo?.price,
-        deposit: updatedInfo?.deposit,
-        start: updatedInfo.start,
-        end: updatedInfo.end,
-        period: updatedInfo.period,
+    if (isFindUserLoading){
+        return <div>Loding...</div>
     }
-    console.log('receivedinfo!!!!!!!!!!!!!!!',info);
-    console.log('info!!!!!!!!!!!!!!!!!!!!!!!',updatedInfo);
 
     const goToItem = () => {
-        if(!isFindItemLoading && !findItemError && item){
+        console.log('아이템 페이지로 이동');
+        if(!isFindItemLoading && !findItemError && item?.itemID){
+            console.log('이동 성공');
             navigate(`/item/${item.itemID}`);
         }
     }
     
-    if(!updatedInfo || !item){
+    if(!user || !item){
+        return null;
+    }
+    const s = reqInfo?.start? reqInfo.start:null;
+    const timeStart = s instanceof Date
+        ? s.toISOString().split('T')[0]
+        : (typeof s === 'string' && !isNaN(new Date(s).getTime()))
+        ? new Date(s).toISOString().split('T')[0]
+        : '';
+        
+    const e = reqInfo?.end? reqInfo.end:null;
+    const timeEnd = e instanceof Date
+        ? e.toISOString().split('T')[0]
+        : (typeof e === 'string' && !isNaN(new Date(e).getTime()))
+        ? new Date(e).toISOString().split('T')[0]
+        : '';
+
+    
+    if(!info || !item){
         return null;
     }
 
     const onLSign = async()=>{
-        if(user._id === updatedInfo.landlordID){
+        console.log(info);
+        if(user._id === info.landlordID){
             await landlordSigned(id);
             setReqInfo(preState => ({
                 ...preState,
@@ -107,7 +173,7 @@ const MakeContract = () => {
         }
     }
     const onTSign = async()=>{
-        if(user._id === updatedInfo.tenantID){
+        if(user._id === info.tenantID){
             await tenantSigned(id);
             setReqInfo(preState => ({
                 ...preState,
@@ -118,9 +184,8 @@ const MakeContract = () => {
 
     const onContract = async (e)=>{
         e.preventDefault();
-
-        await createReq(e);
-
+        isContractUpdater(item.itemID, '1');
+/*
         try {
             await axios.post('http://localhost:5000/api/contracts', info);
             setContract((prev) => [...prev, info]);
@@ -128,21 +193,8 @@ const MakeContract = () => {
         } catch (errer){
             console.error('Error saving contract:', error);
         }
+*/
     };
-
-    const s = updatedInfo?.start? updatedInfo.start:null;
-    const timeStart = s instanceof Date
-        ? s.toISOString().split('T')[0]
-        : (typeof s === 'string' && !isNaN(new Date(s).getTime()))
-        ? new Date(s).toISOString().split('T')[0]
-        : '';
-        
-    const e = updatedInfo?.end? updatedInfo.end:null;
-    const timeEnd = e instanceof Date
-        ? e.toISOString().split('T')[0]
-        : (typeof e === 'string' && !isNaN(new Date(e).getTime()))
-        ? new Date(e).toISOString().split('T')[0]
-        : '';
 
     return (
         <Container>
@@ -167,17 +219,17 @@ const MakeContract = () => {
                             </div>
                             <Card.Body className = "info">
                                 <div className="infotype">이름</div>
-                                <div className = "infoName">{updatedInfo.landlordname}</div>
+                                <div className = "infoName">{info.landlordname}</div>
                                 <div className="infotype">우편번호</div>
-                                <div className = "infoName">{updatedInfo.landlordzipcode}</div>
+                                <div className = "infoName">{info.landlordzipcode}</div>
                                 <div className ="infotype">주민등록번호</div>
-                                <div className = "infoName">{updatedInfo.landlordBirth}-{updatedInfo.landlordIdentityNum}</div>
+                                <div className = "infoName">{info.landlordBirth}-{info.landlordIdentityNum}</div>
                                 <div className="infotype">전화번호</div>
-                                <div className = "infoName">{updatedInfo.landlordphoneNum.replace(/(\d{3})(\d{3})(\d{4})/,'$1-$2-$3')}</div>
+                                <div className = "infoName">{info.landlordphoneNum?.replace(/(\d{3})(\d{3})(\d{4})/,'$1-$2-$3')}</div>
                                 <div className ="infotype">연결된 계좌</div>
-                                <div className = "infoName">{updatedInfo.landlordAccount}</div>
+                                <div className = "infoName">{info.landlordAccount}</div>
                                 <div className ="infotype">메타마스크 주소</div>
-                                <div className = "infoName">{updatedInfo.landlordMetamaskAdd}</div>
+                                <div className = "infoName">{info.landlordMetamaskAdd}</div>
                             </Card.Body>
                         </Card>
                         <Card className = "information" style={{marginBottom:"20px"}}>
@@ -190,17 +242,17 @@ const MakeContract = () => {
                             </div>
                             <Card.Body className = "info">
                                 <div className="infotype">이름</div>
-                                <div className = "infoName">{updatedInfo.tenantname}</div>
+                                <div className = "infoName">{info.tenantname}</div>
                                 <div className="infotype">우편번호</div>
-                                <div className = "infoName">{updatedInfo.tenantzipcode}</div>
+                                <div className = "infoName">{info.tenantzipcode}</div>
                                 <div className ="infotype">주민등록번호</div>
-                                <div className = "infoName">{updatedInfo.tenantBirth}-{updatedInfo.tenantidentityNum}</div>
+                                <div className = "infoName">{info.tenantBirth}-{info.tenantidentityNum}</div>
                                 <div className="infotype">전화번호</div>
-                                <div className = "infoName">{updatedInfo.tenantphoneNum.replace(/(\d{3})(\d{3})(\d{4})/,'$1-$2-$3')}</div>
+                                <div className = "infoName">{info.tenantphoneNum?.replace(/(\d{3})(\d{3})(\d{4})/,'$1-$2-$3')}</div>
                                 <div className ="infotype">연결된 계좌</div>
-                                <div className = "infoName">{updatedInfo.tenantAccount}</div>
+                                <div className = "infoName">{info.tenantAccount}</div>
                                 <div className ="infotype">메타마스크 주소</div>
-                                <div className = "infoName">{updatedInfo.tenantMetamaskAdd}</div>
+                                <div className = "infoName">{info.tenantMetamaskAdd}</div>
                             </Card.Body>
                         </Card>
                         <Card style={{marginBottom:"20px"}}>
@@ -211,7 +263,7 @@ const MakeContract = () => {
                                 <div className="infotype">계약 종료 날짜</div>
                                 <div className = "infoName">{timeEnd}</div>
                                 <div className="infotype">계약 기간</div>
-                                <div className = "infoName">{updatedInfo.period} 개월</div>
+                                <div className = "infoName">{info.period} 개월</div>
                             </Card.Body>
                         </Card>
                         <Card className = "information" style={{marginBottom:"10px"}}>

@@ -227,4 +227,27 @@ const getItems = async(req, res) =>{
     }
 };
 
-module.exports = { registerItem, updateItem, deleteItem, findItem, getItems };
+const setIsContract = async (req, res) => {
+    try {
+        const { itemID,contractID } = req.body;
+
+        console.log("Received data:", { itemID,contractID });
+
+        const item = await itemModel.findOne({itemID});
+        if (!item) return res.status(400).json("Item Not Found");
+        const result = await itemModel.updateOne({itemID : item.itemID}, {$set : { isContract: contractID }});
+        if (result.modifiedCount > 0){
+            const update = await itemModel.findOne({itemID : item.itemID});
+            console.log(update);
+            res.status(200).json(update); 
+        } else{
+            return res.status(400).json({error : "업데이트에 실패했습니다. 매물이 이미 계약 된 상태일 수 있습니다."});
+        }
+
+    } catch (error) {
+        console.log(error); // 에러 로그
+        res.status(500).json(error);
+    }
+};
+
+module.exports = { registerItem, updateItem, deleteItem, findItem, getItems, setIsContract };

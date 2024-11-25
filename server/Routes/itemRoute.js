@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const {registerItem, updateItem, deleteItem, findItem, getItems } = require("../Controllers/itemController");
+const {registerItem, updateItem, deleteItem, findItem, getItems, setIsContract } = require("../Controllers/itemController");
 const multer = require('multer');
 const path = require('path');
 // multer 설정: 파일을 'uploads' 폴더에 저장
@@ -48,6 +48,7 @@ router.post("/createItem", upload.single('imageFile'),async (req,res) => {
 
 router.post("/createItem", upload.single('imageFile'), registerItem);
 router.post("/updateItem/:itemID", updateItem);
+router.post("/contract", setIsContract);
 router.delete("/deleteItem/:itemID", deleteItem);
 router.get("/find/:itemID", findItem);
 router.get("/", getItems);
