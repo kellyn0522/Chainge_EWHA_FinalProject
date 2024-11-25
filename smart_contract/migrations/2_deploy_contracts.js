@@ -1,73 +1,142 @@
 const SmartContract = artifacts.require("SmartContract");
-const axios = require("axios");
+const mongoose = require("mongoose");
+require("dotenv").config();
+const mongoURI = process.env.MONGO_URI;
+
+console.log("Loaded MongoDB URI:", process.env.MONGO_URI);
+
+// const Web3 = require("web3");
+// const web3 = new Web3("http://127.0.0.1:8545"); 
+
+const reqmodels = require("../../server/Models/reqModel");
+const users = require("../../server/Models/userModel");
+const items = require("../../server/Models/itemModel");
 
 module.exports = async function (deployer) {
 
     try {
-        const response = await axios.get("http://localhost:5000/api/contracts");
-        const contractData = response.data;
-        const krwtoether = (krwtoether) => krwtoether / 400;
-
-        console.log("Fetched contracts: ", contractData);
-
-        for (const contract of contractData) {
-            // 1. 임대인 정보
-            const lessor = {
-                name: "John Doe",
-                phoneNumber: "010-1234-5678",
-                identityNumber: "123456-7890123",
-                addr: "0x44e2AfFCFAD498c14eBd1C042d9B2c72A0dF8BF5",
-            };
-
-            // 2. 임차인 정보
-            const tenant = {
-                name : contract.tenantID,
-                phoneNumber : contract.tenantphoneNum,
-                identityNumber : "987654-3210987",
-                addr: "0x8230197520ebbe69624a7eeacca70129e37f2b4b",
-            };
-
-            // 3. 임대인 은행 정보
-            const lessorBankDetails = {
-                ownerName: "John Doe",
-                bankName: "First Bank",
-                account: "123-4567-8901",
-            };
-
-            // 4. 임차인 은행 정보
-            const tenantBankDetails = {
-                ownerName: contract.tenantID,
-                bankName: "Second Bank",
-                account: "987-6543-2109",
-            };
-
-            // 5. 렌탈 정보
-            const rentalDetails = {
-                houseID: contract.itemID,
-                deposit: web3.utils.toWei(krwtoether(contract.deposit).toString(), "ether"), // 보증금
-                cost: web3.utils.toWei(krwtoether(contract.price).toString(), "ether"), // 월세
-                startDate: Math.floor(Date.now() / 1000), // 현재 시간
-                period: 365, // 1년 계약 (365일)
-                endDate: Math.floor(Date.now() / 1000) + 365 * 24 * 60 * 60, // 1년 후 종료
-                status: 0, // ContractStatus.Pending
-            };
-
-            // 6. 전자 서명 정보
-            const signature = {
-                signer: "0x8230197520ebbe69624a7eeacca70129e37f2b4b", // 임차인 이더리움 주소
-                messageHash: web3.utils.keccak256("Sample Message"),
-                signature: "0x",
-            };
-
-            // 7. 배포
-            deployer.deploy(SmartContract, lessor, tenant, lessorBankDetails, tenantBankDetails, rentalDetails, signature);
-
-            console.log(`Contract deployed for houseID: ${contract.itemID}`);
-
+        // const response = await axios.get("http://localhost:5000/api/contracts");
+        // const contractData = response.data;
+        
+        if (!mongoURI) {
+            throw new Error("MongoDB URI is not defined. Check your .env file.");
         }
+        await mongoose.connect(mongoURI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+            serverSelectionTimeoutMS: 30000,
+        });
+        /*
+        await mongoose.connect("mongodb+srv://Chat:1234@cluster0.vcpbx.mongodb.net/Chat?retryWrites=true&w=majority", {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+            serverSelectionTimeoutMS: 30000, // 서버 선택 타임아웃 30초로 설정
+        });
+        */
 
-        console.log("All contracts deployed successfully!");
+        mongoose.connection.on('connected', () => {
+            console.log("MongoDB connected successfully.");
+        });
+        
+        mongoose.connection.on('error', (err) => {
+            console.error("MongoDB connection error:", err);
+        });
+        
+        mongoose.connection.on('disconnected', () => {
+            console.log("MongoDB disconnected.");
+        });
+        
+
+        const krwtoether = (krwAmount) => krwAmount / 400;
+
+        // 아이템 찾기
+        const itemID = "1732431629264";
+        const itemData = await items.findOne({ itemID });
+        if (!itemData) {
+            console.error(`Item not found: ${itemID}`);
+            throw new Error(`No item found for itemID: ${itemID}`);
+        }
+        console.log("Item Data:", itemData);
+        
+        // 거래 정보 찾기
+        const reqData = await reqmodels.findOne({ itemID });
+        if (!reqData) {
+            console.error(`Request not found for itemID: ${itemID}`);
+            throw new Error(`No request found for itemID: ${itemID}`);
+        }
+        console.log("Request Data:", reqData);
+
+        // 임차인 찾기
+        const tenantID = reqData.senderId;
+        const tenantData = await users.findOne({ _id : tenantID });
+        if (!tenantData) {
+            console.error(`Tenant not found: ${tenantID}`);
+            throw new Error(`No user found for tenantID: ${tenantID}`);
+        }
+        console.log("Tenant Data:", tenantData);
+
+        // 임대인 찾기
+        const lessorID = reqData.ownerId;
+        const lessorData = await users.findOne({ _id : lessorID });
+        if (!lessorData) {
+            console.error(`Lessor not found: ${lessorID}`);
+            throw new Error(`No user found for lessorID: ${lessorID}`);
+        }
+        console.log("Lessor Data:", lessorData);
+
+        // 임대인 identityNumber 생성
+        const lessorIdentityNumber = `${lessorData.birth}-${lessorData.identityNum}`;
+
+        // 임차인 identityNumber 생성
+        const tenantIdentityNumber = `${tenantData.birth}-${tenantData.identityNum}`;
+
+        // 1. 임대인 정보
+        const lessor = {
+            name: lessorData._id,
+            phoneNumber: lessorData.phoneNumber,
+            identityNumber: lessorIdentityNumber,
+            addr: lessorData.metaMaskAdd,
+        };
+        
+        // 2. 임차인 정보
+        const tenant = {
+            name : tenantData._id,
+            phoneNumber : tenantData.phoneNumber,
+            identityNumber : tenantIdentityNumber,
+            addr: tenantData.metaMaskAdd,
+        };
+
+        // 3. 임대인 은행 정보
+        const lessorBankDetails = {
+            ownerName: lessorData.name,
+            bankName: "First Bank",
+            account: lessorData.account,
+        };
+
+        // 4. 임차인 은행 정보
+        const tenantBankDetails = {
+            ownerName: tenantData.name,
+            bankName: "Second Bank",
+            account: tenantData.account,
+        };
+
+        // 5. 렌탈 정보
+        const rentalDetails = {
+            houseID: itemID,
+            deposit: web3.utils.toWei(krwtoether(itemData.deposit).toString(), "ether"), // 보증금
+            cost: web3.utils.toWei(krwtoether(itemData.housePrice).toString(), "ether"), // 월세
+            startDate: Math.floor(reqData.start / 1000), // 현재 시간
+            period: reqData.period, // 1년 계약 (365일)
+            endDate: Math.floor(reqData.end / 1000), // 종료 날짜 (초 단위)
+            status: 0, // ContractStatus.Pending
+        };
+
+        // 6. 배포
+        await deployer.deploy(SmartContract, lessor, tenant, lessorBankDetails, tenantBankDetails, rentalDetails);
+        console.log(`SmartContract deployed successfully for houseID: ${itemID}`);
     } catch (error) {
-        console.error("Error fetching or deploying contracts: ", error);
-    }    
+        console.error("Error fetching or deploying contracts:", error);
+    } finally {
+        mongoose.connection.close();
+    }
 };
