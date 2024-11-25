@@ -26,23 +26,18 @@ contract SmartContract {
         ContractStatus status;  // 계약 상태    
     }
 
-    // 전자서명 데이터를 저장할 구조체
-    struct Signature {
-        address signer;
-        bytes32 messageHash;
-        bytes signature;
-    }
-
-    // 계약 상태 열거형 정의 -> 상태 관리 
     // Pending : 계약 대기 상태, Active : 계약이 체결되고 진행 중인 상태, Terminated : 계약이 종료된 상태 
     enum ContractStatus { Pending, Active, Terminated }
+    ContractStatus public status;
     
     Person public lessor;                   // 임대인
     Person public tenant;                   // 임차인
     BankDetails public lessorBankDetails;   // 임대인 은행 정보 
     BankDetails public tenantBankDetails;   // 임차인 은행 정보
     RentalDetails public rentalDetails;     // 렌탈 정보
-    Signature public contractSignature;     // 전자 서명 
+
+    bool public lessorSigned;
+    bool public tenantSigned;
 
     bool public terminationRequestedByTenant;
     bool public depositPaid;
@@ -86,38 +81,13 @@ contract SmartContract {
         Person memory _tenant,
         BankDetails memory _lessorBankDetails,
         BankDetails memory _tenantBankDetails,
-        RentalDetails memory _rentalDetails,
-        Signature memory _signature
+        RentalDetails memory _rentalDetails
     ) {
         lessor = _lessor;
         tenant = _tenant;
-/*
-        rentalDetails = RentalDetails({
-            houseID : "gaeun",
-            deposit : 1 ether,
-            cost : 0.1 ether,
-            startDate : block.timestamp,
-            period : 365 days,
-            endDate : block.timestamp + 365 days,
-            status : ContractStatus.Pending
-        }); */
-
-        
         lessorBankDetails = _lessorBankDetails;
         tenantBankDetails = _tenantBankDetails; 
-
         rentalDetails = _rentalDetails;
-        // rentalDetails.endDate = _rentalDetails.startDate + (_rentalDetails.period * 1 days);
-
-        contractSignature = _signature;
-
-        // isBankAccountLinked[lessor.addr] = true;
-        // isBankAccountLinked[tenant.addr] = true;
-    }
-
-    function activateContract() public {
-        require(rentalDetails.status == ContractStatus.Pending, "Contract is already active or terminated.");
-        rentalDetails.status = ContractStatus.Active;
     }
 
     // 테스트용 함수: 최신 시간으로 계약서 작성 날짜 설정
@@ -166,55 +136,33 @@ contract SmartContract {
     uint256 public contractSignedDate;   // 계약서 작성 날짜
     uint256 public depositPaymentDate;  // 보증금 송금 날짜 
 
-    // 생성된 전자서명 검증 함수
-    function verifysignature(bytes32 messageHash, bytes memory signature) public pure returns (address) {
-        bytes32 r;
-        bytes32 s;
-        uint8 v;
+    // 임차인의 전자서명 등록
+    function signContractByTenant(address signer) public onlyTenant {
+        require(signer == tenant.addr, "Signer address does not match tenant.");
+        require(!tenantSigned, "Tenant has already signed.");
 
-        // 서명 데이터를 분해
-        require(signature.length == 65, "Invalid signature length");
-        assembly {
-            r := mload(add(signature, 32))
-            s := mload(add(signature, 64))
-            v := byte(0, mload(add(signature, 96)))
-        }
-
-        // 복구된 서명자 주소 반환
-        return ecrecover(messageHash, v, r, s);
+        tenantSigned = true;
     }
 
-    // 서명 확인 후 동작하는 함수 -> 검증한 후 계약을 서명하는 함수 
-    function signContract(bytes32 messageHash, bytes memory signature) public onlyTenant {
-        address signer = verifysignature(messageHash, signature);
-        require(signer == msg.sender, "Invalid signer");
+    // 임대인의 전자서명 등록
+    function signContractByLessor(address signer) public onlyLessor {
+        require(signer == lessor.addr, "Signer address does not match lessor.");
+        require(!lessorSigned, "Lessor has already signed.");
 
-        // 계약 상태가 대기 중인 경우에만 활성화 
+        lessorSigned = true;
+    }
+
+    // 모든 서명이 완료되었는지 확인
+    function isContractFullySigned() public view returns (bool) {
+        return lessorSigned && tenantSigned;
+    }
+
+    // 계약 활성화
+    function activateContract() public {
         require(rentalDetails.status == ContractStatus.Pending, "Contract is already active or terminated.");
+        require(isContractFullySigned(), "Both signatures are required to activate the contract.");
 
-        // 계약 상태를 활성화로 업데이트
         rentalDetails.status = ContractStatus.Active;
-
-        contractSignedDate = block.timestamp;    // 계약서 작성 날짜 기록
-
-        // 이벤트 발생: 임대인과 임차인의 서명 정보 기록
-        emit PersonInfo(
-            lessor.name, lessor.phoneNumber
-        );
-
-        emit BankInfo(
-            lessorBankDetails.bankName, lessorBankDetails.account, "lessor"
-        );
-
-        emit PersonInfo(
-            tenant.name, tenant.phoneNumber
-        );
-
-        emit BankInfo(
-            tenantBankDetails.bankName, tenantBankDetails.account, "tenant"
-        );
-
-        // 추가적으로 필요한 로직이 있으면 여기에 추가
     }
 
     // 읽기 전용 함수
