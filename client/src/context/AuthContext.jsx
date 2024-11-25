@@ -305,6 +305,35 @@ export const AuthContextProvider = ({ children }) => {
         }
     }, []);
 
+    const userNickNameFinder = useCallback(async(id) => { 
+        console.log('userNickNameFinder 호출!!!!!!!!!!!!');
+        setFindUserError(null);
+        setIsFindUserLoading(true)
+        console.log('userNickNameFinder 실행!!!!!!!!!!!!');
+        try{
+            if(!id){
+                setFindUserError("Invalid ID");
+                setIsFindUserLoading(false);
+                throw new Error("Invalid ID");
+            }
+
+            const response = await getRequest(
+                `${baseUrl}/users/findName/${id}`);
+
+            console.log("Find Item response ", response);
+        
+            if (response.error) {
+                return setFindUserError(response.error);
+            }
+            setIsFindUserLoading(false);
+            return response;
+        } catch (error){
+            setFindUserError(error.message)
+            console.log(error.message)
+            setIsFindUserLoading(false);
+        }
+    }, []);
+
 
     return (<AuthContext.Provider
         value={{
@@ -334,6 +363,7 @@ export const AuthContextProvider = ({ children }) => {
 
             updaterLike,
             findUser,
+            userNickNameFinder,
             findUserError,
             isFindUserLoading,
 
