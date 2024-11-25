@@ -21,10 +21,12 @@ import { ReqContext } from "../context/ReqContext";
 
 const Mypage = () => {
     const navigate = useNavigate();
-    const { user } = useContext(AuthContext);
+    const { user, userNickNameFinder } = useContext(AuthContext);
     const { getUserSendReq,getUserReceiveReq} = useContext(ReqContext);
     const [receiveRequest, setReceiveRequest] = useState(null);
     const [sendReq, setSendReq] = useState(null);
+    const [senderNickName, setSenderNickName] = useState({});
+    const [reNickName, setReNickName] = useState({});
 
 
     const [showModal, setShowModal] = useState(false);
@@ -80,6 +82,46 @@ const Mypage = () => {
         fetchReq();
     }, []);
 
+    useEffect(() => {
+        console.log(receiveRequest);
+        if(!receiveRequest){return;}
+        const fetchUserNickName = async (senderId) => {
+            try{
+                const result = await userNickNameFinder(senderId);
+                setSenderNickName((prev) => ({
+                    ...prev,
+                    [senderId]: result,
+                }));
+            } catch {
+                console.error('Failed to fetch Received Request.');
+            }
+        };
+
+        receiveRequest.forEach((r)=>{
+            if(!senderNickName[r.senderId]){
+                fetchUserNickName(r.senderId);
+        }});
+    }, [receiveRequest,senderNickName])
+
+    useEffect(() => {
+        if (!sendReq) return;
+        const fetchUserNickName = async (ownerId) => {
+            try{
+            const result = await userNickNameFinder(ownerId);
+            setReNickName((prev) => ({
+                ...prev,
+                [ownerId]: result,
+            }));
+            } catch {
+                console.error('Failed to fetch Sended Request.');
+            }
+        };
+
+        sendReq.forEach((s)=>{
+            if(!reNickName[s.ownerId]){
+                fetchUserNickName(s.ownerId);
+        }});
+    }, [sendReq, reNickName]);
     
     const {contract} = useContext(ContractContext);
 
@@ -167,7 +209,7 @@ const Mypage = () => {
                                             {sendReq?.map((s) => (
                                                 s.accept &&
                                                 <Card style = {{display: 'flex', justifyContent: 'center', padding: '1rem', gap: '7px'}}>
-                                                    <strong>ID: {s.ownerId} 님이 거래 요청을 수락하였습니다.</strong>
+                                                    <strong>ID: {reNickName[s.ownerId]? reNickName[s.ownerId]:s.ownerId} 님이 거래 요청을 수락하였습니다.</strong>
                                                     <p style={{marginBottom: '0'}}>거래 요청 한 매물: {s.itemId}</p>
                                                 </Card>
                                             ))}
@@ -176,7 +218,7 @@ const Mypage = () => {
                                             {receiveRequest?.map((r) => (
                                                 r.accept &&
                                                 <Card  style = {{display: 'flex', justifyContent: 'center', padding: '1rem', gap: '7px'}}>
-                                                    <strong>ID: {r.senderId} 님의 거래 요청을 수락하였습니다.</strong>
+                                                    <strong>ID: {senderNickName[r.senderId]? senderNickName[r.senderId]: r.senderId} 님의 거래 요청을 수락하였습니다.</strong>
                                                     <p style={{marginBottom: '0'}}>거래 요청 한 매물: {r.itemId}</p>
                                                 </Card>
                                             ))}
