@@ -195,6 +195,19 @@ const findUser = async(req, res) =>{
     }
 };
 
+const findUserNickName = async(req, res) =>{
+    console.log("findUserNickName 호출!!!!!!!!!!!!");
+    const userId = req.params.userId;
+    try{
+        const user = await userModel.findById(userId);
+        res.status(200).json(user.nickName); 
+        console.log(user.nickName);
+    }catch(error){
+        console.log(error); 
+        res.status(500).json(error);
+    }
+};
+
 const deleteUser = async(req, res) =>{
     const { id } = req.body;
     try {
@@ -223,4 +236,4 @@ const getUsers = async(req, res) =>{
     }
 };
 
-module.exports = { registerUser, updateUser, loginUser, findUser, getUsers, deleteUser, updateLike, accountUpdate, metaMaskUpdate };
+module.exports = { registerUser, updateUser, loginUser, findUser, getUsers, deleteUser, updateLike, accountUpdate, metaMaskUpdate, findUserNickName };

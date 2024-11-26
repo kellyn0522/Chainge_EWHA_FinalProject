@@ -76,15 +76,15 @@ const HouseItem = ({itemId}) => {
     }
                           
     return (
-        <Card className = 'houseItem' style = {{ width : '210px' }} onClick = {goToItem}>
+        <Card className = 'houseItem' style = {{ width : '240px'}} onClick = {goToItem}>
             <div style = {{position: 'relative', display: 'inline-block'}}>
-                <img src={item.imageFile || house} alt='house_pic' width = '210px' height = '150px' style = {{border: '2px solid #ccc', display: ' block', alignItems:'flex-start'}} onError = {(e) => e.target.src = house} />
+                <img src={item.imageFile || house} alt='house_pic' width = '240px' height = '150px' style = {{border: '2px solid #ccc', display: ' block', alignItems:'flex-start'}} onError = {(e) => e.target.src = house} />
                 <div>
                     {user? (
                         user._id !== item.ownerId?(
                         <>
-                            <span className={`material-symbols-outlined ${liked? 'liked':'dontlike'}`} style = {{ cursor: "pointer", position: 'absolute', top: '10px', left:'170px'}}onClick = {handleLike}>favorite</span>
-                        
+                            <span className={`material-symbols-outlined ${liked? 'liked':'dontlike'}`} style = {{ cursor: "pointer", position: 'absolute', top: '7px', left:'205px'}} onClick = {handleLike}>favorite</span>
+                            <Badge className={`noto-sans-kr ${item.hasAgent? 'bg-secondary' :'skyblue'}`} style = {{ position: 'absolute', top: '10px', left:'10px'}}>{item.hasAgent?'중개인':'방주인'}</Badge>
                         </>
                         ):(
                         <>

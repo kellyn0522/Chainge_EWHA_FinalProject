@@ -29,6 +29,8 @@ export const ReqContextProvider = ({ children }) => {
     const [isDeleteReqLoading, setIsDeleteReqLoading] = useState(false);
     const [signingError, setSigningError] = useState(null);
     const [isSigningLoading, setIsSigningLoading] = useState(false);
+    const [contractError, setContractError] = useState(null);
+    const [isContractLoading, setIsContractLoading] = useState(false);
 
     const updateReqInfo = useCallback((info) => {
         setReqInfo((prevInfo) => ({ ...prevInfo, ...info }));
@@ -93,8 +95,16 @@ export const ReqContextProvider = ({ children }) => {
         return null;
     };
 
+    const getReqByItem = async(itemID) => {
+        return await getReq(`${baseUrl}/itemReq/getRequestByItem/${itemID}`);
+    };
+
     const findingReq = async(reqID) => {
         return await getReq(`${baseUrl}/itemReq/find/${reqID}`);
+    };
+
+    const reqSearcher = async(ownerID, itemID, senderID) => {
+        return await getReq(`${baseUrl}/itemReq//findSpecificReq/${ownerID}/${itemID}/${senderID}`);
     };
 
 const updateAccept = useCallback(async(reqID) => {
@@ -126,6 +136,39 @@ const updateAccept = useCallback(async(reqID) => {
         console.log(error.message)
     } finally{
         setIsAcceptLoading(false);
+    }
+}, []);
+
+const contractUpdater = useCallback(async(reqID, contractID) => {
+    console.log("contractUpdater called");
+    setContractError(null);
+    setIsContractLoading(true);
+
+    try{
+        if(!reqID){
+            setContractError("Invalid Req ID");
+            setIsContractLoading(false);
+            throw new Error("Invalid Req ID");
+        }
+
+        const response = await postRequest(
+            `${baseUrl}/itemReq/contract`,
+            JSON.stringify({ reqID :reqID ,contractID: contractID }));
+
+        console.log("updater response ", response);
+        setIsContractLoading(false);
+    
+        if (response.error) {
+            console.log("error in update request");
+            return setContractError(response);
+        }
+        console.log(response);
+
+    } catch (error){
+        setContractError(error.message)
+        console.log(error.message)
+    } finally{
+        setIsContractLoading(false);
     }
 }, []);
 
@@ -245,6 +288,9 @@ const deleteR = useCallback(async(reqID) => {
         tenantSigned,
         landlordSigned,
 
+        contractUpdater,
+        getReqByItem,
+        reqSearcher,
     }}>
         {children}
     </ReqContext.Provider>

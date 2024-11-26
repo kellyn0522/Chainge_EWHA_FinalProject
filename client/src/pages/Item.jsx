@@ -6,7 +6,7 @@ import Logo from "../component/Logo";
 import { useState, useContext, useEffect } from "react";
 import { AuthItemContext } from "../context/AuthItemContext";
 import { AuthContext } from "../context/AuthContext";
-import { Button, Card, Row, Col, Container } from "react-bootstrap";
+import { Button, Card, Row, Col, Container,Badge } from "react-bootstrap";
 import DeleteItemData from "./DeleteItemData";
 import  ChatEach  from "../components/chat/ChatEach";
 import ac from '../icons/ac_unit.svg';
@@ -23,6 +23,7 @@ import tv from '../icons/tv.svg';
 import weekend from '../icons/weekend_24.svg';
 import house from '../icons/house.svg';
 import { ChatContext } from "../context/ChatContext";
+import { ReqContext } from "../context/ReqContext";
 
 const Item = () => {
     const [showModal, setShowModal] = useState(false);
@@ -37,7 +38,9 @@ const Item = () => {
         updaterLike,
     } = useContext(AuthContext);
     const [liked, setLiked] = useState(false);
+    const [reqInfo, setReqInfo] = useState(null);
     const { userChats, isUserChatsLoading, updateCurrentChat, potentialChats, createChat } = useContext(ChatContext);
+    const{reqSearcher} = useContext(ReqContext);
 
     //const onHistory = () => {
     //    navigate("/userHistory");
@@ -49,6 +52,20 @@ const Item = () => {
     } = useContext(AuthItemContext);
     const [item, setItem] = useState(null)
     const itemHasItems = item?.hasItems? ( item.hasItems) :null;
+
+        
+    useEffect(() =>{
+        const fetchReq = async (ownerID, itemID, senderID) => {
+            try{
+                const result = await reqSearcher(ownerID, itemID, senderID);
+                setReqInfo(result);
+            }catch{
+                return null;
+            }
+        }
+        if(item){ fetchReq(item.ownerId, id, user._id); }
+    }, [user, item]);
+    console.log(reqInfo);
 
     const handleLike = (event) => {
         event.stopPropagation();
@@ -117,6 +134,9 @@ const Item = () => {
         setShowModal(true);
     }
 
+    const acceptContract = async(otherUser, id, isOwner)=>{
+        navigate(`/makeContract/${otherUser}/${id}/${isOwner}`);
+    };
     //<img src = {item.imageFile} style = {{width: '300px', height: 'auto', border: '2px solid #ccc', display: ' block', margin: '0 auto'}} />
 
     return (<>
@@ -128,18 +148,21 @@ const Item = () => {
                             <img src={item.imageFile?`${baseUrl}/uploads/${item.imageFile.replace(/\\/g, '/')}`:house} alt='house_pic' width = '300px' height = 'auto' style = {{border: '2px solid #ccc', display: ' block', margin: '0 auto'}} onError = {(e) => e.target.src = house}/>
                             <div>
                                 <div className = 'introInfo' style = {{marginBottom : '10px'}}>  
-                                <h3>
-                                    {item.deposit && (
-                                        <>
-                                            {Math.floor(item.deposit / 10000) > 0 && (
-                                                <>{Math.floor(item.deposit / 10000)}억 </>
-                                            )}
-                                            {item.deposit % 10000 > 0 && (
-                                                <>{item.deposit % 10000}만원</>
-                                            )}
-                                        </>
-                                    )}
-                                    / {item.housePrice}만원</h3>
+                                    <div style = {{display:'flex', alignItems: 'center', marginBottom: '10px'}}>
+                                        <h3 style = {{marginBottom: '0'}}>
+                                        {item.deposit && (
+                                            <>
+                                                {Math.floor(item.deposit / 10000) > 0 && (
+                                                    <>{Math.floor(item.deposit / 10000)}억 </>
+                                                )}
+                                                {item.deposit % 10000 > 0 && (
+                                                    <>{item.deposit % 10000}만원</>
+                                                )}
+                                            </>
+                                        )}
+                                        / {item.housePrice}만원</h3>
+                                        <Badge className={`noto-sans-kr ${item.hasAgent? 'bg-secondary' :'skyblue'}`} style = {{ margin: '10px', display:'flex', alignItems: 'center'}}>{item.hasAgent?'중개인':'방주인'}</Badge>
+                                    </div>
                                     <div>{item.location} {item.houseAddress}</div>
                                     <div>{item.type} / {item.area}평</div> 
                                 </div>
@@ -150,7 +173,15 @@ const Item = () => {
                                                 <span className={`material-symbols-outlined ${liked? 'liked':'dontlike'}`} style={{cursor: "pointer"}} onClick = {handleLike}>favorite</span>
                                                 <img src={chat} alt='chat' width = '30px' height = '30px' style = {{cursor: "pointer"}} onClick = {onClickChatInd} />
                                                 {showModal && <ChatEach show = {showModal} handleClose = {handleClose} />}
-                                                <Button className="noto-sans-kr green" style = {{color: 'white', border: 'none'}} onClick = {makeContract}>거래하기</Button>
+                                                {reqInfo?(
+                                                    reqInfo[0].accept?(
+                                                        <Button className="noto-sans-kr green" style = {{color: 'white', border: 'none'}} onClick ={() => {acceptContract(item.ownerId, reqInfo[0]._id, false)}}>거래 시작하기</Button>
+                                                    ):(
+                                                        <Button className="noto-sans-kr green" style = {{color: 'white', border: 'none'}} disabled>거래 요청 완료</Button>
+                                                    )
+                                                ):(
+                                                <Button className="noto-sans-kr green" style = {{color: 'white', border: 'none'}} onClick = {makeContract}>거래 요청하기</Button>
+                                                )}
                                             </div>
                                         </>
                                     ):(

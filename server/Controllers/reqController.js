@@ -2,7 +2,6 @@ const reqModel = require('../Models/reqModel');
 
 const createReq = async(req,res) =>{
     const {senderId, itemId, ownerId, start, end, period} = req.body;
-    console.log()
     try{
         const newReq = new reqModel({
             senderId:senderId, 
@@ -14,6 +13,7 @@ const createReq = async(req,res) =>{
             accept: false,
             tenantSign: false,
             landlordSign: false,
+            contractID: false,
         });
 
         const response = await newReq.save();
@@ -82,6 +82,41 @@ const findReq = async(req,res) =>{
         res.status(500).json(error);
     }
 
+};
+
+const findSpecificReq = async(req,res) =>{
+    const {ownerID, itemID, senderID} = req.params;
+    try{
+        const r = await reqModel.find({ownerId: ownerID, itemId: itemID, senderId:senderID});
+        if (!r || r.length === 0){
+            return res.status(404).json({message: '요청을 찾을 수 없습니다.'});
+        }
+
+        res.status(200).json(r);
+        console.log("RRSever", r);
+
+    }catch(error){
+        console.log(error);
+        res.status(500).json(error);
+    }
+
+};
+
+
+
+const getRequsetByItem = async(req, res) =>{
+    const itemID = req.params.itemID;
+    try{
+        const r = await reqModel.find({itemId: itemID});
+        if(r.length === 0){
+            return res.status(404).json({message: 'Item not found'});
+        }
+        res.status(200).json(r); 
+
+    }catch(error){
+        console.log(error); 
+        res.status(500).json(error);
+    }
 };
 
 const acceptReq = async(req,res) => {
@@ -159,6 +194,25 @@ const deleteReq = async(req, res) =>{
     }
 };
 
+const setReqContract = async (req, res) => {
+    console.log('setReqContract 호출!!');
+    try {
+        const { reqID,contractID } = req.body;
+        const r = await reqModel.findById(reqID);
+        if (!r) return res.status(400).json("Request Not Found");
+        result = await reqModel.updateOne({_id : reqID}, {$set : {contractID: contractID}});
+        if (result.modifiedCount > 0){
+            res.status(200).json(result);
+            console.log("RRSever", result);
+        }else{
+            return res.status(400).json({error : "업데이트에 실패했습니다."});
+        }
+    } catch (error) {
+        console.log(error); // 에러 로그
+        res.status(500).json(error);
+    }
+};
 
-module.exports ={createReq, findUserSendReq, findUserReceivedReq, findReq, acceptReq, deleteReq, doTenantSign, doLandlordSign};
+
+module.exports ={createReq, findUserSendReq, findUserReceivedReq, findReq, acceptReq, deleteReq, doTenantSign, doLandlordSign, setReqContract, getRequsetByItem, findSpecificReq};
 

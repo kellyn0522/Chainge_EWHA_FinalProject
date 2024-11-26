@@ -9,10 +9,11 @@ const reqSchema = new mongoose.Schema({
     accept: Boolean,
     tenantSign: Boolean,
     landlordSign: Boolean,
+    contractID: String,
 }, {
     timestamps: true,
 }
 );
 
-const reqModel = mongoose.model("ReqModel", reqSchema);
+const reqModel = mongoose.model("ReqModel", reqSchema, "reqmodels");
 module.exports = reqModel;

@@ -193,6 +193,7 @@ const CreateItemPage = () => {
                 itemID : new Date().getTime(),
                 ownerId : user._id,
                 ownerName : user.name,
+                hasAgent: user.realEstateAgent || false,
             });
         }
     }, [user]);

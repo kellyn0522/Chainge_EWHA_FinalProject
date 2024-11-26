@@ -259,6 +259,26 @@ export const AuthItemContextProvider = ({ children }) => {
         setIsFindItemLoading(false);
     }
     }, []);
+    
+    const isContractUpdater = useCallback(async(itemID,contractID) => {
+        setIsUpdateItemLoading(true);
+        setUpdateItemError(null);
+
+        const response = await postRequest(
+            `${baseUrl}/items/contract`,
+            JSON.stringify({itemID: itemID, contractID: contractID}));
+
+        setIsUpdateItemLoading(false);
+
+        console.log("updater response ", response);
+        
+
+        if (response.error) {
+            return setUpdateItemError(response);
+        }
+    }, []);
+
+
 
     return (
         <AuthItemContext.Provider
@@ -281,7 +301,9 @@ export const AuthItemContextProvider = ({ children }) => {
                 updateItemError,
                 deleteItem,
                 deleteItemError,
-                isDeleteItemLoading
+                isDeleteItemLoading,
+
+                isContractUpdater,
             }}
         >
             {children}

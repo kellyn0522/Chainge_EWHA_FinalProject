@@ -39,7 +39,10 @@ const ReqPage = () => {
 
     useEffect(() => {
         const fetchItem = async () => {
-            if (reqInfo?.itemId && !findItemError && !isFindItemLoading){
+            if (reqInfo?.itemId){
+                if (item){
+                    console.log('Item already fetched', item);
+                }
                 const result = await findItem(reqInfo?.itemId);
                 setItem(result);
             }
@@ -60,12 +63,8 @@ const ReqPage = () => {
 
     console.log('CCCCCCCCCCCCCCCC',otherUserinfo);
     
-    
-    if (isFindItemLoading){
-        return <div>Loding...</div>
-    }
-
-    if (findItemError || !item){
+    if (!item){
+        console.log(item);
         return <div>Error: {findItemError?.message || 'Page not found'}</div>
     }
 
@@ -79,27 +78,10 @@ const ReqPage = () => {
     }
 
     const onContract = async() =>{
-        const contractInfo= {
-            itemID: item?.itemID,
-            price: item?.housePrice,
-            deposit: item?.deposit,
-
-            tenantID: otherUserinfo?._id,
-            tenantphoneNum: otherUserinfo?.phoneNumber,
-            tenantBirth:otherUserinfo?.birth,
-            tenantidentityNum: otherUserinfo?.identityNum,
-            tenantAccount: otherUserinfo?.account,
-            tenantMetamaskAdd: otherUserinfo?.metaMaskAdd,
-            tenantname: otherUserinfo.name,
-            tenantzipcode: otherUserinfo.zipCode,
-
-            start: reqInfo?.start||'2024.11.21',
-            end:reqInfo?.end||'2025.11.20',
-            period:reqInfo?.period||12,
-        }
-        console.log('CCCCCCCCCCCCCCCCC',contractInfo);
+        const otherUser = otherUserinfo._id
+        if(otherUser){
         await updateAccept(id);
-        navigate(`/checkIdentity/${id}/${true}`, {state: {contractInfo}});
+        navigate(`/checkIdentity/${id}/${true}`, {state: {otherUser}});}
     }
 
     const goToItem = () => {
@@ -110,7 +92,7 @@ const ReqPage = () => {
         }
     }
     
-    if(!user || !item){
+    if(!user){
         return null;
     }
     const s = reqInfo?.start? reqInfo.start:null;
@@ -174,15 +156,25 @@ const ReqPage = () => {
                                 <div className = "infoName">{reqInfo.period} 개월</div>
                             </Card.Body>
                         </Card>
-                        <Card className = "information" style={{marginBottom:"10px"}}>
-                            <Card.Title className = "infoTitle">매물 정보</Card.Title>
+                        <Card className = "information" style={{marginBottom:"10px", paddingBottom:'10px'}}>
+                            <Card.Title className = "infoTitle" style={{marginBottom: '25px'}}>매물 정보</Card.Title>
+                            <div style = {{display: 'grid', gridTemplateColumns: '1fr 0.5fr', gap: '15px', fontSize: '17px', marginLeft:'24px', marginBottom: '5px'}}>
+                                <div>{item.location} {item.houseAddress}</div>
+                                <div>
+                                        {item.deposit && (
+                                            <>
+                                                {Math.floor(item.deposit / 10000) > 0 && (
+                                                    <>{Math.floor(item.deposit / 10000)}억 </>
+                                                )}
+                                                {item.deposit % 10000 > 0 && (
+                                                    <>{item.deposit % 10000}만원</>
+                                                )}
+                                            </>
+                                        )}
+                                        / {item.housePrice}만원
+                                </div>
+                            </div>
                             <Card.Body className = "info">
-                                {item.buildingName? (
-                                    <>
-                                        <div className = "infotype">건물 이름</div> 
-                                        <div className = "infoName">{item.buildingName}</div>
-                                    </>
-                                ):null}
                                 {item.type? (
                                     <>
                                         <div className = "infotype">방 종류(건축물 용도)</div> 
