@@ -8,7 +8,7 @@ const itemSchema = new mongoose.Schema({
     longitude: { type: Number, required: false }, // 경도
     area :{ type: String, required: true, maxlength: 30 },
     ownerId : { type: String, required: true, minlength: 3, maxlength: 30 },
-    housePrice: { type: Number, required: true, maxlength: 30 },
+    housePrice: { type: Number, required: true},
     deposit: {type: Number, required: true},
     memo : { type: String, required: false, maxlength: 500 },
     type : { type: String, required: true, maxlength: 30 },
@@ -35,5 +35,5 @@ const itemSchema = new mongoose.Schema({
 }
 );
 
-const itemModel = mongoose.model("Item", itemSchema);
+const itemModel = mongoose.model("Item", itemSchema, "items");
 module.exports = itemModel;

@@ -15,5 +15,5 @@ const reqSchema = new mongoose.Schema({
 }
 );
 
-const reqModel = mongoose.model("ReqModel", reqSchema);
+const reqModel = mongoose.model("ReqModel", reqSchema, "reqmodels");
 module.exports = reqModel;
