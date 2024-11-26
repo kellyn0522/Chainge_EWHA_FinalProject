@@ -49,10 +49,10 @@ const ContractCard = ({id, info}) => { // {contractID}
     return (
         <Card className = "noto-sans-kr" style = {{marginTop:"10px", marginBottom:"10px", width: '270px'}}>
             <div style = {{display:'flex', alignItems: 'center'}}>
-                <Card.Title className = 'infoTitle'>{item.houseAddress}</Card.Title>
+                <Card.Title className = 'infoTitle' >{item.houseAddress}</Card.Title>
                 <Badge className = "bg-secondary" style = {{marginLeft:"15px", marginTop:"12.5px", width: '50px'}}>D-20</Badge>
             </div>
-            <Card.Body style = {{display: "grid", gridTemplateColumns: "1fr 0.7fr", gap:'10px'}}>
+            <Card.Body style = {{display: "grid", gridTemplateColumns: "1fr 0.7fr", gap:'3px'}}>
                 <div className = 'infotype' style = {{fontSize: '13px'}}> 임대 시작일</div>
                 <div className = 'infoName'>{timeStart}</div>
                 <div className = 'infotype' style = {{fontSize: '13px'}}>임대 종료일</div>
