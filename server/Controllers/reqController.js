@@ -84,24 +84,6 @@ const findReq = async(req,res) =>{
 
 };
 
-const findReqID = async(req,res) =>{
-    const itemId = req.params.itemId;
-    console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!',itemId);
-    try{
-        const i = await reqModel.findById(itemId);
-        if (!i){
-            return res.status(404).json({message: '요청을 찾을 수 없습니다.'});
-        }
-
-        res.status(200).json(i);
-        console.log("RRSever", i);
-
-    }catch(error){
-        console.log(error);
-        res.status(500).json(error);
-    }
-
-};
 
 const getRequsetByItem = async(req, res) =>{
     const itemID = req.params.itemID;
@@ -213,5 +195,5 @@ const setReqContract = async (req, res) => {
 };
 
 
-module.exports ={createReq, findUserSendReq, findUserReceivedReq, findReq, acceptReq, deleteReq, doTenantSign, doLandlordSign, setReqContract};
+module.exports ={createReq, findUserSendReq, findUserReceivedReq, findReq, acceptReq, deleteReq, doTenantSign, doLandlordSign, setReqContract, getRequsetByItem};
 

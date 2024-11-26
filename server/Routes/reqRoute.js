@@ -1,5 +1,5 @@
 const express = require("express");
-const {createReq, findUserSendReq, findUserReceivedReq, findReq, acceptReq, deleteReq, doTenantSign, doLandlordSign, setReqContract} = require("../Controllers/reqController");
+const {createReq, findUserSendReq, findUserReceivedReq, findReq, acceptReq, deleteReq, doTenantSign, doLandlordSign, setReqContract, getRequsetByItem} = require("../Controllers/reqController");
 const router = express.Router();
 
 router.post("/", createReq);
