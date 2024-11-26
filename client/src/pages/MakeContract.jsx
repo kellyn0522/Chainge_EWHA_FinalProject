@@ -187,15 +187,6 @@ const MakeContract = () => {
         isContractUpdater(item.itemID, '1');
         contractUpdater(id, '1');
         navigate("/");
-/*
-        try {
-            await axios.post('http://localhost:5000/api/contracts', info);
-            setContract((prev) => [...prev, info]);
-            navigate('/');
-        } catch (errer){
-            console.error('Error saving contract:', error);
-        }
-*/
     };
 
     return (
