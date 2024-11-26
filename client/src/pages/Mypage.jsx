@@ -215,7 +215,7 @@ const Mypage = () => {
                                         <Card.Body className="noto-sans-kr">
                                             <div style = {{display : 'flex', alignItems: 'center', marginBottom : '1rem'}}>
                                                 <Card.Text style={{marginBottom:'0px'}}>이름: {user.name}</Card.Text>
-                                                {user?.realEstateAgent && <Badge className = 'skyblue' style = {{marginLeft: '7px', alignItems:'center'}}>중개사</Badge>}
+                                                {user?.realEstateAgent && <Badge className = 'bg-secondary' style = {{marginLeft: '7px', alignItems:'center'}}>중개사</Badge>}
                                             </div>
                                             <Card.Text>닉네임: {user.nickName}</Card.Text>
                                             <Card.Text>전화번호: {user.phoneNumber?.replace(/(\d{3})(\d{3})(\d{4})/,'$1-$2-$3')}</Card.Text>
@@ -290,7 +290,7 @@ const Mypage = () => {
                                     <div className = 'contractContainer'>
                                         {sendReq?.map((s) => {
                                             console.log(s);
-                                            if(s.accept){
+                                            if(s.contractID !== 'false'){
                                                 return(
                                                 <ContractCard itemId = {s.itemId} reqID = {s._id} className='contractCard'/>
                                                 )
@@ -307,7 +307,7 @@ const Mypage = () => {
                                     <div className = 'contractContainer'>
                                         {receiveRequest?.map((r) => {
                                             console.log(r);
-                                            if(r.accept){
+                                            if(r.contractID !== 'false'){
                                                 return(
                                                 <ContractCard itemId = {r.itemId} reqID = {r._id} className='contractCard'/>
                                                 )

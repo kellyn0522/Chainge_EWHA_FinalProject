@@ -21,7 +21,6 @@ const ContractPage = () => {
     const [otherUserinfo, setOtherUserinfo] = useState(null);
     const{findingReq} = useContext(ReqContext);
     const [d_Day, setD_Day] = useState(20);
-    const today = new Date();
     
     useEffect(() =>{
         const fetchReq = async () => {
@@ -45,7 +44,7 @@ const ContractPage = () => {
             }
         };
         fetchItem();
-    }, [reqInfo?.itemId, findItemError, isFindItemLoading]);
+    }, [reqInfo?.itemId]);
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -55,7 +54,7 @@ const ContractPage = () => {
             };
         };
         fetchUser();
-    }, [otherUser, findUserError, isFindUserLoading]);
+    }, [otherUser]);
 
     useEffect(() => {
         if(user && otherUserinfo && item && reqInfo){
@@ -116,17 +115,23 @@ const ContractPage = () => {
     }, [otherUserinfo,user,item,reqInfo, isOwner]);
 
     useEffect(() => {
+        const today = new Date();
+
         if(reqInfo && reqInfo.start && reqInfo.end){
-            if(today - reqInfo.end < 0){
+            const reqStart = new Date(reqInfo.start);
+            const reqEnd = new Date(reqInfo.end);
+            const dayDifference = Math.floor((reqEnd-today)/1000*60*60*24);
+            if(dayDifference < 0){
                 setD_Day(-1);
             }else{
-                rest = today.getDate() - new Date(reqInfo.start).getDate();
+                const rest = today.getDate() - reqStart.getDate();
                 if (rest >= 0){
                     setD_Day(rest);
                 }else{
                     setD_Day(rest+30);
                 }
             }
+        console.log(d_Day, today.getDate(), new Date(reqInfo.start).getDate())
         }
     },[reqInfo])
 
@@ -177,7 +182,9 @@ const ContractPage = () => {
                 }}>
                     <Col xs={10}>
                         <h2 style={{marginBottom: '30px'}}>계약서</h2>
-                        <div className = 'skyblueFont'>다음 이체까지 {d_Day}일 남았습니다.</div>
+                        {d_Day<0&&<div className = 'skyblueFont'>거래가 종료되었습니다.</div>}
+                        {d_Day===0&&<div className = 'skyblueFont'>계좌 이체 D-day입니다.</div>}
+                        {d_Day>0&&<div className = 'skyblueFont'>다음 이체까지 {d_Day}일 남았습니다.</div>}
                         <Card className = "information" style={{marginBottom:"20px"}}>
                             <Card.Title className = "infoTitle">임대인</Card.Title>
                             <Card.Body className = "info">

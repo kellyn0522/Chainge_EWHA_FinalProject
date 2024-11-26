@@ -38,7 +38,8 @@ const CreateItemPage = () => {
         hasFridge: false,
         hasSofa: false,
         hasChair: false,});
-    
+        
+    // 위경도
     const [addressData, setAddressData] = useState({
         latitude: null,
         longitude: null,
@@ -59,8 +60,12 @@ const CreateItemPage = () => {
                 const kakaoScript = document.createElement("script");
                 kakaoScript.src = "https://dapi.kakao.com/v2/maps/sdk.js?appkey=774e3b62181c99d1ba97f5efdc1eab76&libraries=services";
                 kakaoScript.async = true;
-                kakaoScript.onload = () => resolve();
-                kakaoScript.onerror = () => reject("Kakao Maps API 로드 실패");
+                kakaoScript.onload = () => { console.log("Kakao Maps API 스크립트 로드 완료");
+                    resolve();};
+                kakaoScript.onerror = () => {
+                    console.error("Kakao Maps API 스크립트 로드 실패");
+                    reject("Kakao Maps API 스크립트 로드 실패");
+                };
                 document.body.appendChild(kakaoScript);
                 // reject("Kakao Maps API가 로드되지 않았습니다.");
             }
@@ -74,7 +79,7 @@ const CreateItemPage = () => {
         }
 
         new window.daum.Postcode({
-            oncomplete: async function (data) {
+            oncomplete: async (data) =>{
                 const roadAddress = data.roadAddress;
                 const zonecode = data.zonecode;
 
@@ -85,7 +90,13 @@ const CreateItemPage = () => {
                 setZonecode(zonecode);
     
                 console.log('출력111111111111111');
-                loadKakaoMapsAPI().then(() => {
+
+                console.log("주소 검색 완료, Kakao Maps API 로드 시작");
+                try{
+                
+                await loadKakaoMapsAPI();
+                console.log("Kakao map api로드 완료");
+
                     const geocoder = new window.kakao.maps.services.Geocoder();
                     console.log('출력2222222222222222222222');
                     geocoder.addressSearch(roadAddress, (result, status) => {
@@ -97,16 +108,26 @@ const CreateItemPage = () => {
                                 latitude, 
                                 longitude 
                             });
-
-                            
+                            updateCreateItemInfo({
+                                latitude,
+                                longitude,
+                                location: roadAddress,
+                                zipCode: zonecode,
+                            });
+                           
+                            console.log("위경도 변환 성공:", latitude, longitude);
+                          
                         } else {
                             console.error("주소 검색 실패:", status);
                         }
                     });
-                });
+                } catch (error) {
+                    console.error("Kakao Maps API 처리 중 에러:", error);
+                 }
             },
-        }).open();
-    };
+            }).open();
+        };
+            
 
     const onChangebedExist = (e) => {
         const checked = e.target.checked
