@@ -9,6 +9,7 @@ const reqSchema = new mongoose.Schema({
     accept: Boolean,
     tenantSign: Boolean,
     landlordSign: Boolean,
+    contractID: String,
 }, {
     timestamps: true,
 }

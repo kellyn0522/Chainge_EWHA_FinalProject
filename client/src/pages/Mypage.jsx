@@ -23,11 +23,13 @@ const Mypage = () => {
     const navigate = useNavigate();
     const { user, userNickNameFinder } = useContext(AuthContext);
     const { getUserSendReq,getUserReceiveReq} = useContext(ReqContext);
+    //const { findItem, findItemError, isFindItemLoading, } = useContext(AuthItemContext);
     const [receiveRequest, setReceiveRequest] = useState(null);
     const [sendReq, setSendReq] = useState(null);
     const [senderNickName, setSenderNickName] = useState({});
     const [reNickName, setReNickName] = useState({});
-
+    //const [houseForRent, setHouseForRent] = useState({});
+    //const [rentedHouse, setRentedHouse] = useState({});
 
     const [showModal, setShowModal] = useState(false);
     const handleShow = () => setShowModal(true);
@@ -83,7 +85,6 @@ const Mypage = () => {
     }, []);
 
     useEffect(() => {
-        console.log(receiveRequest);
         if(!receiveRequest){return;}
         const fetchUserNickName = async (senderId) => {
             try{
@@ -122,8 +123,59 @@ const Mypage = () => {
                 fetchUserNickName(s.ownerId);
         }});
     }, [sendReq, reNickName]);
-    
-    const {contract} = useContext(ContractContext);
+/*
+    useEffect(() => {
+        console.log(receiveRequest, sendReq);
+        const fetchHouse = async (itemID, func) => {
+            try{
+                const result = await findItem(itemID);
+                if(result){
+                func((prev) => ({
+                    ...prev,
+                    [itemID]: result,
+                }));}else{
+                    console.error('아이템을 찾을 수 없습니다.');
+                }
+            }catch(error){
+                console.error('Failed to fetch items.');
+            }
+        };
+
+        const fetchReceiveRequest = async () => {
+            if(!receiveRequest){
+                console.log('빈 객체');
+                return;
+            }
+            for (const r of receiveRequest){
+                if(!houseForRent[r.itemId]){
+                    await fetchHouse(r.itemId, setHouseForRent);
+            }}
+        };
+
+        const fetchSendReq = async () => {
+            if(!sendReq){
+                console.log('빈 객체');
+                return;
+            }
+            for (const s of sendReq) {
+                if(!rentedHouse[s.itemId]){
+                    await fetchHouse(s.itemId, setRentedHouse);
+            }}
+        };
+
+        if (receiveRequest && receiveRequest.length > 0){
+            fetchReceiveRequest();
+        }
+        if(sendReq && sendReq.length > 0){
+            fetchSendReq();
+        }
+        
+    }, [receiveRequest, sendReq]);
+
+    useEffect(()=>{
+        console.log(houseForRent, rentedHouse);
+    }, [houseForRent, rentedHouse])
+*/
 
     const onChangeData = () => {
         navigate("/changingUserData");
@@ -141,6 +193,11 @@ const Mypage = () => {
         return <div>Error: User not found'</div>
     }
     console.log('userrrrr: ',{user})
+
+    const acceptContract = async(otherUser, id, isOwner)=>{
+        console.log(otherUser, id, isOwner);
+        navigate(`/makeContract/${otherUser}/${id}/${isOwner}`);
+    };
 
     return (
         <Container>
@@ -194,7 +251,7 @@ const Mypage = () => {
                                     </div>
                                     <Unregister show={showModal} handleClose={handleClose} />
                                 </div>
-                            </div>     
+                            </div> 
                             <div>
                                 <div >
                                     <Button className = 'green' style = {{color: 'white', border: 'none', margin: '7px'}} onClick = {handleSendReqShow}>보낸 거래 요청</Button>
@@ -208,7 +265,7 @@ const Mypage = () => {
                                         <div>
                                             {sendReq?.map((s) => (
                                                 s.accept &&
-                                                <Card style = {{display: 'flex', justifyContent: 'center', padding: '1rem', gap: '7px'}}>
+                                                <Card style = {{display: 'flex', justifyContent: 'center', padding: '1rem', gap: '7px'}} onClick ={() => {acceptContract(s.ownerId, s._id, false)}}>
                                                     <strong>ID: {reNickName[s.ownerId]? reNickName[s.ownerId]:s.ownerId} 님이 거래 요청을 수락하였습니다.</strong>
                                                     <p style={{marginBottom: '0'}}>거래 요청 한 매물: {s.itemId}</p>
                                                 </Card>
@@ -217,37 +274,43 @@ const Mypage = () => {
                                         <div>
                                             {receiveRequest?.map((r) => (
                                                 r.accept &&
-                                                <Card  style = {{display: 'flex', justifyContent: 'center', padding: '1rem', gap: '7px'}}>
+                                                <Card  style = {{display: 'flex', justifyContent: 'center', padding: '1rem', gap: '7px'}} onClick ={() => {acceptContract(r.senderId, r._id, true)}}>
                                                     <strong>ID: {senderNickName[r.senderId]? senderNickName[r.senderId]: r.senderId} 님의 거래 요청을 수락하였습니다.</strong>
                                                     <p style={{marginBottom: '0'}}>거래 요청 한 매물: {r.itemId}</p>
                                                 </Card>
                                             ))}
                                         </div>
-                                    <div style = {{display: "flex", alignItems: 'center', textAlign: 'center'}}>
-                                        <img src={house} alt='house_pic' width = '30px' height = 'auto'/>
-                                        <div style={{marginLeft:"10px", marginRight:'15px'}}>임대 중</div>
-                                    </div>
-                                    <div>
-                                        {contract && Array.isArray(contract)?(
-                                            contract.map((it) => (
-                                                user && it.landlordID && user._id === it.landlordID?(
-                                                    <ContractCard id = {it.itemID} info = {it}/>
-                                                ):null))
-                                            ):null
-                                        }
-                                    </div>
+
                                     <div style = {{display: "flex", alignItems: 'center', textAlign: 'center'}}>
                                         <img src={house} alt='house_pic' width = '30px' height = 'auto'/>
                                         <div style={{marginLeft:"10px", marginRight:'15px'}}>임차 중</div>
                                     </div>
-                                    <div style = {{display:'flex', gap: '17px'}}>
-                                        {contract && Array.isArray(contract)?(
-                                            contract.map((it) => (
-                                                user && it.tenantID && user._id === it.tenantID?(
-                                                    <ContractCard id = {it.itemID} info = {it}/>
-                                                ):null))
-                                            ):null
-                                        }
+                                    <div className = 'contractContainer'>
+                                        {receiveRequest?.map((r) => {
+                                            console.log(r);
+                                            if(r.accept){
+                                                return(
+                                                <ContractCard id = {r.itemId} info = {{start: r.start, end: r.end, period: r.period}} className='contractCard'/>
+                                                )
+                                            }
+                                            return null;
+                                        })}
+                                    </div>
+                                        
+                                    <div style = {{display: "flex", alignItems: 'center', textAlign: 'center'}}>
+                                        <img src={house} alt='house_pic' width = '30px' height = 'auto'/>
+                                        <div style={{marginLeft:"10px", marginRight:'15px'}}>임대 중</div>
+                                    </div>
+                                    <div className = 'contractContainer'>
+                                    {sendReq?.map((s) => {
+                                            console.log(s);
+                                            if(s.accept){
+                                                return(
+                                                <ContractCard id = {s.itemId} info = {{start: s.start, end: s.end, period: s.period}} className='contractCard'/>
+                                                )
+                                            }
+                                            return null;
+                                        })}
                                     </div>
                                 </div>
                             </div>

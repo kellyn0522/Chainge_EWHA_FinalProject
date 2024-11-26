@@ -89,7 +89,7 @@ const Home = () => {
                     </>)}
                     </div>
                     <Map />
-                    <div className= "list_wrapper" style = {{marginTop : '20px'}}>
+                    <div className= "list_wrapper" style = {{margin : '20px'}}>
                         {getItemError && <p>Error: {getItemError}</p>}
                         {getSearchResult().map(it => (
                             userID !== it.ownerId?(

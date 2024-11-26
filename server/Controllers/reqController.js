@@ -14,6 +14,7 @@ const createReq = async(req,res) =>{
             accept: false,
             tenantSign: false,
             landlordSign: false,
+            contractID: false,
         });
 
         const response = await newReq.save();
@@ -178,6 +179,26 @@ const deleteReq = async(req, res) =>{
     }
 };
 
+const setReqContract = async (req, res) => {
+    console.log('setReqContract 호출!!');
+    try {
+        const { reqID,contractID } = req.body;
+        const r = await reqModel.findById(reqID);
+        if (!r) return res.status(400).json("Request Not Found");
+        result = await reqModel.updateOne({_id : reqID}, {$set : {contractID: contractID}});
+        if (result.modifiedCount > 0){
+            res.status(200).json(result);
+            console.log("RRSever", result);
+        }else{
+            return res.status(400).json({error : "업데이트에 실패했습니다."});
+        }
+    } catch (error) {
+        console.log(error); // 에러 로그
+        res.status(500).json(error);
+    }
+};
 
-module.exports ={createReq, findUserSendReq, findUserReceivedReq, findReq, findReqID, acceptReq, deleteReq, doTenantSign, doLandlordSign};
+
+module.exports ={createReq, findUserSendReq, findUserReceivedReq, findReq, acceptReq, deleteReq, doTenantSign, doLandlordSign, setReqContract};
+
 

@@ -79,27 +79,10 @@ const ReqPage = () => {
     }
 
     const onContract = async() =>{
-        const contractInfo= {
-            itemID: item?.itemID,
-            price: item?.housePrice,
-            deposit: item?.deposit,
-
-            tenantID: otherUserinfo?._id,
-            tenantphoneNum: otherUserinfo?.phoneNumber,
-            tenantBirth:otherUserinfo?.birth,
-            tenantidentityNum: otherUserinfo?.identityNum,
-            tenantAccount: otherUserinfo?.account,
-            tenantMetamaskAdd: otherUserinfo?.metaMaskAdd,
-            tenantname: otherUserinfo.name,
-            tenantzipcode: otherUserinfo.zipCode,
-
-            start: reqInfo?.start||'2024.11.21',
-            end:reqInfo?.end||'2025.11.20',
-            period:reqInfo?.period||12,
-        }
-        console.log('CCCCCCCCCCCCCCCCC',contractInfo);
+        const otherUser = otherUserinfo._id
+        if(otherUser){
         await updateAccept(id);
-        navigate(`/checkIdentity/${id}/${true}`, {state: {contractInfo}});
+        navigate(`/checkIdentity/${id}/${true}`, {state: {otherUser}});}
     }
 
     const goToItem = () => {

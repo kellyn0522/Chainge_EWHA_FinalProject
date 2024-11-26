@@ -6,7 +6,7 @@ import Logo from "../component/Logo";
 import { useState, useContext, useEffect } from "react";
 import { AuthItemContext } from "../context/AuthItemContext";
 import { AuthContext } from "../context/AuthContext";
-import { Button, Card, Row, Col, Container } from "react-bootstrap";
+import { Button, Card, Row, Col, Container,Badge } from "react-bootstrap";
 import DeleteItemData from "./DeleteItemData";
 import  ChatEach  from "../components/chat/ChatEach";
 import ac from '../icons/ac_unit.svg';
@@ -128,18 +128,21 @@ const Item = () => {
                             <img src={item.imageFile?`${baseUrl}/uploads/${item.imageFile.replace(/\\/g, '/')}`:house} alt='house_pic' width = '300px' height = 'auto' style = {{border: '2px solid #ccc', display: ' block', margin: '0 auto'}} onError = {(e) => e.target.src = house}/>
                             <div>
                                 <div className = 'introInfo' style = {{marginBottom : '10px'}}>  
-                                <h3>
-                                    {item.deposit && (
-                                        <>
-                                            {Math.floor(item.deposit / 10000) > 0 && (
-                                                <>{Math.floor(item.deposit / 10000)}억 </>
-                                            )}
-                                            {item.deposit % 10000 > 0 && (
-                                                <>{item.deposit % 10000}만원</>
-                                            )}
-                                        </>
-                                    )}
-                                    / {item.housePrice}만원</h3>
+                                    <div style = {{display:'flex', alignItems: 'center', marginBottom: '10px'}}>
+                                        <h3 style = {{marginBottom: '0'}}>
+                                        {item.deposit && (
+                                            <>
+                                                {Math.floor(item.deposit / 10000) > 0 && (
+                                                    <>{Math.floor(item.deposit / 10000)}억 </>
+                                                )}
+                                                {item.deposit % 10000 > 0 && (
+                                                    <>{item.deposit % 10000}만원</>
+                                                )}
+                                            </>
+                                        )}
+                                        / {item.housePrice}만원</h3>
+                                        <Badge className={`noto-sans-kr ${item.hasAgent? 'bg-secondary' :'skyblue'}`} style = {{ margin: '10px', display:'flex', alignItems: 'center'}}>{item.hasAgent?'중개인':'방주인'}</Badge>
+                                    </div>
                                     <div>{item.location} {item.houseAddress}</div>
                                     <div>{item.type} / {item.area}평</div> 
                                 </div>

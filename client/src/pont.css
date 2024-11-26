@@ -226,3 +226,20 @@
 .lightBlue {
   background-color: #6495ED;
 }
+
+.contractContainer{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  min-width: 300px;
+  max-width: 900px;
+  height: 300px;
+  max-height: 60vh;
+  overflow-y:auto;
+  margin: auto;
+  flex-wrap:wrap;
+  gap: 10px;
+}
+.contractContainer > .contractCard{
+  flex-shrink: 0;
+}
