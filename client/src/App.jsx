@@ -9,7 +9,7 @@ import CreateItemPage from "./pages/CreateItemPage";
 import ChangingUserData from "./pages/ChangingUserData";
 import Unregister from "./pages/Unregister";
 import MakeContract from "./pages/MakeContract";
-import ContractList from "./pages/ContractList";
+import ContractPage from "./pages/ContractPage";
 import UserHistory from "./pages/UserHistory";
 import{Routes, Route, Navigate} from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -51,7 +51,7 @@ function App() {
                          <Route path="/register" element={user? <Home/>:<Register />} />
                          <Route path="/createItemPage" element={<CreateItemPage />} />
                          <Route path="/makeContract/:otherUser/:id/:type" element={<MakeContract />} />
-                         <Route path="/contractList" element={<ContractList />} />
+                         <Route path="/ContractPage/:otherUser/:id/:type" element={<ContractPage />} />
                          <Route path="/changingUserData" element={<ChangingUserData />} />
                          <Route path="/userHistory" element={<UserHistory />} />
                          <Route path="/checkIdentity/:id/:type" element={<CheckIdentity />} />

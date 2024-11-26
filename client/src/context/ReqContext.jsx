@@ -95,8 +95,16 @@ export const ReqContextProvider = ({ children }) => {
         return null;
     };
 
+    const getReqByItem = async(itemID) => {
+        return await getReq(`${baseUrl}/itemReq/getRequestByItem/${itemID}`);
+    };
+
     const findingReq = async(reqID) => {
         return await getReq(`${baseUrl}/itemReq/find/${reqID}`);
+    };
+
+    const reqSearcher = async(ownerID, itemID, senderID) => {
+        return await getReq(`${baseUrl}/itemReq//findSpecificReq/${ownerID}/${itemID}/${senderID}`);
     };
 
 const updateAccept = useCallback(async(reqID) => {
@@ -281,6 +289,8 @@ const deleteR = useCallback(async(reqID) => {
         landlordSigned,
 
         contractUpdater,
+        getReqByItem,
+        reqSearcher,
     }}>
         {children}
     </ReqContext.Provider>
