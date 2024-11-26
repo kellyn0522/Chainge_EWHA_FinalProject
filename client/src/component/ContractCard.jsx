@@ -19,6 +19,7 @@ const ContractCard = ({itemId, reqID}) => { // {contractID}
     const { user } = useContext(AuthContext);
     const [reqInfo, setReqInfo] = useState(null);
     const{findingReq} = useContext(ReqContext);
+    const [d_Day, setD_Day] = useState(20);
 
     useEffect(() =>{
         const fetchReq = async () => {
@@ -43,6 +44,28 @@ const ContractCard = ({itemId, reqID}) => { // {contractID}
         };
         fetchItem();
     }, [findItem, findItemError]);
+
+    useEffect(() => {
+        const today = new Date();
+
+        if(reqInfo && reqInfo.start && reqInfo.end){
+            const reqStart = new Date(reqInfo.start);
+            const reqEnd = new Date(reqInfo.end);
+            const dayDifference = Math.floor((reqEnd-today)/1000*60*60*24);
+            if(dayDifference < 0){
+                setD_Day(-1);
+            }else{
+                const rest = today.getDate() - reqStart.getDate();
+                if (rest >= 0){
+                    setD_Day(rest);
+                }else{
+                    setD_Day(rest+30);
+                }
+            }
+        console.log(d_Day, today.getDate(), new Date(reqInfo.start).getDate())
+        }
+    },[reqInfo])
+
 
     if (isFindItemLoading){
         return null;
@@ -76,9 +99,11 @@ const ContractCard = ({itemId, reqID}) => { // {contractID}
 
     return (
         <Card className = "noto-sans-kr" style = {{marginTop:"10px", marginBottom:"10px", width: '270px'}}  onClick ={onContractPage}>
-            <div style = {{display:'flex', alignItems: 'center'}}>
-                <Card.Title className = 'infoTitle' >{item.houseAddress}</Card.Title>
-                <Badge className = "bg-secondary" style = {{marginLeft:"15px", marginTop:"12.5px", width: '50px'}}>D-20</Badge>
+            <div style = {{display:'flex', alignItems: 'center', width: '240px', marginLeft: '15px', marginRight:'15px', justifyContext: 'space-between'}}>
+                <Card.Title style = {{marginTop:'20px', fontSize: '18px'}} >{item.houseAddress}</Card.Title>
+                {d_Day<0&&<Badge className = "bg-secondary" style = {{marginLeft:"15px", marginTop:"12.5px", width: '50px'}}>거래 종료</Badge>}
+                {d_Day===0&&<Badge className = "green" style = {{marginLeft:"15px", marginTop:"12.5px", width: '50px'}}>D-Day</Badge>}
+                {d_Day>0&&<Badge className = "skyblue" style = {{marginLeft:"15px", marginTop:"12.5px", width: '50px'}}>D-{d_Day}</Badge>}
             </div>
             <Card.Body style = {{display: "grid", gridTemplateColumns: "1fr 0.7fr", gap:'3px'}}>
                 <div className = 'infotype' style = {{fontSize: '13px'}}> 임대 시작일</div>
