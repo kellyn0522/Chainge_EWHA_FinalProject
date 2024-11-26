@@ -7,10 +7,13 @@ const userRoute = require("./Routes/userRoute");
 const chatRoute = require("./Routes/chatRoute");
 const reqRoute = require("./Routes/reqRoute");
 
+
 const messageRoute = require("./Routes/messageRoute");
 const contractRoute = require("./Routes/contractRoute");
-
 require("dotenv").config();
+
+const geocodeRoute = require("./Routes/geocodeRoute");
+
 
 app.use(express.json());
 app.use(cors());
@@ -22,6 +25,8 @@ app.use("/api/itemReq" , reqRoute);
 app.use("/api/messages" , messageRoute);
 app.use("/api/contracts", contractRoute);
 app.use("/uploads", express.static('uploads'));
+
+app.use("/api", geocodeRoute);
 
 app.get("/", (req,res) =>{ 
     res.send("welcome to our chat app APIS ... ");
