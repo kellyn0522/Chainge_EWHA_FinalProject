@@ -5,7 +5,7 @@ module.exports = async function (deployer) {
 
     try {
         // 거래 번호 (ID)
-        const contractID = "674078bfee4065336b6695d7";
+        const contractID = "6742bbbea98d722cf1f3b36f";
         console.log("Contract Num:", contractID);
         
         // 거래 정보 찾기
@@ -28,8 +28,8 @@ module.exports = async function (deployer) {
         const krwtoether = (krwAmount) => (krwAmount / 400).toFixed(18);
 
         // 스마트 컨트랙트에 전달할 데이터 구성
-        const lessor = createPerson(lessorData);
-        const tenant = createPerson(tenantData);
+        const lessor = createPerson(lessorData, "0x44e2AfFCFAD498c14eBd1C042d9B2c72A0dF8BF5");
+        const tenant = createPerson(tenantData, "0x8230197520ebbe69624a7eeacca70129e37f2b4b");
         const lessorBankDetails = createBankDetails(lessorData, "First Bank");
         const tenantBankDetails = createBankDetails(tenantData, "Second Bank");
         const rentalDetails = createRentalDetails(contractData, itemData, krwtoether);
@@ -68,12 +68,12 @@ async function fetchDataFromAPI(endpoint, dataType) {
 }
 
 // Person 객체 생성
-function createPerson(userData) {
+function createPerson(userData, metamaskAdd) {
     return {
         name: userData.name,
         phoneNumber: userData.phoneNumber,
         identityNumber: `${userData.birth}-${userData.identityNum}`,
-        addr: "0x44e2AfFCFAD498c14eBd1C042d9B2c72A0dF8BF5",
+        addr: metamaskAdd,
     };
 }
 
@@ -82,7 +82,7 @@ function createBankDetails(userData, bankName) {
     return {
         ownerName: userData.name,
         bankName: bankName,
-        account: "0x8230197520ebbe69624a7eeacca70129e37f2b4b",
+        account: userData.account,
     };
 }
 
