@@ -258,6 +258,7 @@ const Mypage = () => {
                                     <Button className = 'green' style = {{color: 'white', border: 'none', margin: '7px'}} onClick = {handleReqShow}>받은 거래 요청</Button>
                                     <SendContractReq show={showSendReqModal} handleClose={handleSendReqClose} />
                                     <ContractReq show={showReqModal} handleClose={handleReqClose} />
+                                    <div style = {{margin: '10px', marginTop:'20px'}}>
                                     <div style = {{display: "flex", alignItems: 'center', textAlign: 'center'}}>
                                         <img src={house} alt='house_pic' width = '30px' height = 'auto'/>
                                         <div style={{marginLeft:"10px", marginRight:'15px'}}>진행 중인 거래</div>
@@ -280,10 +281,28 @@ const Mypage = () => {
                                                 </Card>
                                             ))}
                                         </div>
-
+                                    </div>
+                                    <div style = {{margin: '10px', marginTop:'20px'}}>
                                     <div style = {{display: "flex", alignItems: 'center', textAlign: 'center'}}>
                                         <img src={house} alt='house_pic' width = '30px' height = 'auto'/>
                                         <div style={{marginLeft:"10px", marginRight:'15px'}}>임차 중</div>
+                                    </div>
+                                    <div className = 'contractContainer'>
+                                        {sendReq?.map((s) => {
+                                            console.log(s);
+                                            if(s.accept){
+                                                return(
+                                                <ContractCard id = {s.itemId} info = {{start: s.start, end: s.end, period: s.period}} className='contractCard'/>
+                                                )
+                                            }
+                                            return null;
+                                        })}
+                                    </div>
+                                    </div>
+                                    <div style = {{margin: '10px', marginTop:'20px'}}>
+                                    <div style = {{display: "flex", alignItems: 'center', textAlign: 'center'}}>
+                                        <img src={house} alt='house_pic' width = '30px' height = 'auto'/>
+                                        <div style={{marginLeft:"10px", marginRight:'15px'}}>임대 중</div>
                                     </div>
                                     <div className = 'contractContainer'>
                                         {receiveRequest?.map((r) => {
@@ -296,21 +315,6 @@ const Mypage = () => {
                                             return null;
                                         })}
                                     </div>
-                                        
-                                    <div style = {{display: "flex", alignItems: 'center', textAlign: 'center'}}>
-                                        <img src={house} alt='house_pic' width = '30px' height = 'auto'/>
-                                        <div style={{marginLeft:"10px", marginRight:'15px'}}>임대 중</div>
-                                    </div>
-                                    <div className = 'contractContainer'>
-                                    {sendReq?.map((s) => {
-                                            console.log(s);
-                                            if(s.accept){
-                                                return(
-                                                <ContractCard id = {s.itemId} info = {{start: s.start, end: s.end, period: s.period}} className='contractCard'/>
-                                                )
-                                            }
-                                            return null;
-                                        })}
                                     </div>
                                 </div>
                             </div>

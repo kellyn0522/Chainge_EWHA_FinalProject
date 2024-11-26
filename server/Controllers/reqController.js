@@ -2,7 +2,6 @@ const reqModel = require('../Models/reqModel');
 
 const createReq = async(req,res) =>{
     const {senderId, itemId, ownerId, start, end, period} = req.body;
-    console.log()
     try{
         const newReq = new reqModel({
             senderId:senderId, 
@@ -85,23 +84,20 @@ const findReq = async(req,res) =>{
 
 };
 
-const findReqID = async(req,res) =>{
-    const itemId = req.params.itemId;
-    console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!',itemId);
-    try{
-        const i = await reqModel.findById(itemId);
-        if (!i){
-            return res.status(404).json({message: '요청을 찾을 수 없습니다.'});
-        }
 
-        res.status(200).json(i);
-        console.log("RRSever", i);
+const getRequsetByItem = async(req, res) =>{
+    const itemID = req.params.itemID;
+    try{
+        const r = await reqModel.find({itemId: itemID});
+        if(r.length === 0){
+            return res.status(404).json({message: 'Item not found'});
+        }
+        res.status(200).json(r); 
 
     }catch(error){
-        console.log(error);
+        console.log(error); 
         res.status(500).json(error);
     }
-
 };
 
 const acceptReq = async(req,res) => {
@@ -199,6 +195,5 @@ const setReqContract = async (req, res) => {
 };
 
 
-module.exports ={createReq, findUserSendReq, findUserReceivedReq, findReq, acceptReq, deleteReq, doTenantSign, doLandlordSign, setReqContract};
-
+module.exports ={createReq, findUserSendReq, findUserReceivedReq, findReq, acceptReq, deleteReq, doTenantSign, doLandlordSign, setReqContract, getRequsetByItem};
 
