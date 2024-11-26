@@ -23,13 +23,13 @@ const Mypage = () => {
     const navigate = useNavigate();
     const { user, userNickNameFinder } = useContext(AuthContext);
     const { getUserSendReq,getUserReceiveReq} = useContext(ReqContext);
-    const { findItem, findItemError, isFindItemLoading, } = useContext(AuthItemContext);
+    //const { findItem, findItemError, isFindItemLoading, } = useContext(AuthItemContext);
     const [receiveRequest, setReceiveRequest] = useState(null);
     const [sendReq, setSendReq] = useState(null);
     const [senderNickName, setSenderNickName] = useState({});
     const [reNickName, setReNickName] = useState({});
-    const [houseForRent, setHouseForRent] = useState({});
-    const [rentedHouse, setRentedHouse] = useState({});
+    //const [houseForRent, setHouseForRent] = useState({});
+    //const [rentedHouse, setRentedHouse] = useState({});
 
     const [showModal, setShowModal] = useState(false);
     const handleShow = () => setShowModal(true);
@@ -85,7 +85,6 @@ const Mypage = () => {
     }, []);
 
     useEffect(() => {
-        console.log(receiveRequest);
         if(!receiveRequest){return;}
         const fetchUserNickName = async (senderId) => {
             try{
@@ -124,8 +123,9 @@ const Mypage = () => {
                 fetchUserNickName(s.ownerId);
         }});
     }, [sendReq, reNickName]);
-
+/*
     useEffect(() => {
+        console.log(receiveRequest, sendReq);
         const fetchHouse = async (itemID, func) => {
             try{
                 const result = await findItem(itemID);
@@ -142,6 +142,10 @@ const Mypage = () => {
         };
 
         const fetchReceiveRequest = async () => {
+            if(!receiveRequest){
+                console.log('빈 객체');
+                return;
+            }
             for (const r of receiveRequest){
                 if(!houseForRent[r.itemId]){
                     await fetchHouse(r.itemId, setHouseForRent);
@@ -149,15 +153,29 @@ const Mypage = () => {
         };
 
         const fetchSendReq = async () => {
+            if(!sendReq){
+                console.log('빈 객체');
+                return;
+            }
             for (const s of sendReq) {
                 if(!rentedHouse[s.itemId]){
                     await fetchHouse(s.itemId, setRentedHouse);
             }}
         };
 
-        fetchReceiveRequest();
-        fetchSendReq();
+        if (receiveRequest && receiveRequest.length > 0){
+            fetchReceiveRequest();
+        }
+        if(sendReq && sendReq.length > 0){
+            fetchSendReq();
+        }
+        
     }, [receiveRequest, sendReq]);
+
+    useEffect(()=>{
+        console.log(houseForRent, rentedHouse);
+    }, [houseForRent, rentedHouse])
+*/
 
     const onChangeData = () => {
         navigate("/changingUserData");
@@ -268,11 +286,15 @@ const Mypage = () => {
                                         <div style={{marginLeft:"10px", marginRight:'15px'}}>임차 중</div>
                                     </div>
                                     <div className = 'contractContainer'>
-                                    {Object.values(rentedHouse).map((it) => (
-                                            it.isContract&&(
-                                            <ContractCard id = {it.itemID} info = {it} className='contractCard'/>
-                                            )
-                                    ))}
+                                        {receiveRequest?.map((r) => {
+                                            console.log(r);
+                                            if(r.accept){
+                                                return(
+                                                <ContractCard id = {r.itemId} info = {{start: r.start, end: r.end, period: r.period}} className='contractCard'/>
+                                                )
+                                            }
+                                            return null;
+                                        })}
                                     </div>
                                         
                                     <div style = {{display: "flex", alignItems: 'center', textAlign: 'center'}}>
@@ -280,11 +302,15 @@ const Mypage = () => {
                                         <div style={{marginLeft:"10px", marginRight:'15px'}}>임대 중</div>
                                     </div>
                                     <div className = 'contractContainer'>
-                                    {Object.values(houseForRent).map((it) => (
-                                            it.isContract&&(
-                                            <ContractCard id = {it.itemID} info = {it} className='contractCard'/>
-                                            )
-                                    ))}
+                                    {sendReq?.map((s) => {
+                                            console.log(s);
+                                            if(s.accept){
+                                                return(
+                                                <ContractCard id = {s.itemId} info = {{start: s.start, end: s.end, period: s.period}} className='contractCard'/>
+                                                )
+                                            }
+                                            return null;
+                                        })}
                                     </div>
                                 </div>
                             </div>

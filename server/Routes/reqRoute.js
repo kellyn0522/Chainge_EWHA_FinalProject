@@ -1,5 +1,5 @@
 const express = require("express");
-const {createReq, findUserSendReq, findUserReceivedReq, findReq, acceptReq, deleteReq, doTenantSign, doLandlordSign} = require("../Controllers/reqController");
+const {createReq, findUserSendReq, findUserReceivedReq, findReq, acceptReq, deleteReq, doTenantSign, doLandlordSign, setReqContract} = require("../Controllers/reqController");
 const router = express.Router();
 
 router.post("/", createReq);
@@ -9,6 +9,7 @@ router.get("/find/:reqId", findReq);
 router.post("/update/:reqID", acceptReq);
 router.post("/tSign/:reqID", doTenantSign);
 router.post("/lSign/:reqID", doLandlordSign);
+router.post("/contract", setReqContract);
 router.delete("/delete/:reqID", deleteReq);
 
 module.exports = router;

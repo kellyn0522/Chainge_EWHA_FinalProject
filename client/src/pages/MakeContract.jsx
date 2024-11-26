@@ -25,7 +25,7 @@ const MakeContract = () => {
     const isOwner = type==='true';
     const [otherUserinfo, setOtherUserinfo] = useState(null);
 
-    const{findingReq, signingError, isSigningLoading, tenantSigned, landlordSigned} = useContext(ReqContext);
+    const{findingReq, signingError, isSigningLoading, tenantSigned, landlordSigned, contractUpdater} = useContext(ReqContext);
     
     useEffect(() =>{
         const fetchReq = async () => {
@@ -185,6 +185,8 @@ const MakeContract = () => {
     const onContract = async (e)=>{
         e.preventDefault();
         isContractUpdater(item.itemID, '1');
+        contractUpdater(id, '1');
+        navigate("/");
 /*
         try {
             await axios.post('http://localhost:5000/api/contracts', info);
