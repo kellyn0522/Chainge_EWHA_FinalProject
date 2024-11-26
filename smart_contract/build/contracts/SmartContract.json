@@ -29492,12 +29492,12 @@
     "1732609989557": {
       "events": {},
       "links": {},
-      "address": "0x562A7B4260C8e999FEcd50451A0fB3797B8FC952",
-      "transactionHash": "0xd3fb5e3d7e732e3f097388497ba28cc5b181a39dde2f4070f2017dc1f02ff0ba"
+      "address": "0x7580Dfaa10BC23F1D3511DAcB4E5F9B1f965DA54",
+      "transactionHash": "0x1166438c3b48cf3eba4a5b144443c2fe87ac1ac45c8ca3513a9e9f3372fd266e"
     }
   },
   "schemaVersion": "3.4.16",
-  "updatedAt": "2024-11-26T11:02:13.593Z",
+  "updatedAt": "2024-11-26T11:28:11.359Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
