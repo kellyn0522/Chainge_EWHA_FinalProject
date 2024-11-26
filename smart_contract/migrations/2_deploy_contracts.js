@@ -1,11 +1,13 @@
 const SmartContract = artifacts.require("SmartContract");
 const axios = require("axios");
 
+
 module.exports = async function (deployer) {
 
     try {
         // 거래 번호 (ID)
-        const contractID = "6742bbbea98d722cf1f3b36f";
+        // const contractID = "6742bbbea98d722cf1f3b36f";
+        const contractID = process.env.CONTRACT_ID;
         console.log("Contract Num:", contractID);
         
         // 거래 정보 찾기

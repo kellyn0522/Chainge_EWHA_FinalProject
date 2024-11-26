@@ -6,7 +6,7 @@ const itemRoute = require("./Routes/itemRoute");
 const userRoute = require("./Routes/userRoute");
 const chatRoute = require("./Routes/chatRoute");
 const reqRoute = require("./Routes/reqRoute");
-
+const deployRoute = require("./Routes/deployRoute");
 const messageRoute = require("./Routes/messageRoute");
 const contractRoute = require("./Routes/contractRoute");
 
@@ -21,6 +21,7 @@ app.use("/api/chats" , chatRoute);
 app.use("/api/itemReq" , reqRoute);
 app.use("/api/messages" , messageRoute);
 app.use("/api/contracts", contractRoute);
+app.use("/api", deployRoute);
 app.use("/uploads", express.static('uploads'));
 
 app.get("/", (req,res) =>{ 
