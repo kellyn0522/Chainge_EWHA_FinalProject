@@ -292,7 +292,7 @@ const Mypage = () => {
                                             console.log(s);
                                             if(s.accept){
                                                 return(
-                                                <ContractCard id = {s.itemId} info = {{start: s.start, end: s.end, period: s.period}} className='contractCard'/>
+                                                <ContractCard itemId = {s.itemId} reqID = {s._id} className='contractCard'/>
                                                 )
                                             }
                                             return null;
@@ -309,7 +309,7 @@ const Mypage = () => {
                                             console.log(r);
                                             if(r.accept){
                                                 return(
-                                                <ContractCard id = {r.itemId} info = {{start: r.start, end: r.end, period: r.period}} className='contractCard'/>
+                                                <ContractCard itemId = {r.itemId} reqID = {r._id} className='contractCard'/>
                                                 )
                                             }
                                             return null;

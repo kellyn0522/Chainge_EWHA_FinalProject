@@ -43,12 +43,14 @@ const MakeContract = () => {
 
     useEffect(() => {
         const fetchItem = async () => {
-            if (reqInfo?.itemId && !findItemError && !isFindItemLoading){
+            if (reqInfo?.itemId){
                 const result = await findItem(reqInfo?.itemId);
                 setItem(result);
             }
         };
-        fetchItem();
+        if(reqInfo?.itemId){
+            fetchItem();
+        }
     }, [reqInfo]);
 
     useEffect(() => {
@@ -134,7 +136,7 @@ const MakeContract = () => {
 
     const goToItem = () => {
         console.log('아이템 페이지로 이동');
-        if(!isFindItemLoading && !findItemError && item?.itemID){
+        if(item?.itemID){
             console.log('이동 성공');
             navigate(`/item/${item.itemID}`);
         }
@@ -268,15 +270,25 @@ const MakeContract = () => {
                                 <div className = "infoName">{info.period} 개월</div>
                             </Card.Body>
                         </Card>
-                        <Card className = "information" style={{marginBottom:"10px"}}>
-                            <Card.Title className = "infoTitle">매물 정보 확인</Card.Title>
+                        <Card className = "information" style={{marginBottom:"10px", paddingBottom:'10px'}}>
+                            <Card.Title className = "infoTitle" style={{marginBottom: '25px'}}>매물 정보 확인</Card.Title>
+                            <div style = {{display: 'grid', gridTemplateColumns: '1fr 0.5fr', gap: '15px', fontSize: '17px', marginLeft:'24px', marginBottom: '5px'}}>
+                                <div>{item.location} {item.houseAddress}</div>
+                                <div>
+                                        {item.deposit && (
+                                            <>
+                                                {Math.floor(item.deposit / 10000) > 0 && (
+                                                    <>{Math.floor(item.deposit / 10000)}억 </>
+                                                )}
+                                                {item.deposit % 10000 > 0 && (
+                                                    <>{item.deposit % 10000}만원</>
+                                                )}
+                                            </>
+                                        )}
+                                        / {item.housePrice}만원
+                                </div>
+                            </div>
                             <Card.Body className = "info">
-                                {item.buildingName? (
-                                    <>
-                                        <div className = "infotype">건물 이름</div> 
-                                        <div className = "infoName">{item.buildingName}</div>
-                                    </>
-                                ):null}
                                 {item.type? (
                                     <>
                                         <div className = "infotype">방 종류(건축물 용도)</div> 

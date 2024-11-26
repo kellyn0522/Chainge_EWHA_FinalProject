@@ -1,30 +1,31 @@
 import {useEffect, useState, useContext} from "react";
 import Logo from "../component/Logo";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams} from "react-router-dom";
 import { AuthItemContext } from "../context/AuthItemContext";
 import { AuthContext } from "../context/AuthContext";
 import { Button, Card, Row, Col, Container, Stack } from "react-bootstrap";
 import { ReqContext } from "../context/ReqContext";
 
-const ReqPage = () => {
-    const navigate = useNavigate();
+const ContractPage = () => {
     const {otherUser,id,type} = useParams();
+    const [item, setItem] = useState(null);
+    const [reqInfo, setReqInfo] = useState(null);
+    const [info, setInfo] = useState(null);
     const { user, findUser, findUserError, isFindUserLoading } = useContext(AuthContext);
     const {
         findItem,
         findItemError,
         isFindItemLoading,
     } = useContext(AuthItemContext);
-    const [item, setItem] = useState(null);
     const isOwner = type==='true';
-
-    const [reqInfo, setReqInfo] = useState(null);
-
     const [otherUserinfo, setOtherUserinfo] = useState(null);
-    const{findingReq, updateAccept, deleteR} = useContext(ReqContext);
+    const{findingReq} = useContext(ReqContext);
+    const [d_Day, setD_Day] = useState(20);
+    const today = new Date();
     
     useEffect(() =>{
         const fetchReq = async () => {
+            console.log(id);
             try{
                 const result = await findingReq(id);
                 setReqInfo(result);
@@ -34,65 +35,114 @@ const ReqPage = () => {
         }
         fetchReq();
     }, [id]);
-    
     console.log(reqInfo);
 
     useEffect(() => {
         const fetchItem = async () => {
-            if (reqInfo?.itemId){
-                if (item){
-                    console.log('Item already fetched', item);
-                }
+            if (reqInfo?.itemId && !findItemError && !isFindItemLoading){
                 const result = await findItem(reqInfo?.itemId);
                 setItem(result);
             }
         };
         fetchItem();
-    }, [reqInfo]);
+    }, [reqInfo?.itemId, findItemError, isFindItemLoading]);
 
     useEffect(() => {
         const fetchUser = async () => {
             if (otherUser && !findUserError && !isFindUserLoading){
-                console.log('AAAAAAAAAAAAAAAAA');
                     const result = await findUser(otherUser);
                     setOtherUserinfo(result);
             };
         };
         fetchUser();
-    }, [reqInfo]);
+    }, [otherUser, findUserError, isFindUserLoading]);
 
-    console.log('CCCCCCCCCCCCCCCC',otherUserinfo);
-    
-    if (!item){
-        console.log(item);
+    useEffect(() => {
+        if(user && otherUserinfo && item && reqInfo){
+            const newInfo = isOwner?
+                {
+                    tenantID: otherUserinfo._id,
+                    tenantphoneNum: otherUserinfo.phoneNumber,
+                    tenantBirth: otherUserinfo.birth,
+                    tenantidentityNum: otherUserinfo.identityNum,
+                    tenantMetamaskAdd: otherUserinfo.metaMaskAdd,
+                    tenantname: otherUserinfo.name,
+                    tenantzipcode: otherUserinfo.zipCode,
+                    tenantAccount: otherUserinfo.account,
+
+                    landlordID: user._id,
+                    landlordphoneNum: user.phoneNumber,
+                    landlordBirth: user.birth,
+                    landlordIdentityNum: user.identityNum,
+                    landlordMetamaskAdd: user.metaMaskAdd,
+                    landlordname: user.name,
+                    landlordzipcode: user.zipCode,
+                    landlordAccount: user.account,
+
+                    itemID: item?.itemID,
+                    price: item?.price,
+                    deposit: item?.deposit,
+                    start: reqInfo.start,
+                    end: reqInfo.end,
+                    period: reqInfo.period,
+                }:{
+                    tenantID: user._id,
+                    tenantphoneNum: user.phoneNumber,
+                    tenantBirth: user.birth,
+                    tenantidentityNum: user.identityNum,
+                    tenantMetamaskAdd: user.metaMaskAdd,
+                    tenantname: user.name,
+                    tenantzipcode: user.zipCode,
+                    tenantAccount: user.account,
+
+                    landlordID: otherUserinfo._id,
+                    landlordphoneNum: otherUserinfo.phoneNumber,
+                    landlordBirth: otherUserinfo.birth,
+                    landlordIdentityNum: otherUserinfo.identityNum,
+                    landlordMetamaskAdd: otherUserinfo.metaMaskAdd,
+                    landlordname: otherUserinfo.name,
+                    landlordzipcode: otherUserinfo.zipCode,
+                    landlordAccount: otherUserinfo.account,
+
+                    itemID: item?.itemID,
+                    price: item?.price,
+                    deposit: item?.deposit,
+                    start: reqInfo.start,
+                    end: reqInfo.end,
+                    period: reqInfo.period,
+                };
+                setInfo(newInfo);
+        };
+    }, [otherUserinfo,user,item,reqInfo, isOwner]);
+
+    useEffect(() => {
+        if(reqInfo && reqInfo.start && reqInfo.end){
+            if(today - reqInfo.end < 0){
+                setD_Day(-1);
+            }else{
+                rest = today.getDate() - new Date(reqInfo.start).getDate();
+                if (rest >= 0){
+                    setD_Day(rest);
+                }else{
+                    setD_Day(rest+30);
+                }
+            }
+        }
+    },[reqInfo])
+
+    if (isFindItemLoading){
+        return <div>Loding...</div>
+    }
+
+    if (findItemError || !item){
         return <div>Error: {findItemError?.message || 'Page not found'}</div>
     }
 
     if (isFindUserLoading){
         return <div>Loding...</div>
     }
-
-    const onDeleteReq = async() => {
-        await deleteR(id);
-        navigate("/mypage");
-    }
-
-    const onContract = async() =>{
-        const otherUser = otherUserinfo._id
-        if(otherUser){
-        await updateAccept(id);
-        navigate(`/checkIdentity/${id}/${true}`, {state: {otherUser}});}
-    }
-
-    const goToItem = () => {
-        console.log('아이템 페이지로 이동');
-        if(!isFindItemLoading && !findItemError && item?.itemID){
-            console.log('이동 성공');
-            navigate(`/item/${item.itemID}`);
-        }
-    }
     
-    if(!user){
+    if(!user || !item){
         return null;
     }
     const s = reqInfo?.start? reqInfo.start:null;
@@ -109,6 +159,11 @@ const ReqPage = () => {
         ? new Date(e).toISOString().split('T')[0]
         : '';
 
+    
+    if(!info || !item){
+        return null;
+    }
+
     return (
         <Container>
             <div className = "logo"><Logo /></div>
@@ -121,43 +176,55 @@ const ReqPage = () => {
                     margin:"10px"
                 }}>
                     <Col xs={10}>
-                        <h2 style={{marginBottom: '20px'}}>{isOwner?'받은 요청':'보낸 요청'}</h2>
+                        <h2 style={{marginBottom: '30px'}}>계약서</h2>
+                        <div className = 'skyblueFont'>다음 이체까지 {d_Day}일 남았습니다.</div>
                         <Card className = "information" style={{marginBottom:"20px"}}>
-                            {isOwner?(
-                                <>
-                                    <Card.Title className = "infoTitle">상대 정보 확인</Card.Title>
-                                    <Card.Body className = "info">
-                                        <div className="infotype">이름</div>
-                                        <div className = "infoName">{otherUserinfo.name}</div>
-                                        <div className="infotype">전화번호</div>
-                                        <div className = "infoName">{otherUserinfo.phoneNumber.replace(/(\d{3})(\d{3})(\d{4})/,'$1-$2-$3')}</div>
-                                    </Card.Body>
-                                </>
-                            ):(
-                                <>
-                                    <Card.Title className = "infoTitle">내 정보 확인</Card.Title>
-                                    <Card.Body className = "info">
-                                        <div className="infotype">이름</div>
-                                        <div className = "infoName">{user.name}</div>
-                                        <div className="infotype">전화번호</div>
-                                        <div className = "infoName">{user.phoneNumber.replace(/(\d{3})(\d{3})(\d{4})/,'$1-$2-$3')}</div>
-                                    </Card.Body>
-                                </>
-                            )}
+                            <Card.Title className = "infoTitle">임대인</Card.Title>
+                            <Card.Body className = "info">
+                                <div className="infotype">이름</div>
+                                <div className = "infoName">{info.landlordname}</div>
+                                <div className="infotype">우편번호</div>
+                                <div className = "infoName">{info.landlordzipcode}</div>
+                                <div className ="infotype">주민등록번호</div>
+                                <div className = "infoName">{info.landlordBirth}-{info.landlordIdentityNum}</div>
+                                <div className="infotype">전화번호</div>
+                                <div className = "infoName">{info.landlordphoneNum?.replace(/(\d{3})(\d{3})(\d{4})/,'$1-$2-$3')}</div>
+                                <div className ="infotype">연결된 계좌</div>
+                                <div className = "infoName">{info.landlordAccount}</div>
+                                <div className ="infotype">메타마스크 주소</div>
+                                <div className = "infoName">{info.landlordMetamaskAdd}</div>
+                            </Card.Body>
+                        </Card>
+                        <Card className = "information" style={{marginBottom:"20px"}}>
+                            <Card.Title className = "infoTitle">임차인</Card.Title>
+                            <Card.Body className = "info">
+                                <div className="infotype">이름</div>
+                                <div className = "infoName">{info.tenantname}</div>
+                                <div className="infotype">우편번호</div>
+                                <div className = "infoName">{info.tenantzipcode}</div>
+                                <div className ="infotype">주민등록번호</div>
+                                <div className = "infoName">{info.tenantBirth}-{info.tenantidentityNum}</div>
+                                <div className="infotype">전화번호</div>
+                                <div className = "infoName">{info.tenantphoneNum?.replace(/(\d{3})(\d{3})(\d{4})/,'$1-$2-$3')}</div>
+                                <div className ="infotype">연결된 계좌</div>
+                                <div className = "infoName">{info.tenantAccount}</div>
+                                <div className ="infotype">메타마스크 주소</div>
+                                <div className = "infoName">{info.tenantMetamaskAdd}</div>
+                            </Card.Body>
                         </Card>
                         <Card style={{marginBottom:"20px"}}>
-                            <Card.Title className = "infoTitle">계약 요청 상세</Card.Title>
+                            <Card.Title className = "infoTitle">계약 상세</Card.Title>
                             <Card.Body className = "inputCard">
                                 <div className="infotype">계약 시작 날짜</div>
                                 <div className = "infoName">{timeStart}</div>
                                 <div className="infotype">계약 종료 날짜</div>
                                 <div className = "infoName">{timeEnd}</div>
                                 <div className="infotype">계약 기간</div>
-                                <div className = "infoName">{reqInfo.period} 개월</div>
+                                <div className = "infoName">{info.period} 개월</div>
                             </Card.Body>
                         </Card>
                         <Card className = "information" style={{marginBottom:"10px", paddingBottom:'10px'}}>
-                            <Card.Title className = "infoTitle" style={{marginBottom: '25px'}}>매물 정보</Card.Title>
+                            <Card.Title className = "infoTitle" style={{marginBottom: '25px'}}>매물 정보 확인</Card.Title>
                             <div style = {{display: 'grid', gridTemplateColumns: '1fr 0.5fr', gap: '15px', fontSize: '17px', marginLeft:'24px', marginBottom: '5px'}}>
                                 <div>{item.location} {item.houseAddress}</div>
                                 <div>
@@ -237,21 +304,9 @@ const ReqPage = () => {
                                 ):null}
                             </Card.Body>
                         </Card>
-                        <div className='contractButton' style={{marginTop: '15px'}}>{
-                            isOwner?(
-                            <>
-                                <Button style = {{backgroundColor: '#5B6A82', color: 'white', border: 'none', marginTop: '5px', width:'100px'}} onClick = {onDeleteReq}>요청 거절</Button>
-                                <Button className="green" style = {{color: 'white', border: 'none', marginTop: '5px', width: '100px'}} onClick = {onContract} >요청 수락</Button>
-                            </>):(
-                                <>
-                                <Button style = {{backgroundColor: '#5B6A82', color: 'white', border: 'none', marginTop: '5px', width:'100px'}} onClick = {goToItem}>매물 보기</Button>
-                                <Button className="green" style = {{color: 'white', border: 'none', marginTop: '5px', width: '100px'}} onClick = {onDeleteReq}>요청 취소</Button>
-                                </>
-                            )}
-                        </div>
                     </Col>
             </Row>
         </Container>
     )
 };
-export default ReqPage;
+export default ContractPage;
