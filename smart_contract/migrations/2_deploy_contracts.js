@@ -1,142 +1,104 @@
 const SmartContract = artifacts.require("SmartContract");
-const mongoose = require("mongoose");
-require("dotenv").config();
-const mongoURI = process.env.MONGO_URI;
-
-console.log("Loaded MongoDB URI:", process.env.MONGO_URI);
-
-// const Web3 = require("web3");
-// const web3 = new Web3("http://127.0.0.1:8545"); 
-
-const reqmodels = require("../../server/Models/reqModel");
-const users = require("../../server/Models/userModel");
-const items = require("../../server/Models/itemModel");
+const axios = require("axios");
 
 module.exports = async function (deployer) {
 
     try {
-        // const response = await axios.get("http://localhost:5000/api/contracts");
-        // const contractData = response.data;
-        
-        if (!mongoURI) {
-            throw new Error("MongoDB URI is not defined. Check your .env file.");
-        }
-        await mongoose.connect(mongoURI, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-            serverSelectionTimeoutMS: 30000,
-        });
-        /*
-        await mongoose.connect("mongodb+srv://Chat:1234@cluster0.vcpbx.mongodb.net/Chat?retryWrites=true&w=majority", {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-            serverSelectionTimeoutMS: 30000, // 서버 선택 타임아웃 30초로 설정
-        });
-        */
-
-        mongoose.connection.on('connected', () => {
-            console.log("MongoDB connected successfully.");
-        });
-        
-        mongoose.connection.on('error', (err) => {
-            console.error("MongoDB connection error:", err);
-        });
-        
-        mongoose.connection.on('disconnected', () => {
-            console.log("MongoDB disconnected.");
-        });
-        
-
-        const krwtoether = (krwAmount) => krwAmount / 400;
-
-        // 아이템 찾기
-        const itemID = "1732431629264";
-        const itemData = await items.findOne({ itemID });
-        if (!itemData) {
-            console.error(`Item not found: ${itemID}`);
-            throw new Error(`No item found for itemID: ${itemID}`);
-        }
-        console.log("Item Data:", itemData);
+        // 거래 번호 (ID)
+        const contractID = "674078bfee4065336b6695d7";
+        console.log("Contract Num:", contractID);
         
         // 거래 정보 찾기
-        const reqData = await reqmodels.findOne({ itemID });
-        if (!reqData) {
-            console.error(`Request not found for itemID: ${itemID}`);
-            throw new Error(`No request found for itemID: ${itemID}`);
-        }
-        console.log("Request Data:", reqData);
+        const contractData = await fetchContractData(contractID);
+        console.log("Fetched contract data:", contractData);
 
-        // 임차인 찾기
-        const tenantID = reqData.senderId;
-        const tenantData = await users.findOne({ _id : tenantID });
-        if (!tenantData) {
-            console.error(`Tenant not found: ${tenantID}`);
-            throw new Error(`No user found for tenantID: ${tenantID}`);
-        }
+        // 아이템 찾기
+        const itemData = await fetchItemData(contractData.itemId);
+        console.log("Item Data:", itemData);
+
+        // 임차인 찾기 
+        const tenantData = await fetchUserData(contractData.senderId);
         console.log("Tenant Data:", tenantData);
 
         // 임대인 찾기
-        const lessorID = reqData.ownerId;
-        const lessorData = await users.findOne({ _id : lessorID });
-        if (!lessorData) {
-            console.error(`Lessor not found: ${lessorID}`);
-            throw new Error(`No user found for lessorID: ${lessorID}`);
-        }
+        const lessorData = await fetchUserData(contractData.ownerId);
         console.log("Lessor Data:", lessorData);
 
-        // 임대인 identityNumber 생성
-        const lessorIdentityNumber = `${lessorData.birth}-${lessorData.identityNum}`;
+        // 환율 변환 
+        const krwtoether = (krwAmount) => (krwAmount / 400).toFixed(18);
 
-        // 임차인 identityNumber 생성
-        const tenantIdentityNumber = `${tenantData.birth}-${tenantData.identityNum}`;
+        // 스마트 컨트랙트에 전달할 데이터 구성
+        const lessor = createPerson(lessorData);
+        const tenant = createPerson(tenantData);
+        const lessorBankDetails = createBankDetails(lessorData, "First Bank");
+        const tenantBankDetails = createBankDetails(tenantData, "Second Bank");
+        const rentalDetails = createRentalDetails(contractData, itemData, krwtoether);
 
-        // 1. 임대인 정보
-        const lessor = {
-            name: lessorData._id,
-            phoneNumber: lessorData.phoneNumber,
-            identityNumber: lessorIdentityNumber,
-            addr: lessorData.metaMaskAdd,
-        };
-        
-        // 2. 임차인 정보
-        const tenant = {
-            name : tenantData._id,
-            phoneNumber : tenantData.phoneNumber,
-            identityNumber : tenantIdentityNumber,
-            addr: tenantData.metaMaskAdd,
-        };
-
-        // 3. 임대인 은행 정보
-        const lessorBankDetails = {
-            ownerName: lessorData.name,
-            bankName: "First Bank",
-            account: lessorData.account,
-        };
-
-        // 4. 임차인 은행 정보
-        const tenantBankDetails = {
-            ownerName: tenantData.name,
-            bankName: "Second Bank",
-            account: tenantData.account,
-        };
-
-        // 5. 렌탈 정보
-        const rentalDetails = {
-            houseID: itemID,
-            deposit: web3.utils.toWei(krwtoether(itemData.deposit).toString(), "ether"), // 보증금
-            cost: web3.utils.toWei(krwtoether(itemData.housePrice).toString(), "ether"), // 월세
-            startDate: Math.floor(reqData.start / 1000), // 현재 시간
-            period: reqData.period, // 1년 계약 (365일)
-            endDate: Math.floor(reqData.end / 1000), // 종료 날짜 (초 단위)
-            status: 0, // ContractStatus.Pending
-        };
-
-        // 6. 배포
         await deployer.deploy(SmartContract, lessor, tenant, lessorBankDetails, tenantBankDetails, rentalDetails);
-        console.log(`SmartContract deployed successfully for houseID: ${itemID}`);
+        console.log(`SmartContract deployed successfully for houseID: ${contractData.itemId}`);
     } catch (error) {
         console.error("Error fetching or deploying contracts:", error);
-    } finally {
-        mongoose.connection.close();
     }
 };
+
+// 거래 데이터 가져오기
+async function fetchContractData(contractID) {
+    return await fetchDataFromAPI(`/itemReq/find/${contractID}`, "contract data");
+};
+
+// 아이템 데이터 가져오기
+async function fetchItemData(itemID) {
+    return await fetchDataFromAPI(`/items/find/${itemID}`, "item data");
+}
+
+// 사용자 데이터 가져오기
+async function fetchUserData(userID) {
+    return await fetchDataFromAPI(`/users/find/${userID}`, "user data");
+}
+
+// API 호출 유틸리티 함수
+async function fetchDataFromAPI(endpoint, dataType) {
+    const BASE_URL = "http://localhost:5000/api"; // API 서버 URL
+    try {
+        const response = await axios.get(`${BASE_URL}${endpoint}`);
+        return response.data;
+    } catch (error) {
+        throw new Error(`Failed to fetch ${dataType} from ${endpoint}: ${error.message}`);
+    }
+}
+
+// Person 객체 생성
+function createPerson(userData) {
+    return {
+        name: userData.name,
+        phoneNumber: userData.phoneNumber,
+        identityNumber: `${userData.birth}-${userData.identityNum}`,
+        addr: "0x44e2AfFCFAD498c14eBd1C042d9B2c72A0dF8BF5",
+    };
+}
+
+// BankDetails 객체 생성
+function createBankDetails(userData, bankName) {
+    return {
+        ownerName: userData.name,
+        bankName: bankName,
+        account: "0x8230197520ebbe69624a7eeacca70129e37f2b4b",
+    };
+}
+
+// RentalDetails 객체 생성
+function createRentalDetails(contractData, itemData, krwToEther) {
+    const startDate = Math.floor(new Date(contractData.start).getTime() / 1000); // 시작일
+    const endDate = Math.floor(new Date(contractData.end).getTime() / 1000); // 종료일
+
+    return {
+        houseID: contractData.itemId,
+        deposit: web3.utils.toWei(krwToEther(itemData.deposit), "ether"),
+        cost: web3.utils.toWei(krwToEther(itemData.housePrice), "ether"),
+        startDate: startDate,
+        period: contractData.period,
+        endDate: endDate,
+        status: 0, // ContractStatus.Pending
+    };
+}
+
