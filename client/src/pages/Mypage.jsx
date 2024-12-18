@@ -123,59 +123,6 @@ const Mypage = () => {
                 fetchUserNickName(s.ownerId);
         }});
     }, [sendReq, reNickName]);
-/*
-    useEffect(() => {
-        console.log(receiveRequest, sendReq);
-        const fetchHouse = async (itemID, func) => {
-            try{
-                const result = await findItem(itemID);
-                if(result){
-                func((prev) => ({
-                    ...prev,
-                    [itemID]: result,
-                }));}else{
-                    console.error('아이템을 찾을 수 없습니다.');
-                }
-            }catch(error){
-                console.error('Failed to fetch items.');
-            }
-        };
-
-        const fetchReceiveRequest = async () => {
-            if(!receiveRequest){
-                console.log('빈 객체');
-                return;
-            }
-            for (const r of receiveRequest){
-                if(!houseForRent[r.itemId]){
-                    await fetchHouse(r.itemId, setHouseForRent);
-            }}
-        };
-
-        const fetchSendReq = async () => {
-            if(!sendReq){
-                console.log('빈 객체');
-                return;
-            }
-            for (const s of sendReq) {
-                if(!rentedHouse[s.itemId]){
-                    await fetchHouse(s.itemId, setRentedHouse);
-            }}
-        };
-
-        if (receiveRequest && receiveRequest.length > 0){
-            fetchReceiveRequest();
-        }
-        if(sendReq && sendReq.length > 0){
-            fetchSendReq();
-        }
-        
-    }, [receiveRequest, sendReq]);
-
-    useEffect(()=>{
-        console.log(houseForRent, rentedHouse);
-    }, [houseForRent, rentedHouse])
-*/
 
     const onChangeData = () => {
         navigate("/changingUserData");
@@ -218,7 +165,7 @@ const Mypage = () => {
                                                 {user?.realEstateAgent && <Badge className = 'bg-secondary' style = {{marginLeft: '7px', alignItems:'center'}}>중개사</Badge>}
                                             </div>
                                             <Card.Text>닉네임: {user.nickName}</Card.Text>
-                                            <Card.Text>전화번호: {user.phoneNumber?.replace(/(\d{3})(\d{3})(\d{4})/,'$1-$2-$3')}</Card.Text>
+                                            <Card.Text>전화번호: {user.phoneNumber?.replace(/(\d{3})(\d{4})(\d{4})/,'$1-$2-$3')}</Card.Text>
                                             <Card.Text>Email: {user.email}</Card.Text>
                                             <div style = {{display : 'flex', alignItems: 'center', gap:'10px', marginBottom : '1rem'}}>
                                                 <Card.Text style={{marginBottom:'0px'}}>계좌 연결 상태: </Card.Text>
@@ -264,22 +211,30 @@ const Mypage = () => {
                                         <div style={{marginLeft:"10px", marginRight:'15px'}}>진행 중인 거래</div>
                                     </div>
                                         <div>
-                                            {sendReq?.map((s) => (
-                                                s.accept &&
-                                                <Card style = {{display: 'flex', justifyContent: 'center', padding: '1rem', gap: '7px'}} onClick ={() => {acceptContract(s.ownerId, s._id, false)}}>
-                                                    <strong>ID: {reNickName[s.ownerId]? reNickName[s.ownerId]:s.ownerId} 님이 거래 요청을 수락하였습니다.</strong>
-                                                    <p style={{marginBottom: '0'}}>거래 요청 한 매물: {s.itemId}</p>
-                                                </Card>
-                                            ))}
+                                            {sendReq?.map((s) => {
+                                                if(s.accept && !s.contractID){
+                                                    return(
+                                                        <Card style = {{display: 'flex', justifyContent: 'center', padding: '1rem', gap: '7px'}} onClick ={() => {acceptContract(s.ownerId, s._id, false)}}>
+                                                            <strong>ID: {reNickName[s.ownerId]? reNickName[s.ownerId]:s.ownerId} 님이 거래 요청을 수락하였습니다.</strong>
+                                                            <p style={{marginBottom: '0'}}>거래 요청 한 매물: {s.itemId}</p>
+                                                        </Card>
+                                                    );
+                                                }
+                                                return null;
+                                            })}
                                         </div>
                                         <div>
-                                            {receiveRequest?.map((r) => (
-                                                r.accept &&
-                                                <Card  style = {{display: 'flex', justifyContent: 'center', padding: '1rem', gap: '7px'}} onClick ={() => {acceptContract(r.senderId, r._id, true)}}>
-                                                    <strong>ID: {senderNickName[r.senderId]? senderNickName[r.senderId]: r.senderId} 님의 거래 요청을 수락하였습니다.</strong>
-                                                    <p style={{marginBottom: '0'}}>거래 요청 한 매물: {r.itemId}</p>
-                                                </Card>
-                                            ))}
+                                            {receiveRequest?.map((r) => {
+                                                if(r.accept && !r.contractID){
+                                                    return(
+                                                        <Card  style = {{display: 'flex', justifyContent: 'center', padding: '1rem', gap: '7px'}} onClick ={() => {acceptContract(r.senderId, r._id, true)}}>
+                                                            <strong>ID: {senderNickName[r.senderId]? senderNickName[r.senderId]: r.senderId} 님의 거래 요청을 수락하였습니다.</strong>
+                                                            <p style={{marginBottom: '0'}}>거래 요청 한 매물: {r.itemId}</p>
+                                                        </Card>
+                                                    );
+                                                }
+                                                return null;
+                                            })}
                                         </div>
                                     </div>
                                     <div style = {{margin: '10px', marginTop:'20px'}}>

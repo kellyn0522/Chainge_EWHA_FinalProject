@@ -3,8 +3,9 @@ import Logo from "../component/Logo";
 import { useNavigate, useParams } from "react-router-dom";
 import { AuthItemContext } from "../context/AuthItemContext";
 import { AuthContext } from "../context/AuthContext";
-import { Button, Card, Row, Col, Container, Stack } from "react-bootstrap";
+import { Button, Card, Row, Col, Container, Badge } from "react-bootstrap";
 import { ReqContext } from "../context/ReqContext";
+import History  from "../component/History";
 
 const ReqPage = () => {
     const navigate = useNavigate();
@@ -22,6 +23,9 @@ const ReqPage = () => {
 
     const [otherUserinfo, setOtherUserinfo] = useState(null);
     const{findingReq, updateAccept, deleteR} = useContext(ReqContext);
+    const [showHistoryModal, setShowHistoryModal] = useState(false);
+    const handleHistoryShow = () => setShowHistoryModal(true);
+    const handleHistoryClose = () => setShowHistoryModal(false);
     
     useEffect(() =>{
         const fetchReq = async () => {
@@ -126,9 +130,21 @@ const ReqPage = () => {
                             {isOwner?(
                                 <>
                                     <Card.Title className = "infoTitle">상대 정보 확인</Card.Title>
-                                    <Card.Body className = "info">
+                                    <Card.Body 
+                                        style={{
+                                            display: 'grid', 
+                                            gridTemplateColumns: '0.5fr 1.5fr 1fr 1fr', 
+                                            gap: '5px',
+                                            alignItems: 'center', 
+                                            justifyContent:'center', 
+                                            textAlign:'center',
+                                            }}>
                                         <div className="infotype">이름</div>
-                                        <div className = "infoName">{otherUserinfo.name}</div>
+                                        <div style={{display: 'flex',alignItems: 'center', justifyContent:'center', textAlign:'center',}}>
+                                            <div className = "infoName">{otherUserinfo.name}</div>
+                                            <Badge className='noto-sans-kr skyblue' style = {{ marginLeft: '20px', display:'flex', alignItems: 'center'}} onClick = {handleHistoryShow}>히스토리 확인</Badge>
+                                        </div>
+                                        <History show={showHistoryModal} handleClose={handleHistoryClose} nickName = {otherUserinfo.nickName} />
                                         <div className="infotype">전화번호</div>
                                         <div className = "infoName">{otherUserinfo.phoneNumber.replace(/(\d{3})(\d{3})(\d{4})/,'$1-$2-$3')}</div>
                                     </Card.Body>

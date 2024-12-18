@@ -10,7 +10,6 @@ import ChangingUserData from "./pages/ChangingUserData";
 import Unregister from "./pages/Unregister";
 import MakeContract from "./pages/MakeContract";
 import ContractPage from "./pages/ContractPage";
-import UserHistory from "./pages/UserHistory";
 import{Routes, Route, Navigate} from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {Container} from "react-bootstrap";
@@ -53,7 +52,6 @@ function App() {
                          <Route path="/makeContract/:otherUser/:id/:type" element={<MakeContract />} />
                          <Route path="/ContractPage/:otherUser/:id/:type" element={<ContractPage />} />
                          <Route path="/changingUserData" element={<ChangingUserData />} />
-                         <Route path="/userHistory" element={<UserHistory />} />
                          <Route path="/checkIdentity/:id/:type" element={<CheckIdentity />} />
                          <Route path="/reqContract/:id" element={<RequestContract />} />
                          <Route path="/reqPage/:otherUser/:id/:type" element={<ReqPage />} />

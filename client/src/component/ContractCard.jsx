@@ -100,7 +100,7 @@ const ContractCard = ({itemId, reqID}) => { // {contractID}
     return (
         <Card className = "noto-sans-kr" style = {{marginTop:"10px", marginBottom:"10px", width: '270px'}}  onClick ={onContractPage}>
             <div style = {{display:'flex', alignItems: 'center', width: '240px', marginLeft: '15px', marginRight:'15px', justifyContext: 'space-between'}}>
-                <Card.Title style = {{marginTop:'20px', fontSize: '18px'}} >{item.houseAddress}</Card.Title>
+                <Card.Title style = {{marginTop:'20px', marginLeft:'10px', fontSize: '18px'}} >{item.houseAddress}</Card.Title>
                 {d_Day<0&&<Badge className = "bg-secondary" style = {{marginLeft:"15px", marginTop:"12.5px", width: '50px'}}>거래 종료</Badge>}
                 {d_Day===0&&<Badge className = "green" style = {{marginLeft:"15px", marginTop:"12.5px", width: '50px'}}>D-Day</Badge>}
                 {d_Day>0&&<Badge className = "skyblue" style = {{marginLeft:"15px", marginTop:"12.5px", width: '50px'}}>D-{d_Day}</Badge>}

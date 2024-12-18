@@ -3,8 +3,9 @@ import Logo from "../component/Logo";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { AuthItemContext } from "../context/AuthItemContext";
 import { AuthContext } from "../context/AuthContext";
-import { Button, Card, Row, Col, Container, Stack } from "react-bootstrap";
+import { Button, Card, Row, Col, Container, Stack, Badge } from "react-bootstrap";
 import { ReqContext } from "../context/ReqContext";
+import account from '../icons/account.svg';
 
 
 const RequestContract = () => {
@@ -18,6 +19,7 @@ const RequestContract = () => {
         isFindItemLoading,
     } = useContext(AuthItemContext);
     const [item, setItem] = useState(null);
+    const [selectedBroker, setSelectedBroker] = useState(null);
 
     useEffect(() => {
         const fetchItem = async () => {
@@ -65,6 +67,13 @@ const RequestContract = () => {
     const handlePeriod = (e) =>{
         updateReqInfo({period:e.target.value});
     }
+    const handleBroker = (cardID)=>{
+        if(selectedBroker === cardID){
+            setSelectedBroker(null);
+        }else{
+            setSelectedBroker(cardID);
+        }
+    };
 
 
     const onContract = async (e)=>{
@@ -100,7 +109,7 @@ const RequestContract = () => {
                                 <div className ="infotype">주민등록번호</div>
                                 <div className = "infoName">{user.birth}-{user.identityNum}</div>
                                 <div className="infotype">전화번호</div>
-                                <div className = "infoName">{user.phoneNumber?.replace(/(\d{3})(\d{3})(\d{4})/,'$1-$2-$3')}</div>
+                                <div className = "infoName">{user.phoneNumber?.replace(/(\d{3})(\d{4})(\d{4})/,'$1-$2-$3')}</div>
                                 <div className ="infotype">연결된 계좌</div>
                                 <div className = "infoName">{user.account}</div>
                                 <div className ="infotype">메타마스크 주소</div>
@@ -118,6 +127,109 @@ const RequestContract = () => {
                                 <input placeholder=" 개월 수" className="set" onChange={handlePeriod} />
                             </Card.Body>
                         </Card>
+                        {!item.hasAgent&&
+                        <Card style={{marginBottom:"20px", paddingBottom:'10px', overflowX:'auto', gap:'5px'}}>
+                            <Card.Title className = "infoTitle">중개인 선임 (선택 사항)</Card.Title>
+                            <Card.Body className = "brokerList" style={{display:'flex'}}>
+                                <Card 
+                                    className="broker" 
+                                    onClick={()=>handleBroker(1)} 
+                                    style={{
+                                        backgroundColor: selectedBroker === 1? '#B2CAF6': 'transparent', 
+                                        transition: 'background-color 0.3s ease'
+                                    }}>
+                                    <img src={account} style={{marginBottom:'5px'}} alt='account' width = '70px' height = 'auto'/>
+                                    <div>Bob</div>
+                                    <div style={{fontSize:'15px', marginBottom:'7px'}}>햇살 중개사무소</div>
+                                    <Badge className='darkBlue'>자세히</Badge>
+                                </Card>
+                                <Card 
+                                    className="broker" 
+                                    onClick={()=>handleBroker(2)}
+                                    style={{
+                                        backgroundColor: selectedBroker === 2? '#B2CAF6': 'transparent', 
+                                        transition: 'background-color 0.3s ease'
+                                    }}>
+                                    <img src={account} style={{marginBottom:'5px'}} alt='account' width = '70px' height = 'auto'/>
+                                    <div>Chris</div>
+                                    <div style={{fontSize:'15px', marginBottom:'7px'}}>행복 중개사무소</div>
+                                    <Badge className='darkBlue'>자세히</Badge>
+                                </Card>
+                                <Card 
+                                    className="broker" 
+                                    onClick={()=>handleBroker(3)}
+                                    style={{
+                                        backgroundColor: selectedBroker === 3? '#B2CAF6': 'transparent', 
+                                        transition: 'background-color 0.3s ease'
+                                    }}>
+                                    <img src={account} style={{marginBottom:'5px'}} alt='account' width = '70px' height = 'auto'/>
+                                    <div>Tom</div>
+                                    <div style={{fontSize:'15px', marginBottom:'7px'}}>우리 중개사무소</div>
+                                    <Badge className='darkBlue'>자세히</Badge>
+                                </Card>
+                                <Card 
+                                    className="broker" 
+                                    onClick={()=>handleBroker(4)}
+                                    style={{
+                                        backgroundColor: selectedBroker === 4? '#B2CAF6': 'transparent', 
+                                        transition: 'background-color 0.3s ease'
+                                    }}>
+                                    <img src={account} style={{marginBottom:'5px'}} alt='account' width = '70px' height = 'auto'/>
+                                    <div>Nick</div>
+                                    <div style={{fontSize:'15px', marginBottom:'7px'}}>하늘 중개사무소</div>
+                                    <Badge className='darkBlue'>자세히</Badge>
+                                </Card>
+                                <Card 
+                                    className="broker" 
+                                    onClick={()=>handleBroker(5)}
+                                    style={{
+                                        backgroundColor: selectedBroker === 5? '#B2CAF6': 'transparent', 
+                                        transition: 'background-color 0.3s ease'
+                                    }}>
+                                    <img src={account} style={{marginBottom:'5px'}} alt='account' width = '70px' height = 'auto'/>
+                                    <div>Phil</div>
+                                    <div style={{fontSize:'15px', marginBottom:'7px'}}>성공 중개사무소</div>
+                                    <Badge className='darkBlue'>자세히</Badge>
+                                </Card>
+                                <Card 
+                                    className="broker" 
+                                    onClick={()=>handleBroker(6)}
+                                    style={{
+                                        backgroundColor: selectedBroker === 6? '#B2CAF6': 'transparent', 
+                                        transition: 'background-color 0.3s ease'
+                                    }}>
+                                    <img src={account} style={{marginBottom:'5px'}} alt='account' width = '70px' height = 'auto'/>
+                                    <div>Robert</div>
+                                    <div style={{fontSize:'15px', marginBottom:'7px'}}>대박 중개사무소</div>
+                                    <Badge className='darkBlue'>자세히</Badge>
+                                </Card>
+                                <Card 
+                                    className="broker" 
+                                    onClick={()=>handleBroker(7)}
+                                    style={{
+                                        backgroundColor: selectedBroker === 7? '#B2CAF6': 'transparent', 
+                                        transition: 'background-color 0.3s ease'
+                                    }}>
+                                    <img src={account} style={{marginBottom:'5px'}} alt='account' width = '70px' height = 'auto'/>
+                                    <div>Jackson</div>
+                                    <div style={{fontSize:'15px', marginBottom:'7px'}}>최고 중개사무소</div>
+                                    <Badge className='darkBlue'>자세히</Badge>
+                                </Card>
+                                <Card 
+                                    className="broker" 
+                                    onClick={()=>handleBroker(8)}
+                                    style={{
+                                        backgroundColor: selectedBroker === 8? '#B2CAF6': 'transparent', 
+                                        transition: 'background-color 0.3s ease'
+                                    }}>
+                                    <img src={account} style={{marginBottom:'5px'}} alt='account' width = '70px' height = 'auto'/>
+                                    <div>Scarlett</div>
+                                    <div style={{fontSize:'15px', marginBottom:'7px'}}>행운 중개사무소</div>
+                                    <Badge className='darkBlue'>자세히</Badge>
+                                </Card>
+                                
+                            </Card.Body>
+                        </Card>}
                         <Card className = "information" style={{marginBottom:"10px", paddingBottom:'10px'}}>
                             <Card.Title className = "infoTitle" style={{marginBottom: '25px'}}>매물 정보 확인</Card.Title>
                             <div style = {{display: 'grid', gridTemplateColumns: '1fr 0.5fr', gap: '15px', fontSize: '17px', marginLeft:'24px', marginBottom: '5px'}}>

@@ -8,7 +8,8 @@ import { AuthItemContext } from "../context/AuthItemContext";
 import { AuthContext } from "../context/AuthContext";
 import { Button, Card, Row, Col, Container,Badge } from "react-bootstrap";
 import DeleteItemData from "./DeleteItemData";
-import  ChatEach  from "../components/chat/ChatEach";
+import ChatEach  from "../components/chat/ChatEach";
+import History  from "../component/History";
 import ac from '../icons/ac_unit.svg';
 import bed from '../icons/bed.svg';
 import blind from '../icons/blinds.svg';
@@ -29,6 +30,7 @@ const Item = () => {
     const [showModal, setShowModal] = useState(false);
     const handleClose = () => setShowModal(false);
     const [showModalItem, setShowModalItem] = useState(false);
+    const [nickName, setNickName] = useState('');
     const handleShowItem = () => setShowModalItem(true);
     const handleCloseItem = () => setShowModalItem(false);
     const navigate = useNavigate();
@@ -36,11 +38,16 @@ const Item = () => {
     const { 
         user,
         updaterLike,
+        userNickNameFinder,
     } = useContext(AuthContext);
     const [liked, setLiked] = useState(false);
     const [reqInfo, setReqInfo] = useState(null);
     const { userChats, isUserChatsLoading, updateCurrentChat, potentialChats, createChat } = useContext(ChatContext);
     const{reqSearcher} = useContext(ReqContext);
+    
+    const [showHistoryModal, setShowHistoryModal] = useState(false);
+    const handleHistoryShow = () => setShowHistoryModal(true);
+    const handleHistoryClose = () => setShowHistoryModal(false);
 
     //const onHistory = () => {
     //    navigate("/userHistory");
@@ -52,20 +59,6 @@ const Item = () => {
     } = useContext(AuthItemContext);
     const [item, setItem] = useState(null)
     const itemHasItems = item?.hasItems? ( item.hasItems) :null;
-
-        
-    useEffect(() =>{
-        const fetchReq = async (ownerID, itemID, senderID) => {
-            try{
-                const result = await reqSearcher(ownerID, itemID, senderID);
-                setReqInfo(result);
-            }catch{
-                return null;
-            }
-        }
-        if(item){ fetchReq(item.ownerId, id, user._id); }
-    }, [user, item]);
-    console.log(reqInfo);
 
     const handleLike = (event) => {
         event.stopPropagation();
@@ -85,6 +78,38 @@ const Item = () => {
         };
         fetchItem();
     }, [findItem, findItemError]);
+
+    useEffect(() => {
+        if (item?.ownerId){
+            console.log("실행!!!!!!!!!!!!!!!!!!!!");
+            console.log(item);
+            console.log(item.ownerId);
+            const fetchUserNickName = async (ownerId) => {
+            try{
+                const result = await userNickNameFinder(ownerId);
+                setNickName(result);
+            } catch {
+                console.error('Failed to fetch owner ID Request.');
+            }
+        };
+        fetchUserNickName(item.ownerId);
+        }
+    }, [item]);
+  
+    useEffect(() =>{
+        const fetchReq = async (ownerID, itemID, senderID) => {
+            try{
+                const result = await reqSearcher(ownerID, itemID, senderID);
+                setReqInfo(result);
+            }catch{
+                return null;
+            }
+        }
+        if(item){ fetchReq(item.ownerId, id, user._id); }
+    }, [user, item]);
+    console.log(reqInfo);
+    console.log(item);
+    console.log(nickName);
 
 
     useEffect(() => {
@@ -165,6 +190,17 @@ const Item = () => {
                                     </div>
                                     <div>{item.location} {item.houseAddress}</div>
                                     <div>{item.type} / {item.area}평</div> 
+                                    {user? (
+                                        user._id !== item.ownerId?(
+                                            <div style = {{display:'flex', alignItems: 'center', marginTop:'2px', marginBottom:'5px'}}>
+                                                <div style = {{display:'flex', alignItems: 'center'}}>
+                                                    <div>{nickName}</div>
+                                                </div>
+                                                <Badge className='noto-sans-kr darkBlue' style = {{ margin: '10px', display:'flex', alignItems: 'center'}} onClick = {handleHistoryShow}>유저 히스토리</Badge>
+                                                <History show={showHistoryModal} handleClose={handleHistoryClose} nickName = {nickName} />
+                                            </div>
+                                            ):null
+                                        ):null}
                                 </div>
                                 {user? (
                                     user._id !== item.ownerId?(
@@ -290,14 +326,8 @@ const Item = () => {
                                     </div>
                                 </Card.Body>
                             </Card> 
-                            <Card>
-                                <Card.Title className = "infoTitle">보안/안전시설</Card.Title>
-                            </Card>
-                            <Card>
-                                <Card.Title className = "infoTitle">위치 및 주변시설</Card.Title>
-                            </Card>
                             </div>
-                            <Card className = "information" style={{marginBottom:"30px"}}>
+                            <Card className = "information">
                                 <Card.Title className = "infoTitle">상세 정보</Card.Title>
                                 <Card.Body className = "info">
                                     {item.buildingName? (
@@ -372,6 +402,23 @@ const Item = () => {
                                             <div className = "infoName">{formattedDate}</div>
                                         </>
                                     ):null}
+                                </Card.Body>
+                            </Card>
+                            <Card className = "information" style={{marginBottom:"30px"}}>
+                                <Card.Title className = "infoTitle">매물 히스토리</Card.Title>
+                                <Card.Body className = "info">
+                                    <div className="infoTextNoBottom blueFont">임대인 ID</div>
+                                    <div className="infoTextNoBottom blueFont">임차인 ID</div>
+                                    <div className="infoTextNoBottom blueFont">임대 기간</div>
+                                    <div className="infoTextNoBottom blueFont">거래 ID</div>
+                                    <div className="infoTextNoBottom">{nickName}</div>
+                                    <div className="infoTextNoBottom">Alice</div>
+                                    <div className="infoTextNoBottom">2022.11.7 ~ 2023.11.6 (거래 종료)</div>
+                                    <div className="infoTextNoBottom">거래 ID</div>
+                                    <div className="infoTextNoBottom">{nickName}</div>
+                                    <div className="infoTextNoBottom">Dan</div>
+                                    <div className="infoTextNoBottom">2023.12.3 ~ 2024.12.2 (거래 종료)</div>
+                                    <div className="infoTextNoBottom">거래 ID</div>
                                 </Card.Body>
                             </Card>
                         </div>
