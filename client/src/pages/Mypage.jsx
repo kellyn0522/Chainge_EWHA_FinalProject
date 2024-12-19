@@ -175,12 +175,13 @@ const Mypage = () => {
                                             
                                             </div>
                                             <LinkingAccount show={showAccountModal} handleClose={handleAccountClose}/>
-                                            <div style = {{display : 'flex', alignItems: 'center', gap:'10px'}}>
-                                                <Card.Text style={{marginBottom:'0px'}}>이더리움 주소: </Card.Text>
+                                            <div>
+                                                <div style = {{display : 'flex', alignItems: 'center', gap:'10px'}}>
+                                                    <Card.Text style={{marginBottom:'0px'}}>이더리움 주소: </Card.Text>
+                                                    {!user?.metaMaskAdd && <Badge className = 'skyblue' style = {{marginLeft: '7px', marginBottom : '0', display : 'flex', alignItems:'center'}} onClick = {handleMetaMaskShow}>등록하기</Badge>}
+                                                    {user?.metaMaskAdd && <Badge className = 'skyblue' style = {{marginLeft: '7px', marginBottom : '0', display : 'flex', alignItems:'center'}} onClick = {handleMetaMaskShow}>변경하기</Badge>}
+                                                </div>
                                                 <Card.Text className={user.metaMaskAdd?'blueFont':'skyblueFont'} style = {{marginBottom : '0'}}>{user.metaMaskAdd?user.metaMaskAdd:"미연결"}</Card.Text>
-                                                {!user?.metaMaskAdd && <Badge className = 'skyblue' style = {{marginLeft: '7px', marginBottom : '0', display : 'flex', alignItems:'center'}} onClick = {handleMetaMaskShow}>등록하기</Badge>}
-                                                {user?.metaMaskAdd && <Badge className = 'skyblue' style = {{marginLeft: '7px', marginBottom : '0', display : 'flex', alignItems:'center'}} onClick = {handleMetaMaskShow}>변경하기</Badge>}
-                                            
                                             </div>
                                             <LinkingMetaMask show={showMetaMaskModal} handleClose={handleMetaMaskClose}/>
                                         </Card.Body>
