@@ -24,14 +24,14 @@ const UserHistory = ({show,handleClose, nickName}) => {
                     </div>
                     <div className="historyInfo">
                         <div className="historyText blueFont">임차인 ID</div>
-                        <div className="historyText blueFont">거래 ID</div>
                         <div className="historyText blueFont">임대 기간</div>
+                        <div className="historyText blueFont">거래 주소</div>
                         <div className="historyText">Alice</div>
-                        <div className="historyText">2211072311061207</div>
                         <div className="historyText">2022.11.7 ~ 2023.11.6 (거래 종료)</div>
+                        <div className="historyText">0x53C850ceDb010F8B0d59d351360770fB9C5dDdA2</div>
                         <div className="historyText">Dan</div>
-                        <div className="historyText">2312032412021205</div>
                         <div className="historyText">2023.12.3 ~ 2024.12.2 (거래 종료)</div>
+                        <div className="historyText">0x6B02e60048EC6877074Ea8D4E8F6f8118bd4C9e9</div>
                     </div>
                 </div>
                 <div>

@@ -410,15 +410,15 @@ const Item = () => {
                                     <div className="infoTextNoBottom blueFont">임대인 ID</div>
                                     <div className="infoTextNoBottom blueFont">임차인 ID</div>
                                     <div className="infoTextNoBottom blueFont">임대 기간</div>
-                                    <div className="infoTextNoBottom blueFont">거래 ID</div>
+                                    <div className="infoTextNoBottom blueFont">거래 주소</div>
                                     <div className="infoTextNoBottom">{nickName}</div>
                                     <div className="infoTextNoBottom">Alice</div>
                                     <div className="infoTextNoBottom">2022.11.7 ~ 2023.11.6 (거래 종료)</div>
-                                    <div className="infoTextNoBottom">2211072311061207</div>
+                                    <div className="infoTextNoBottom">0x53C850ceDb010F8B0d59d351360770fB9C5dDdA2</div>
                                     <div className="infoTextNoBottom">{nickName}</div>
                                     <div className="infoTextNoBottom">Dan</div>
                                     <div className="infoTextNoBottom">2023.12.3 ~ 2024.12.2 (거래 종료)</div>
-                                    <div className="infoTextNoBottom">2312032412021205</div>
+                                    <div className="infoTextNoBottom">0x6B02e60048EC6877074Ea8D4E8F6f8118bd4C9e9</div>
                                 </Card.Body>
                             </Card>
                         </div>

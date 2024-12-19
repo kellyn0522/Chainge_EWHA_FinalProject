@@ -259,7 +259,7 @@
 
 .historyInfo{
   display: grid;
-  grid-template-columns: 0.4fr 0.7fr 1fr;
+  grid-template-columns: 0.3fr 0.7fr 1fr;
   gap: 5px;
 }
 
@@ -282,12 +282,12 @@
 }
 .modalSize2 .modal-dialog{
   position: fixed;
-  width: 600px;
-  left:31%;
+  width: 900px;
+  left:21%;
   z-index: 1050;
 }
 
 .modalSize2 .modal-content{
   max-height: 35000px;
-  width: 600px;
+  width: 900px;
 }
