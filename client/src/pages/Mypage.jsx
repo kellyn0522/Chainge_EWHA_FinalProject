@@ -157,8 +157,8 @@ const Mypage = () => {
                                 <div className = "intro" style = {{display:'flex', flexDirection:'column', alignItems: 'center'}}>
                                     <h4 className="gugi-regular" style={{marginTop:'15px', marginBottom: '25px', fontSize:'30px'}}>MY page</h4>
                                     <span className="material-symbols-outlined size-200" style={{textAlign: 'center', marginBottom: '10px'}}>account_circle</span>
-                                    <div style ={{display:'flex', flexDirection: ' column', alignItems:'flex-start', width: '400px'}}>
-                                    <Card style = {{width: '420px', marginBottom:'5px'}}>
+                                    <div style ={{display:'flex', flexDirection: ' column', alignItems:'flex-start', width: '450px'}}>
+                                    <Card style = {{width: '450px', marginBottom:'5px'}}>
                                         <Card.Body className="noto-sans-kr">
                                             <div style = {{display : 'flex', alignItems: 'center', marginBottom : '1rem'}}>
                                                 <Card.Text style={{marginBottom:'0px'}}>이름: {user.name}</Card.Text>
