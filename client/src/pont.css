@@ -259,7 +259,7 @@
 
 .historyInfo{
   display: grid;
-  grid-template-columns: 0.35fr 0.35fr 1fr;
+  grid-template-columns: 0.4fr 0.7fr 1fr;
   gap: 5px;
 }
 
@@ -273,4 +273,21 @@
   flex-shrink:0;
   cursor: pointer;
   margin-bottom:7px;
+}
+
+.modalSize2{
+  display: flex;
+  justify-content: center;
+  align-items:center;
+}
+.modalSize2 .modal-dialog{
+  position: fixed;
+  width: 600px;
+  left:31%;
+  z-index: 1050;
+}
+
+.modalSize2 .modal-content{
+  max-height: 35000px;
+  width: 600px;
 }

@@ -414,11 +414,11 @@ const Item = () => {
                                     <div className="infoTextNoBottom">{nickName}</div>
                                     <div className="infoTextNoBottom">Alice</div>
                                     <div className="infoTextNoBottom">2022.11.7 ~ 2023.11.6 (거래 종료)</div>
-                                    <div className="infoTextNoBottom">거래 ID</div>
+                                    <div className="infoTextNoBottom">2211072311061207</div>
                                     <div className="infoTextNoBottom">{nickName}</div>
                                     <div className="infoTextNoBottom">Dan</div>
                                     <div className="infoTextNoBottom">2023.12.3 ~ 2024.12.2 (거래 종료)</div>
-                                    <div className="infoTextNoBottom">거래 ID</div>
+                                    <div className="infoTextNoBottom">2312032412021205</div>
                                 </Card.Body>
                             </Card>
                         </div>

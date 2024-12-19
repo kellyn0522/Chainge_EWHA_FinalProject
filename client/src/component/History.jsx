@@ -4,7 +4,7 @@ import house from '../icons/house.svg';
 const UserHistory = ({show,handleClose, nickName}) => {
 
     return (<>
-        <Modal show = {show} onHide={handleClose} className = 'modalSize'>
+        <Modal show = {show} onHide={handleClose} className = 'modalSize2'>
             <Modal.Header closeButton className = "noto-sans-kr">
                 <div>{nickName}</div>
             </Modal.Header>
@@ -27,10 +27,10 @@ const UserHistory = ({show,handleClose, nickName}) => {
                         <div className="historyText blueFont">거래 ID</div>
                         <div className="historyText blueFont">임대 기간</div>
                         <div className="historyText">Alice</div>
-                        <div className="historyText">거래 ID</div>
+                        <div className="historyText">2211072311061207</div>
                         <div className="historyText">2022.11.7 ~ 2023.11.6 (거래 종료)</div>
                         <div className="historyText">Dan</div>
-                        <div className="historyText">거래 ID</div>
+                        <div className="historyText">2312032412021205</div>
                         <div className="historyText">2023.12.3 ~ 2024.12.2 (거래 종료)</div>
                     </div>
                 </div>
@@ -47,7 +47,7 @@ const UserHistory = ({show,handleClose, nickName}) => {
                                 marginLeft:'9px'
                             }}>임차 기록</div>
                         </div>
-                    <div className='historyText'>기록이 존재하지 않습니다.</div>
+                    <div className='historyText' style={{marginBottom:'20px'}}>기록이 존재하지 않습니다.</div>
                 </div>
             </Modal.Body>
         </Modal>

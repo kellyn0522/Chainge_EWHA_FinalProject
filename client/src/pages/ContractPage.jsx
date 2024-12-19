@@ -195,7 +195,7 @@ const ContractPage = () => {
                                 <div className ="infotype">주민등록번호</div>
                                 <div className = "infoName">{info.landlordBirth}-{info.landlordIdentityNum}</div>
                                 <div className="infotype">전화번호</div>
-                                <div className = "infoName">{info.landlordphoneNum?.replace(/(\d{3})(\d{3})(\d{4})/,'$1-$2-$3')}</div>
+                                <div className = "infoName">{info.landlordphoneNum?.replace(/(\d{3})(\d{4})(\d{4})/,'$1-$2-$3')}</div>
                                 <div className ="infotype">연결된 계좌</div>
                                 <div className = "infoName">{info.landlordAccount}</div>
                                 <div className ="infotype">메타마스크 주소</div>
@@ -212,7 +212,7 @@ const ContractPage = () => {
                                 <div className ="infotype">주민등록번호</div>
                                 <div className = "infoName">{info.tenantBirth}-{info.tenantidentityNum}</div>
                                 <div className="infotype">전화번호</div>
-                                <div className = "infoName">{info.tenantphoneNum?.replace(/(\d{3})(\d{3})(\d{4})/,'$1-$2-$3')}</div>
+                                <div className = "infoName">{info.tenantphoneNum?.replace(/(\d{3})(\d{4})(\d{4})/,'$1-$2-$3')}</div>
                                 <div className ="infotype">연결된 계좌</div>
                                 <div className = "infoName">{info.tenantAccount}</div>
                                 <div className ="infotype">메타마스크 주소</div>

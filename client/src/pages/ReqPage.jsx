@@ -146,7 +146,7 @@ const ReqPage = () => {
                                         </div>
                                         <History show={showHistoryModal} handleClose={handleHistoryClose} nickName = {otherUserinfo.nickName} />
                                         <div className="infotype">전화번호</div>
-                                        <div className = "infoName">{otherUserinfo.phoneNumber.replace(/(\d{3})(\d{3})(\d{4})/,'$1-$2-$3')}</div>
+                                        <div className = "infoName">{otherUserinfo.phoneNumber.replace(/(\d{3})(\d{4})(\d{4})/,'$1-$2-$3')}</div>
                                     </Card.Body>
                                 </>
                             ):(
@@ -156,7 +156,7 @@ const ReqPage = () => {
                                         <div className="infotype">이름</div>
                                         <div className = "infoName">{user.name}</div>
                                         <div className="infotype">전화번호</div>
-                                        <div className = "infoName">{user.phoneNumber.replace(/(\d{3})(\d{3})(\d{4})/,'$1-$2-$3')}</div>
+                                        <div className = "infoName">{user.phoneNumber.replace(/(\d{3})(\d{4})(\d{4})/,'$1-$2-$3')}</div>
                                     </Card.Body>
                                 </>
                             )}
