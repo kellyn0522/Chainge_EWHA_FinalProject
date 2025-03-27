@@ -1,0 +1,293 @@
+.gugi-regular {
+  font-family: "Gugi", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.noto-sans-kr {
+  font-family: "Noto Sans KR", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.green{
+  background-color: #002D72 !important;
+  border: none;
+}
+.disable{
+  background-color: #d3d3d3;
+  border: none;
+}
+.skyblue{
+  background-color: #6495ED !important;
+  border: none;
+}
+.darkBlue{
+  background-color: #4A90E2 !important;
+  border: none;
+}
+.skyblueFont{
+  color:#6495ED;
+}
+.green:hover{
+  background-color: #002D72;
+}
+.blueFont{
+  color:#002D72
+}
+
+.creatPageItem{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 15px;
+}
+
+.optionCheck{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  column-gap: 80px;
+  row-gap: 10px;
+}
+
+.creatPageText{
+  margin-right: 10px;
+}
+
+.inputCard{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  font-size: 14px;
+}
+
+.intro{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.information{
+  margin-top: 10px;
+  display: flex;
+}
+
+.infoTitle{
+  margin-top:20px;
+  margin-left:25px;
+  font-size: 18px;
+}
+
+.info{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 15px;
+  font-size: 14px;
+}
+
+.info div:nth-child(2){
+  margin-right:30px;
+}
+
+.infotype{
+  color: #002D72;
+  margin-left: 10px;
+}
+
+.infoName{
+  font-size: 15px;
+}
+
+.optionCard{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.infoText{
+  font-size:15px; 
+  margin-bottom:10px; 
+  margin-left:10px
+}
+
+.infoTextNoBottom{
+  font-size:15px;  
+  margin-left:10px
+}
+
+.infoIcon{
+  margin-bottom:10px;
+}
+
+.introInfo{
+  margin-bottom:10px;
+}
+.combine-container{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+  gap: 20px;
+}
+
+.combine{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.list_wrapper{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.list_column{
+  display: flex;
+  overflow-y:auto;
+  gap: 20px;
+  max-height: 60vh;
+  padding: 10px;
+}
+
+.list_column > .houseItem{
+  flex-shrink: 0;
+}
+
+.longModalSize .modal-body{
+  max-height: 60vh;
+  overflow-y:auto;
+}
+.longModalSize .modal-content{
+  width: 100%;
+  min-width: 300px;
+  max-width: 800px;
+  margin: auto;
+}
+
+.longModalSize .modal-dialog{
+  width: 100%;
+  max-width: 800px;
+  margin: auto;
+}
+
+.contractButton{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+}
+
+.checkContainer{
+  display:flex;
+  gap: 20px;
+  align-items: stretch;
+}
+
+.groupLeft, .groupRight{
+  display:flex;
+  flex-direction:column;
+}
+.formGroupRight{
+  display:flex;
+  flex-direction: column;
+  gap:10px;
+}
+
+.groupLeft{
+  flex: 1;
+  float: left;
+}
+
+.groupRight{
+  flex: 1;
+  float: left;
+  gap: 10px;
+}
+
+.radioCheck{
+  gap: 10px;
+  padding: 15px;
+  padding-left: 20px;
+  flex: 1;
+}
+
+.formControl{
+  margin-bottom: 10px;
+  display: grid;
+  grid-template-columns: 1fr 2.7fr;
+  align-items: center;
+}
+
+.formControl2{
+  margin :15px;
+  display: grid;
+  grid-template-columns: 0.5fr 2fr 0.7fr;
+  gap: 20px;
+  align-items: center;
+}
+
+.modalSize .modal-body{
+  max-height: 35000px;
+}
+.lightBlue {
+  background-color: #6495ED;
+}
+
+.contractContainer{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  min-width: 300px;
+  max-width: 900px;
+  height: 300px;
+  max-height: 60vh;
+  overflow-y:auto;
+  margin: auto;
+  flex-wrap:wrap;
+  gap: 10px;
+}
+.contractContainer > .contractCard{
+  flex-shrink: 0;
+}
+
+.historyText{
+  margin-bottom:10px; 
+  margin-left:10px
+}
+
+.historyInfo{
+  display: grid;
+  grid-template-columns: 0.3fr 0.7fr 1fr;
+  gap: 5px;
+}
+
+.broker{
+  display:flex;
+  flex-direction:column;
+  padding:10px;
+  justify-content:center;
+  align-items:center;
+  margin: 5px;
+  flex-shrink:0;
+  cursor: pointer;
+  margin-bottom:7px;
+}
+
+.modalSize2{
+  display: flex;
+  justify-content: center;
+  align-items:center;
+}
+.modalSize2 .modal-dialog{
+  position: fixed;
+  width: 900px;
+  left:21%;
+  z-index: 1050;
+}
+
+.modalSize2 .modal-content{
+  max-height: 35000px;
+  width: 900px;
+}

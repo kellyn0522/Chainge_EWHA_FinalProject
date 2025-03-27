@@ -1,0 +1,16 @@
+.secondHeader{
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    justify-content: space-between;
+}
+
+.button{
+    margin-left: auto; 
+}
+
+.list_wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+}
