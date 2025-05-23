@@ -6,14 +6,13 @@
 
 ## 📌 Quick View
 
+- 블록체인으로 거래함으로 수정 및 삭제가 불가능 + 거래 상대 및 대상에 대한 히스토리 확인 가능 -> 사기 예방 가능 
+
+     <img width="570" alt="image" src="https://github.com/user-attachments/assets/aa1596b3-83e1-4602-bf36-ae6897f85cc8" />
+
 - Smart Contract를 통한 거래 과정 및 체인 연결
 
      <img width="1000" alt="image" src="https://github.com/user-attachments/assets/a0e073a1-84a2-4a8a-bcd1-8553747252b5" />
-
-- (자세히) 블록체인으로 거래함으로 수정 및 삭제가 불가능 + 거래 상대 및 대상에 대한 히스토리 확인 가능 -> 사기 예방 가능 
-
-     <img width="600" alt="image" src="https://github.com/user-attachments/assets/aa1596b3-83e1-4602-bf36-ae6897f85cc8" />
-
 
 <br>
 
